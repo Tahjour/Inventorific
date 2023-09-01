@@ -1,0 +1,8 @@
+/* components\layout\app\main-bar.module.css */
+.mainBar {
+  /* position: relative; */
+  width: 100%;
+  height: calc(100% - var(--main-bar-menu-height) - var(--main-nav-height));
+  color: var(--lightest-color);
+  background: rgba(35, 35, 35, 0);
+}

@@ -1,0 +1,108 @@
+/* components\layout\app\main-bar-menu.module.css */
+.mainBarMenuBox {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  height: var(--main-bar-menu-height);
+  z-index: 1;
+  padding: 10px 0;
+}
+
+.mainBarMenu {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 10px;
+  height: 100%;
+  width: 60%;
+}
+
+.mainBarMenuBtns {
+  height: 100%;
+  display: flex;
+  margin-left: 10px;
+  gap: 10px;
+  justify-content: space-evenly;
+}
+
+.mainBarMenuBtn,
+.listTypeBtn {
+  height: 100%;
+  position: relative;
+  z-index: 1;
+  display: flex;
+  align-items: center;
+  background-color: var(--dark-bg-color);
+  color: white;
+  border: var(--main-border-size) solid var(--dark-neon-blue);
+  border-radius: 10px;
+  padding: 10px;
+  cursor: pointer;
+  transition: var(--fast-transition);
+}
+
+.listTypeBtn {
+  border: var(--main-border-size) solid var(--dark-bg-color);
+}
+
+.listTypeBtn:hover, .listTypeBtn:focus {
+  background-color: var(--dark-neon-blue);
+}
+
+/* hover with background color */
+.mainBarMenuBtn:hover,
+.activeListTypeBtn {
+  background-color: var(--dark-neon-blue);
+  /* border: var(--main-border-size) solid var(--dark-bg-color); */
+}
+
+.mainBarMenuBtnIcons {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: var(--dark-bg-color);
+  border-radius: 10px;
+}
+
+.searchBarBox {
+  position: relative;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100%;
+  /* flex: 0.5; */
+}
+
+.searchBar {
+  width: 100%;
+  height: 100%;
+  background-color: var(--dark-bg-color);
+  border: var(--main-border-size) solid var(--dark-neon-blue);
+  color: white;
+  border-radius: 10px;
+  padding: 0 10px 0 50px;
+}
+
+.searchBar:focus {
+  outline: none;
+  box-shadow: 0 0 10px var(--neon-blue-accent);
+}
+
+.searchIcon {
+  position: absolute;
+  left: 20px;
+  color: white;
+}
+
+/* Breakpoints------------------------------------------------------ */
+@media screen and (max-width: 900px) {
+  .mainBarMenuBox {
+    margin: 0;
+  }
+
+  .mainBarMenu {
+    margin-top: 5px;
+    width: 100%;
+  }
+}

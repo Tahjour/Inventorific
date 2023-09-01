@@ -1,0 +1,146 @@
+/* components\auth-pages\profile-page.module.css */
+.profileBox {
+  width: 100%;
+  height: 100%;
+  display: grid;
+  /* grid-template-columns: 0.5fr 1fr; */
+  grid-template-rows: 1fr 1fr;
+  justify-items: center;
+  gap: 20px;
+  align-items: start;
+  color: white;
+  overflow: auto;
+  padding: 20px 5px;
+}
+
+.imageAndItemsBox {
+  position: relative;
+  width: 60%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  background-color: rgba(0, 0, 0, 0.75);
+  border-radius: 10px;
+  padding: 20px;
+}
+
+.dropdownBox {
+  position: absolute;
+  top: 0;
+  right: 0;
+  margin: 10px;
+}
+
+.userImage {
+  width: 200px;
+  height: 200px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 5em;
+  border-radius: 50%;
+  background-color: rgb(53, 0, 103);
+}
+
+.formBox {
+  position: relative;
+  width: 60%;
+  display: grid;
+  grid-template-columns: 1fr;
+  padding: 20px;
+  background-color: rgba(0, 0, 0, 0.75);
+  border-radius: 10px;
+}
+
+.formGroup {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 30px;
+}
+
+.textInput {
+  text-align: center;
+  border-radius: 5px;
+  border: 0;
+  padding: 10px;
+  background-color: rgb(41, 41, 41);
+  color: rgb(190, 190, 190);
+}
+
+.textInput:focus,
+.textInput:hover {
+  /* border: var(--main-border-size) solid var(--dark-neon-blue); */
+  outline: 5px solid var(--dark-neon-blue);
+}
+
+.buttons {
+  display: grid;
+  justify-items: center;
+  gap: 30px;
+}
+
+.button {
+  width: 50px;
+  background-color: transparent;
+  color: white;
+  border: var(--main-border-size) solid var(--dark-neon-blue);
+  border-radius: 10px;
+  padding: 0.625em;
+  /* Use em instead of px for relative sizing */
+  font-size: 1rem;
+  /* Use rem for a responsive font size */
+  width: 100%;
+  /* Make the buttons full width on small screens */
+  margin-bottom: 30px;
+  transition: 100ms linear;
+}
+
+.updateInfoBtn,
+.deleteAccountBtn {
+  background-color: transparent;
+  color: white;
+  border: var(--main-border-size) solid var(--dark-neon-blue);
+  border-radius: 10px;
+  padding: 0.625em;
+  /* Use em instead of px for relative sizing */
+  font-size: 1rem;
+  /* Use rem for a responsive font size */
+  width: 100%;
+  /* Make the buttons full width on small screens */
+  transition: 100ms linear;
+}
+
+.updateInfoBtn:hover {
+  background-color: var(--dark-neon-blue);
+  box-shadow: 0 0 10px var(--dark-neon-blue);
+  cursor: pointer;
+}
+
+.deleteAccountBtn {
+  border: var(--main-border-size) solid rgba(255, 0, 0, 0.5);
+}
+
+.deleteAccountBtn:hover {
+  background-color: rgba(255, 0, 0, 0.5);
+  box-shadow: 0 0 10px rgba(255, 0, 0, 0.5);
+  cursor: pointer;
+}
+
+@media screen and (max-width: 420px) {
+  .formGroup {
+    flex-direction: column;
+    gap: 10px;
+  }
+}
+
+@media screen and (max-width: 900px) {
+  .imageAndItemsBox {
+    width: 100%;
+  }
+
+  .formBox {
+    width: 100%;
+  }
+}

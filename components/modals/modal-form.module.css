@@ -1,0 +1,366 @@
+/* components\app-page\add-item-modal-form.module.css */
+.modalBackdrop {
+  position: absolute;
+  z-index: 3;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100%;
+  background-color: var(--3-4-dark-bg-color);
+}
+
+.formBox {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.itemForm,
+.deleteForm {
+  position: relative;
+  background-color: var(--bg-color);
+  text-align: center;
+  border: var(--main-border-size) solid var(--dark-neon-blue);
+  box-shadow: 0 0 10px var(--dark-neon-blue);
+  z-index: 3;
+}
+
+.itemForm {
+  width: 80%;
+  height: 90%;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  border-radius: 20px;
+}
+
+.deleteForm {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  gap: 25px;
+  border-radius: 20px;
+  color: var(--lightest-color);
+  background-color: var(--dark-bg-color);
+  width: 40%;
+  height: 50%;
+  padding: 20px;
+}
+
+.imageFileInput {
+  display: none;
+}
+
+.customImageUploadLabel {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  padding: 30px;
+  cursor: pointer;
+  text-align: center;
+  border-radius: 20px;
+  border: 0;
+  background-color: var(--dark-bg-color);
+  color: var(--lightest-color);
+  overflow: hidden;
+}
+
+.customImageUploadLabel img {
+  object-fit: cover;
+  max-width: 100%;
+  height: auto;
+}
+
+.customImageUploadLabelContents {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 5px;
+  z-index: 2;
+  color: var(--lightest-color);
+}
+
+.customImageUploadLabelContentsOptions {
+  background-color: var(--bg-color);
+  padding: 10px;
+  border-radius: 10px;
+  visibility: hidden;
+  opacity: 0;
+  transition: var(--fast-transition);
+}
+
+.customImageUploadLabel:hover .customImageUploadLabelContentsOptions,
+.customImageUploadLabel:focus .customImageUploadLabelContentsOptions {
+  visibility: visible;
+  opacity: 1;
+}
+
+.visible {
+  visibility: visible;
+  opacity: 1;
+}
+
+.customImageUploadLabelContents svg {
+  font-size: 1.2rem;
+}
+
+.customImageUploadLabelContents p {
+  margin: 0;
+}
+
+.itemInfoBox {
+  width: 100%;
+  display: grid;
+  align-items: center;
+  justify-items: center;
+  padding: 20px;
+  border-radius: 20px;
+  color: var(--lightest-color);
+  overflow-y: scroll;
+  scrollbar-gutter: stable both-edges;
+}
+
+.itemInfoBox::-webkit-scrollbar-thumb {
+  background-color: var(--dark-neon-blue);
+  border-radius: 10px;
+}
+.itemInfoBox::-webkit-scrollbar-track {
+  margin-block-start: 15px;
+  margin-block-end: 15px;
+}
+
+.inputBox {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  margin-bottom: 30px;
+}
+
+.inputBox:last-child {
+  margin-bottom: 0;
+}
+
+.inputBox2 {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 10px;
+  width: 100%;
+}
+
+.inputText {
+  width: 100%;
+  padding: 20px;
+  border-radius: 10px;
+  background-color: transparent;
+  border: 0;
+  outline: var(--main-border-size) solid var(--lightest-color);
+  color: var(--lightest-color);
+  text-align: center;
+  transition: outline 300ms ease, color 300ms ease;
+}
+
+.inputTextArea {
+  height: 200px;
+  width: 100%;
+  line-height: 20px;
+  text-align: left;
+}
+
+.successInputText {
+  outline-color: var(--dark-neon-blue);
+}
+
+.errorInputText {
+  outline-color: var(--error-color);
+}
+
+.inputText:-webkit-autofill {
+  background-color: transparent !important;
+  -webkit-text-fill-color: var(--lightest-color);
+  -webkit-box-shadow: 0 0 0 1000px var(--bg-color) inset;
+  caret-color: var(--lightest-color);
+}
+
+.inputLabel {
+  position: absolute;
+  top: 50%;
+  /* left: 20px; */
+  transform: translateY(-50%);
+  border-radius: 10px;
+  pointer-events: none;
+  background-color: var(--bg-color);
+  transition: 200ms ease;
+}
+
+.inputText:focus + .inputLabel,
+.successLabel,
+.errorLabel {
+  top: -2px;
+  padding: 5px;
+  font-size: 80%;
+}
+
+.successLabel {
+  color: var(--gradient-end-color);
+}
+
+.errorLabel {
+  color: var(--error-color);
+}
+
+.errorText {
+  color: var(--error-color);
+}
+
+/* .resizeHandle {
+  height: 0px;
+  width: 0px;
+  border: 10px solid rgb(0, 158, 158);
+  border-radius: 50%;
+  transform: rotate(-45deg);
+  position: absolute;
+  right: -5px;
+  bottom: 0px;
+  pointer-events: none;
+  z-index: 2;
+} */
+
+.submitAndCancelBtns {
+  display: flex;
+  gap: 50px;
+}
+
+.submitBtn,
+.cancelBtn {
+  background-color: transparent;
+  color: white;
+  border: var(--main-border-size) solid var(--dark-neon-blue);
+  border-radius: 10px;
+  padding: 0.625rem;
+  /* Use em instead of px for relative sizing */
+  font-size: 1rem;
+  /* Use rem for a responsive font size */
+  width: auto;
+  padding: 1rem 2rem;
+  transition: var(--fast-transition);
+}
+
+.submitBtn:hover {
+  background-color: var(--dark-neon-blue);
+  box-shadow: 0 0 10px var(--dark-neon-blue);
+  cursor: pointer;
+}
+
+.cancelBtn {
+  border: var(--main-border-size) solid var(--error-color);
+}
+
+.cancelBtn:hover {
+  background-color: var(--error-color);
+  box-shadow: 0 0 10px var(--error-color);
+  cursor: pointer;
+}
+
+.toggleBtn {
+  background-color: transparent;
+  border: 0;
+  color: var(--dark-neon-blue);
+  transition: 100ms linear;
+}
+
+.toggleBtn:hover {
+  cursor: pointer;
+  color: var(--neon-blue);
+}
+
+.errorTextInput,
+.errorTextInput:focus {
+  outline: 2px solid var(--error-color);
+}
+
+@media (hover: none) {
+  .customImageUploadLabel .customImageUploadLabelContentsOptions {
+    /* Styles for devices without hover capabilities go here */
+    visibility: visible;
+    opacity: 1;
+  }
+}
+/* Breakpoints------------------------------------------------------------- */
+@media (max-width: 1160px) {
+  .deleteForm {
+    height: 70%;
+    width: 80%;
+  }
+}
+
+@media (max-width: 1000px) {
+  .itemForm {
+    width: 100%;
+    height: 100%;
+    padding: 15px;
+    border-radius: 0;
+    grid-template-columns: 1fr;
+    grid-template-rows: 1fr 1fr;
+    overflow-y: scroll;
+    border: 0;
+    box-shadow: none;
+  }
+
+  .itemForm::-webkit-scrollbar {
+    /* background-color: rgb(21, 21, 21); */
+    /* background-color: transparent; */
+    width: 5px;
+  }
+
+  .customImageUploadLabel {
+    height: 400px;
+  }
+
+  .textAreaBox {
+    width: 100%;
+  }
+
+  .itemInfoBox {
+    gap: 20px;
+    padding: 30px 10px;
+    overflow-y: visible;
+  }
+
+  .itemInfoBox::-webkit-scrollbar {
+    /* background-color: rgb(21, 21, 21); */
+    /* background-color: transparent; */
+    width: 0px;
+  }
+
+  .textInput {
+    width: 100%;
+  }
+
+  .textArea {
+    width: 100%;
+  }
+}
+
+@media (max-width: 500px) {
+  .deleteForm {
+    width: 100%;
+    height: 100%;
+    border: 0;
+    box-shadow: none;
+  }
+}

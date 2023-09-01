@@ -1,0 +1,35 @@
+/* components\layout\app\list-bar.module.css */
+.listBar {
+  width: 100%;
+  height: 100%;
+  overflow-y: scroll;
+  overflow-x: hidden;
+}
+
+/* .listBar::-webkit-scrollbar-thumb {
+    background: linear-gradient(rgba(140, 0, 255, 0.5), var(--dark-neon-blue));
+    transition: background 100ms ease-in-out;
+}
+
+.listBar::-webkit-scrollbar-thumb:hover {
+    background: linear-gradient(rgba(140, 0, 255, 1), var(--neon-blue));
+}
+
+.listBar::-webkit-scrollbar-track {
+    border-radius: 20px;
+    margin-block-start: 10px;
+    margin-block-end: 10px;
+} */
+.noItemsDisplayBox {
+  width: 100%;
+  height: 100%;
+  /* background-color: rgba(0, 0, 0, 0.727); */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.noItemsDisplayBox h1 {
+  margin: 0;
+  font-size: 1rem;
+}
