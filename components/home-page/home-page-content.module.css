@@ -1,5 +1,5 @@
 .homePageContent {
-  color: var(--lightest-color);
+  color: var(--color-L100);
   height: calc(100% - var(--main-nav-height));
   display: flex;
   flex-direction: column;

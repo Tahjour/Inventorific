@@ -210,13 +210,13 @@ function RegisterForm() {
           </div>
 
           <button type="submit" className={styles.submitBtn}>
-            {"Sign Up"}
+            {"Submit"}
           </button>
 
           <div className={styles.loginOrSignUpPart}>
             {"Have an account? "}
             <Link href={"/login"} className={styles.toggleBtn}>
-              {"Sign In"}
+              {"Login"}
             </Link>
           </div>
         </form>

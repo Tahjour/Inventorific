@@ -3,11 +3,11 @@ import { useUserInfoContext } from "@/context/user-context";
 import { Item } from "@/lib/types/item";
 import { AnimatePresence, motion } from "framer-motion";
 import { useEffect, useState } from "react";
-import TileList from "../../../item-lists/tile-list";
+import TileList from "../../../item-list-types/tiles/tile-list";
 import styles from "./list-bar.module.css";
 
 export default function ListBar() {
-  const { serverLoadWasTried, getUserItems } = useUserInfoContext();
+  const { serverLoadWasTried, getUserItems, getPreferredListType } = useUserInfoContext();
   const [itemsAreLoading, setItemsAreLoading] = useState(true);
   const [loadedItems, setLoadedItems] = useState<Item[]>([]);
 
@@ -22,11 +22,14 @@ export default function ListBar() {
   return (
     <section className={styles.listBar}>
       <AnimatePresence mode="wait">
-        {serverLoadWasTried && !itemsAreLoading && loadedItems.length > 0 && (
-          <motion.div>
-            <TileList key={"tile-list"} loadedItems={loadedItems} />
-          </motion.div>
-        )}
+        {serverLoadWasTried &&
+          !itemsAreLoading &&
+          loadedItems.length > 0 &&
+          getPreferredListType() === "tiles" && (
+            <motion.div>
+              <TileList key={"tile-list"} loadedItems={loadedItems} />
+            </motion.div>
+          )}
 
         {serverLoadWasTried && !itemsAreLoading && loadedItems.length < 1 && (
           <motion.div key={"no-items"} className={styles.noItemsDisplayBox}>

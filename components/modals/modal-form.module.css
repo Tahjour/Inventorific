@@ -6,7 +6,7 @@
   left: 0;
   width: 100vw;
   height: 100%;
-  background-color: var(--3-4-dark-bg-color);
+  background-color: var(--dark-bg-T75);
 }
 
 .formBox {
@@ -23,10 +23,10 @@
 .itemForm,
 .deleteForm {
   position: relative;
-  background-color: var(--bg-color);
+  background-color: var(--main-bg);
   text-align: center;
   border: var(--main-border-size) solid var(--dark-neon-blue);
-  box-shadow: 0 0 10px var(--dark-neon-blue);
+  box-shadow: 0 0 .625rem var(--dark-neon-blue);
   z-index: 3;
 }
 
@@ -35,7 +35,7 @@
   height: 90%;
   display: grid;
   grid-template-columns: 1fr 1fr;
-  border-radius: 20px;
+  border-radius: 1.25rem;
 }
 
 .deleteForm {
@@ -43,13 +43,13 @@
   justify-content: center;
   align-items: center;
   flex-direction: column;
-  gap: 25px;
-  border-radius: 20px;
-  color: var(--lightest-color);
-  background-color: var(--dark-bg-color);
+  gap: 1.5625rem;
+  border-radius: 1.25rem;
+  color: var(--color-L100);
+  background-color: var(--dark-bg);
   width: 40%;
   height: 50%;
-  padding: 20px;
+  padding: 1.25rem;
 }
 
 .imageFileInput {
@@ -61,13 +61,12 @@
   width: 100%;
   height: 100%;
   overflow: hidden;
-  padding: 30px;
+  padding: 1.875rem;
   cursor: pointer;
   text-align: center;
-  border-radius: 20px;
+  border-radius: 1.25rem;
   border: 0;
-  background-color: var(--dark-bg-color);
-  color: var(--lightest-color);
+  background-color: var(--dark-bg);
   overflow: hidden;
 }
 
@@ -84,18 +83,18 @@
   display: flex;
   justify-content: center;
   align-items: center;
-  gap: 5px;
+  gap: .3125rem;
   z-index: 2;
-  color: var(--lightest-color);
+  color: var(--color-L100);
 }
 
 .customImageUploadLabelContentsOptions {
-  background-color: var(--bg-color);
-  padding: 10px;
-  border-radius: 10px;
+  background-color: var(--main-bg);
+  padding: .625rem;
+  border-radius: .625rem;
   visibility: hidden;
   opacity: 0;
-  transition: var(--fast-transition);
+  transition: var(--fast-linear);
 }
 
 .customImageUploadLabel:hover .customImageUploadLabelContentsOptions,
@@ -110,7 +109,7 @@
 }
 
 .customImageUploadLabelContents svg {
-  font-size: 1.2rem;
+  font-size: 19.2px;
 }
 
 .customImageUploadLabelContents p {
@@ -122,20 +121,25 @@
   display: grid;
   align-items: center;
   justify-items: center;
-  padding: 20px;
-  border-radius: 20px;
-  color: var(--lightest-color);
+  padding: 1.25rem;
+  border-radius: 1.25rem;
+  color: var(--color-L100);
   overflow-y: scroll;
   scrollbar-gutter: stable both-edges;
 }
 
 .itemInfoBox::-webkit-scrollbar-thumb {
   background-color: var(--dark-neon-blue);
-  border-radius: 10px;
+  border-radius: .625rem;
 }
+
+.itemInfoBox::-webkit-scrollbar-thumb:hover {
+  background-color: var(--neon-blue);
+}
+
 .itemInfoBox::-webkit-scrollbar-track {
-  margin-block-start: 15px;
-  margin-block-end: 15px;
+  margin-block-start: .9375rem;
+  margin-block-end: .9375rem;
 }
 
 .inputBox {
@@ -145,7 +149,7 @@
   align-items: center;
   justify-content: center;
   width: 100%;
-  margin-bottom: 30px;
+  margin-bottom: 1.875rem;
 }
 
 .inputBox:last-child {
@@ -158,27 +162,29 @@
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  margin-bottom: 10px;
+  margin-bottom: .625rem;
   width: 100%;
 }
 
 .inputText {
   width: 100%;
-  padding: 20px;
-  border-radius: 10px;
+  padding: 1.25rem;
+  border-radius: .625rem;
   background-color: transparent;
   border: 0;
-  outline: var(--main-border-size) solid var(--lightest-color);
-  color: var(--lightest-color);
+  outline: var(--main-border-size) solid var(--color-L75);
+  color: var(--color-L100);
   text-align: center;
+  letter-spacing: .0625rem;
   transition: outline 300ms ease, color 300ms ease;
 }
 
 .inputTextArea {
-  height: 200px;
+  height: 12.5rem;
   width: 100%;
-  line-height: 20px;
+  line-height: 1.25rem;
   text-align: left;
+  letter-spacing: .0625rem;
 }
 
 .successInputText {
@@ -186,93 +192,96 @@
 }
 
 .errorInputText {
-  outline-color: var(--error-color);
+  outline-color: var(--error);
 }
 
 .inputText:-webkit-autofill {
   background-color: transparent !important;
-  -webkit-text-fill-color: var(--lightest-color);
-  -webkit-box-shadow: 0 0 0 1000px var(--bg-color) inset;
-  caret-color: var(--lightest-color);
+  -webkit-text-fill-color: var(--color-L100);
+  -webkit-box-shadow: 0 0 0 62.5rem var(--main-bg) inset;
+  caret-color: var(--color-L100);
 }
 
 .inputLabel {
   position: absolute;
   top: 50%;
-  /* left: 20px; */
   transform: translateY(-50%);
-  border-radius: 10px;
+  border-radius: .625rem;
   pointer-events: none;
-  background-color: var(--bg-color);
+  color: var(--color-L100);
+  background-color: var(--main-bg);
   transition: 200ms ease;
 }
 
 .inputText:focus + .inputLabel,
 .successLabel,
 .errorLabel {
-  top: -2px;
-  padding: 5px;
+  top: -0.125rem;
+  padding: .3125rem;
   font-size: 80%;
 }
 
 .successLabel {
-  color: var(--gradient-end-color);
+  letter-spacing: .0625rem;
+  font-weight: 500;
 }
 
 .errorLabel {
-  color: var(--error-color);
+  letter-spacing: .0625rem;
+  font-weight: 500;
+  color: var(--error);
 }
 
 .errorText {
-  color: var(--error-color);
+  color: var(--error);
 }
 
 /* .resizeHandle {
-  height: 0px;
-  width: 0px;
-  border: 10px solid rgb(0, 158, 158);
+  height: 0rem;
+  width: 0rem;
+  border: .625rem solid rgb(0, 158, 158);
   border-radius: 50%;
   transform: rotate(-45deg);
   position: absolute;
-  right: -5px;
-  bottom: 0px;
+  right: -0.3125rem;
+  bottom: 0rem;
   pointer-events: none;
   z-index: 2;
 } */
 
 .submitAndCancelBtns {
   display: flex;
-  gap: 50px;
+  gap: 3.125rem;
 }
 
 .submitBtn,
 .cancelBtn {
   background-color: transparent;
-  color: white;
+  color: var(--color-L100);
   border: var(--main-border-size) solid var(--dark-neon-blue);
-  border-radius: 10px;
-  padding: 0.625rem;
+  border-radius: .625rem;
+  padding: 10px;
   /* Use em instead of px for relative sizing */
-  font-size: 1rem;
+  font-size: 16px;
   /* Use rem for a responsive font size */
   width: auto;
-  padding: 1rem 2rem;
-  transition: var(--fast-transition);
+  padding: 16px 32px;
+  transition: var(--fast-linear);
 }
 
 .submitBtn:hover {
   background-color: var(--dark-neon-blue);
-  box-shadow: 0 0 10px var(--dark-neon-blue);
+  box-shadow: 0 0 .625rem var(--dark-neon-blue);
   cursor: pointer;
 }
 
 .cancelBtn {
-  border: var(--main-border-size) solid var(--error-color);
+  border: var(--main-border-size) solid var(--error);
 }
 
 .cancelBtn:hover {
-  background-color: var(--error-color);
-  box-shadow: 0 0 10px var(--error-color);
+  background-color: var(--error);
+  box-shadow: 0 0 .625rem var(--error);
   cursor: pointer;
 }
 
@@ -290,7 +299,7 @@
 
 .errorTextInput,
 .errorTextInput:focus {
-  outline: 2px solid var(--error-color);
+  outline: .125rem solid var(--error);
 }
 
 @media (hover: none) {
@@ -301,18 +310,18 @@
   }
 }
 /* Breakpoints------------------------------------------------------------- */
-@media (max-width: 1160px) {
+@media (max-width: 72.5rem) {
   .deleteForm {
     height: 70%;
     width: 80%;
   }
 }
 
-@media (max-width: 1000px) {
+@media (max-width: 62.5rem) {
   .itemForm {
     width: 100%;
     height: 100%;
-    padding: 15px;
+    padding: .9375rem;
     border-radius: 0;
     grid-template-columns: 1fr;
     grid-template-rows: 1fr 1fr;
@@ -324,11 +333,11 @@
   .itemForm::-webkit-scrollbar {
     /* background-color: rgb(21, 21, 21); */
     /* background-color: transparent; */
-    width: 5px;
+    width: .3125rem;
   }
 
   .customImageUploadLabel {
-    height: 400px;
+    height: 25rem;
   }
 
   .textAreaBox {
@@ -336,15 +345,15 @@
   }
 
   .itemInfoBox {
-    gap: 20px;
-    padding: 30px 10px;
+    gap: 1.25rem;
+    padding: 1.875rem .625rem;
     overflow-y: visible;
   }
 
   .itemInfoBox::-webkit-scrollbar {
     /* background-color: rgb(21, 21, 21); */
     /* background-color: transparent; */
-    width: 0px;
+    width: 0rem;
   }
 
   .textInput {
@@ -356,7 +365,7 @@
   }
 }
 
-@media (max-width: 500px) {
+@media (max-width: 31.25rem) {
   .deleteForm {
     width: 100%;
     height: 100%;

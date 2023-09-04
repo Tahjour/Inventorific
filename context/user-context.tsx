@@ -1,17 +1,20 @@
 // context\user-context.tsx
+import { ErrorMessages, PendingMessages, SuccessMessages } from "@/lib/helpers/messages";
+import { ResponseData } from "@/lib/types/api";
 import { LoginValues, RegisterValues } from "@/lib/types/form-authentication";
 import { Item } from "@/lib/types/item";
-import { UserContextType, UserInfo, UserResponseData } from "@/lib/types/user";
-import { signIn, signOut } from "next-auth/react";
+import { ListType } from "@/lib/types/list";
+import { UserContextType, UserInfo } from "@/lib/types/user";
+import { signIn, signOut, useSession } from "next-auth/react";
 import { useRouter } from "next/router";
 import { createContext, useContext, useEffect, useState } from "react";
 import { useNotification } from "./notification-context";
-import { PendingMessages } from "@/lib/helpers/messages";
 
 const UserContext = createContext<UserContextType>({} as UserContextType);
 
 export function UserContextProvider({ children }: { children: React.ReactNode }) {
   const router = useRouter();
+  const { data: session } = useSession();
   const { showNotification } = useNotification();
   const [userInfo, setUserInfo] = useState<UserInfo>(null);
   const [userItems, setUserItems] = useState<Item[]>([]);
@@ -20,20 +23,15 @@ export function UserContextProvider({ children }: { children: React.ReactNode })
   const [serverLoadWasTried, setServerLoadWasTried] = useState(false);
   const [itemSearchTerm, setItemSearchTerm] = useState("");
   const [debouncedSearchTerm, setDebouncedSearchTerm] = useState("");
+  const [preferredListType, setPreferredListType] = useState<ListType>("tiles");
 
   useEffect(() => {
     // Figure out how to add a loading component
     async function loadUserInfo() {
       if (!serverLoadWasTried) {
         const response = await fetch("/api/load-user");
-        const data: UserResponseData = await response.json();
+        const data: ResponseData = await response.json();
         console.log("data: ", data);
-        if (data.type === "error") {
-          showNotification({
-            type: "error",
-            message: data.message,
-          });
-        }
         if (data.type === "success" && data.userInfo) {
           setUserInfo(data.userInfo);
           setUserItems(data.userInfo.items);
@@ -43,7 +41,7 @@ export function UserContextProvider({ children }: { children: React.ReactNode })
       setServerLoadWasTried(true);
     }
     loadUserInfo();
-  }, [serverLoadWasTried, showNotification]);
+  }, [serverLoadWasTried]);
 
   // Update debouncedSearchTerm with a delay after itemSearchTerm changes
   useEffect(() => {
@@ -77,97 +75,143 @@ export function UserContextProvider({ children }: { children: React.ReactNode })
     return userInfoToDelete;
   }
 
-  // function searchItems(newItemSearchTerm: string) {
-  //   if (newItemSearchTerm === "") {
-  //     setFilteredItems(getUserItems());
-  //   } else {
-  //     const filteredItems = getUserItems().filter((item) =>
-  //       item?.name.toLowerCase().includes(newItemSearchTerm.toLowerCase())
-  //     );
-  //     setFilteredItems(filteredItems);
-  //   }
-  // }
+  function getPreferredListType() {
+    return preferredListType;
+  }
+
+  function changePreferredListType(preferredListType: ListType) {
+    setPreferredListType(preferredListType);
+  }
 
   async function loginUser(values: LoginValues) {
-    showNotification({
-      type: "saving",
-      message: "Logging in...",
-    });
-    const response = await signIn("credentials", {
-      redirect: false,
-      email: values.email,
-      password: values.password,
-    });
-    if (!response?.ok) {
+    try {
+      showNotification({
+        type: "saving",
+        message: PendingMessages.LoggingIn,
+      });
+      const response = await signIn("credentials", {
+        redirect: false,
+        email: values.email,
+        password: values.password,
+      });
+      if (!response || !response.ok) {
+        throw new Error(ErrorMessages.UserLoginFailed);
+      }
+      setServerItemsWereLoaded(false);
+      setServerLoadWasTried(false);
+      showNotification({
+        type: "success",
+        message: SuccessMessages.UserSignedIn,
+      });
+
+      router.push("/inventory");
+    } catch (error) {
       showNotification({
         type: "error",
-        message: "Username or password incorrect",
+        message: error instanceof Error ? error.message : ErrorMessages.UserLoginFailed,
       });
-      return;
     }
-    setServerItemsWereLoaded(false);
-    setServerLoadWasTried(false);
-    showNotification({
-      type: "success",
-      message: "Logged In",
-    });
-    if (serverLoadWasTried) {
-      router.push("/inventory");
+  }
+
+  async function loginUserWithGoogle() {
+    try {
+      showNotification({
+        type: "saving",
+        message: "launching...",
+      });
+      const response = await signIn("google", { callbackUrl: "/inventory" });
+
+      if (response?.ok) {
+        showNotification({
+          type: "success",
+          message: "Success!",
+        });
+
+        setServerItemsWereLoaded(false);
+        setServerLoadWasTried(false);
+      }
+    } catch (error) {
+      showNotification({
+        type: "error",
+        message: "Something went wrong!",
+      });
     }
   }
   //similar function to register user instead
   async function registerUser(values: RegisterValues) {
-    const requestBody = {
-      name: values.name,
-      email: values.email,
-      password: values.password,
-    };
-    showNotification({
-      type: "saving",
-      message: PendingMessages.CreatingUser,
-    });
-    const response = await fetch("/api/auth/signup", {
-      method: "POST",
-      body: JSON.stringify(requestBody),
-      headers: {
-        "Content-Type": "application/json",
-        Accept: "application/json",
-      },
-    });
-    const data = await response.json();
-    if (data) {
+    try {
+      const requestBody = {
+        name: values.name,
+        email: values.email,
+        password: values.password,
+        list_type: preferredListType,
+      };
       showNotification({
-        type: "success",
-        message: "User created!",
+        type: "saving",
+        message: PendingMessages.CreatingUser,
       });
-      router.push("/login");
+      const response = await fetch("/api/auth/signup", {
+        method: "POST",
+        body: JSON.stringify(requestBody),
+        headers: {
+          "Content-Type": "application/json",
+          Accept: "application/json",
+        },
+      });
+      const data: ResponseData = await response.json();
+      if (data.type === "error") {
+        showNotification({
+          type: "error",
+          message: data.message,
+        });
+        return;
+      }
+      if (data) {
+        showNotification({
+          type: "success",
+          message: SuccessMessages.UserCreated,
+        });
+        router.push("/login");
+      }
+    } catch (error) {
+      showNotification({
+        type: "error",
+        message: error instanceof Error ? error.message : ErrorMessages.UserCreationFailed,
+      });
     }
   }
 
   async function deleteUserInfo() {
-    if (!userInfoToDelete) {
-      console.error("No user set to delete");
-      return;
-    }
-    showNotification({
-      type: "saving",
-      message: "Deleting User Data...",
-    });
-    const response = await fetch("/api/delete-user", {
-      method: "DELETE",
-    });
-    const data = await response.json();
-    if (data) {
-      console.log(data);
+    try {
+      if (!userInfoToDelete) {
+        throw new Error(ErrorMessages.NoUserToDelete);
+      }
+      showNotification({
+        type: "saving",
+        message: "Deleting User Data...",
+      });
+      const response = await fetch("/api/delete-user", {
+        method: "DELETE",
+      });
+      const data: ResponseData = await response.json();
+      if (data.type === "error") {
+        throw new Error(data.message);
+      }
       showNotification({
         type: "success",
-        message: "User Deleted",
+        message: data.message,
       });
       await signOut({
         callbackUrl: "/",
       });
+    } catch (error) {
+      showNotification({
+        type: "error",
+        message: error instanceof Error ? error.message : ErrorMessages.UserDeleteFailed,
+      });
+    } finally {
+      setUserInfoToDelete(null);
     }
-    setUserInfoToDelete(null);
   }
 
   const context: UserContextType = {
@@ -183,10 +227,12 @@ export function UserContextProvider({ children }: { children: React.ReactNode })
     setServerLoadWasTried,
     setServerItemsWereLoaded,
     loginUser,
+    loginUserWithGoogle,
     registerUser,
-    // searchItems,
     itemSearchTerm,
     setItemSearchTerm,
+    changePreferredListType,
+    getPreferredListType,
   };
 
   return <UserContext.Provider value={context}>{children}</UserContext.Provider>;

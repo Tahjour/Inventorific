@@ -12,15 +12,15 @@ export class ResponseError extends Error {
   }
 }
 
-export function handleError(res: NextApiResponse, error: unknown): void {
+export function sendResponseError(error: unknown, res: NextApiResponse): void {
   // Handle any error that occurs during the process and send an appropriate error message as JSON.
   logger.error(error);
+
+  // Set the response status to the appropriate status code based on the error and send the `data` object as JSON.
   const data: ResponseData = {
     type: "error",
     message: error instanceof ResponseError ? error.message : ErrorMessages.InternalServerError,
   };
-
-  // Set the response status to the appropriate status code based on the error and send the `data` object as JSON.
   error instanceof ResponseError
     ? res.status(error.statusCode).json(data)
     : res.status(StatusCodes.INTERNAL_SERVER_ERROR).json(data);

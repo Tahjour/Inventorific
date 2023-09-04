@@ -1,14 +1,15 @@
 //pages/api/auth/add-item.ts
 import { getConnectedClient } from "@/lib/database/mongodb";
-import { ResponseError, handleError } from "@/lib/helpers/errors";
+import { ResponseError, sendResponseError } from "@/lib/helpers/errors";
 import { ErrorMessages, SuccessMessages } from "@/lib/helpers/messages";
-import { ItemResponseData, MongodbItem } from "@/lib/types/item";
+import { ResponseData } from "@/lib/types/api";
+import { MongodbItem } from "@/lib/types/item";
 import { v2 as cloudinary } from "cloudinary";
 import formidable from "formidable";
 import { StatusCodes } from "http-status-codes";
 import { NextApiRequest, NextApiResponse } from "next";
 import { getServerSession } from "next-auth/next";
-import { authOptions } from "./auth/[...nextauth]";
+import { getNextAuthOptions } from "./auth/[...nextauth]";
 
 export const config = {
   api: {
@@ -46,8 +47,8 @@ export default async function addItemHandler(
           throw new ResponseError(StatusCodes.BAD_REQUEST, ErrorMessages.FormParseFailed);
         }
 
-        // Get the user session using `getServerSession` and `authOptions`.
-        const session = await getServerSession(req, res, authOptions);
+        // Get the user session using `getServerSession` and `getNextAuthOptions`.
+        const session = await getServerSession(req, res, getNextAuthOptions());
 
         // Check if the session and user exist. If not, throw an error.
         if (!session || !session.user) {
@@ -121,17 +122,17 @@ export default async function addItemHandler(
         }
 
         // Send a response with a success message and the new item details.
-        const data: ItemResponseData = {
+        const data: ResponseData = {
           type: "success",
           message: SuccessMessages.ItemAdded,
           uploadedItem: newItem,
         };
         res.status(StatusCodes.OK).json(data);
       } catch (error) {
-        handleError(res, error);
+        sendResponseError(error, res);
       }
     });
   } catch (error) {
-    handleError(res, error);
+    sendResponseError(error, res);
   }
 }

@@ -2,7 +2,7 @@
 import { hashPassword } from "@/lib/auth/user-validation/server";
 import { getConnectedClient } from "@/lib/database/mongodb";
 import { getFormattedDate, getFormattedTime } from "@/lib/helpers/date";
-import { ResponseError, handleError } from "@/lib/helpers/errors";
+import { ResponseError, sendResponseError } from "@/lib/helpers/errors";
 import { ErrorMessages, SuccessMessages } from "@/lib/helpers/messages";
 import { ResponseData } from "@/lib/types/api";
 import { StatusCodes } from "http-status-codes";
@@ -59,9 +59,9 @@ export default async function signUpHandler(req: NextApiRequest, res: NextApiRes
       type: "success",
       message: SuccessMessages.UserCreated,
     };
-    res.status(201).json(data);
+    res.status(StatusCodes.OK).json(data);
     return;
   } catch (error) {
-    handleError(res, error);
+    sendResponseError(error, res);
   }
 }

@@ -2,20 +2,25 @@ export const ErrorMessages = {
   UserNotFound: "User not found in database",
   UserAlreadyExists: "User already exists",
   UserDeleteFailed: "Failed to delete user. Please contact the developer.",
-  UserNotAuthorized: "User is not authorized",
+  UserNotAuthorized: "User is not authorized. Login to save changes.",
   UserValidationFailed: "User validation failed",
   EmailAlreadyExists: "Email already exists",
   PasswordGenerateFailed: "Failed to generate password. Please contact the developer.",
   UserCreationFailed: "Failed to create user. Please contact the developer.",
+  UserLoginFailed: "Failed to sign in user. Please contact the developer.",
+  NoUserToEdit: "No user to edit",
+  NoUserToDelete: "No user to delete",
 
   ItemNotFound: "Item not found",
   ItemAlreadyExists: "Item already exists",
   ItemCreationFailed: "Failed to add item on server. Please contact the developer.",
   ItemEditFailed: "Failed to edit item on server. Please contact the developer.",
   ItemDeleteFailed: "Failed to delete item on server. Please contact the developer.",
+  NoItemToCreate: "No item to create",
   NoItemToEdit: "No item to edit",
   NoItemToDelete: "No item to delete",
   ItemValidationFailed: "Item validation failed",
+  PreferredListTypeSaveFailed: "Failed to save preferred list type. Please contact the developer.",
 
   InvalidImageFile: "Invalid image file",
   ImageUploadFailed: "Failed to upload image on server. Please contact the developer.",
@@ -49,6 +54,7 @@ export const ErrorMessages = {
   BadGateway: "Bad gateway. Please contact the developer.",
   ServiceUnavailable: "Service unavailable. Please contact the developer.",
   GatewayTimeout: "Gateway timeout. Please contact the developer.",
+  SomethingWentWrong: "Something went wrong. Please contact the developer.",
 };
 
 export const SuccessMessages = {
@@ -69,6 +75,7 @@ export const SuccessMessages = {
   ItemAdded: "Item added!",
   ItemEdited: "Item edited!",
   ItemDeleted: "Item deleted!",
+  PreferredListTypeSaved: "Preferred list type saved!",
 
   ItemImageDeleted: "Item image deleted!",
   UserImageDeleted: "User image deleted!",
@@ -82,4 +89,5 @@ export const PendingMessages = {
   SavingItem: "Saving item...",
 
   CreatingUser: "Creating user...",
+  LoggingIn: "Signing in...",
 };

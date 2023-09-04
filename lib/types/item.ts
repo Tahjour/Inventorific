@@ -51,5 +51,3 @@ export type ItemResponseData = {
   uploadedItem?: MongodbItem;
   editedItem?: MongodbItem;
 };
-
-

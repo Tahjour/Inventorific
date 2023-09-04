@@ -1,6 +1,9 @@
 // components\layout\app\app-bars\main-bar\main-bar-menu\main-bar-menu.tsx
 import { useItemsContext } from "@/context/items-context";
+import { useNotification } from "@/context/notification-context";
 import { useUserInfoContext } from "@/context/user-context";
+import { ResponseData } from "@/lib/types/api";
+import { ListType } from "@/lib/types/list";
 import { Fragment } from "react";
 import { BsSearch } from "react-icons/bs";
 import { FaListUl } from "react-icons/fa";
@@ -9,7 +12,10 @@ import styles from "./main-bar-menu.module.css";
 
 export default function MainBarMenu() {
   const { showItemModal } = useItemsContext();
-  const { itemSearchTerm, setItemSearchTerm } = useUserInfoContext();
+  const { showNotification } = useNotification();
+  const { itemSearchTerm, setItemSearchTerm, getPreferredListType, changePreferredListType } =
+    useUserInfoContext();
+  const listType = getPreferredListType();
 
   function addNewItemHandler() {
     showItemModal(null);
@@ -18,6 +24,37 @@ export default function MainBarMenu() {
   function handleSearchTermChange(event: React.ChangeEvent<HTMLInputElement>) {
     const newItemSearchTerm = event.target.value;
     setItemSearchTerm(newItemSearchTerm);
+  }
+
+  // Updated changePreferredListTypeHandler to take a desired type
+  async function changePreferredListTypeHandler(preferredListType: ListType) {
+    showNotification({
+      type: "saving",
+      message: "saving...",
+    });
+    // Change the list type specifically to the desired type
+    changePreferredListType(preferredListType);
+
+    const response = await fetch("/api/save-preferred-list-type", {
+      method: "POST",
+      body: JSON.stringify({ preferredListType: preferredListType }),
+      headers: {
+        "Content-Type": "application/json",
+        Accept: "application/json",
+      },
+    });
+    const data: ResponseData = await response.json();
+    if (data.type === "error") {
+      showNotification({
+        type: "error",
+        message: data.message,
+      });
+      return;
+    }
+    showNotification({
+      type: "success",
+      message: data.message,
+    });
   }
 
   return (
@@ -36,10 +73,22 @@ export default function MainBarMenu() {
           </div>
           <div className={styles.mainBarMenuBtns}>
             <div className={styles.mainBarMenuBtnIcons}>
-              <button className={styles.listTypeBtn}>
+              <button
+                className={`${styles.listTypeBtn} ${
+                  listType === "slabs" ? styles.activeListTypeBtn : ""
+                }`}
+                // Call changePreferredListTypeHandler with the desired type on click
+                onClick={() => changePreferredListTypeHandler("slabs")}
+              >
                 <FaListUl />
               </button>
-              <button className={`${styles.listTypeBtn} ${styles.activeListTypeBtn}`}>
+              <button
+                className={`${styles.listTypeBtn} ${
+                  listType === "tiles" ? styles.activeListTypeBtn : ""
+                }`}
+                // Call changePreferredListTypeHandler with the desired type on click
+                onClick={() => changePreferredListTypeHandler("tiles")}
+              >
                 <IoGrid />
               </button>
             </div>

@@ -3,7 +3,7 @@
 .notificationLoader {
   border: 10px solid var(--neon-blue);
   border-radius: 50%;
-  border-top: 10px solid var(--dark-bg-color);
+  border-top: 10px solid var(--dark-bg);
   width: 30px;
   height: 30px;
 }
@@ -45,5 +45,5 @@
 } */
 
 .error {
-  background: var(--error-color);
+  background: var(--error);
 }

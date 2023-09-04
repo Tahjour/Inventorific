@@ -1,6 +1,7 @@
 import { Dispatch, SetStateAction } from "react";
 import { LoginValues, RegisterValues } from "./form-authentication";
 import { Item } from "./item";
+import { ListType } from "./list";
 
 export type UserInfo = {
   login_type: "oauth" | "credentials";
@@ -10,6 +11,7 @@ export type UserInfo = {
   items: Item[];
   date_created: string;
   time_created: string;
+  preferred_list_type?: ListType;
 } | null;
 
 export type UserContextType = {
@@ -25,9 +27,12 @@ export type UserContextType = {
   serverItemsWereLoaded: boolean;
   setServerItemsWereLoaded: Dispatch<SetStateAction<boolean>>;
   loginUser: (values: LoginValues) => Promise<void>;
+  loginUserWithGoogle: () => Promise<void>;
   registerUser: (values: RegisterValues) => Promise<void>;
   itemSearchTerm: string;
   setItemSearchTerm: Dispatch<SetStateAction<string>>;
+  changePreferredListType: (listType: ListType) => void;
+  getPreferredListType: () => ListType;
   // searchItems: (newItemSearchTerm: string) => void;
 };
 

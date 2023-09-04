@@ -122,7 +122,7 @@ function DropDownMenu() {
                     <span className={styles.iconWrapper}>
                       <RiLogoutBoxLine size={20} />
                     </span>
-                    Sign Out
+                    Log Out
                   </DropdownMenu.Item>
                 ) : null}
               </motion.div>

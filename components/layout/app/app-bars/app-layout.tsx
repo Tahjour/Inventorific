@@ -4,7 +4,7 @@ import { Fragment, PropsWithChildren } from "react";
 import { useItemsContext } from "../../../../context/items-context";
 import AddItemModalForm from "../../../modals/add-item-modal-form";
 import ModalBackdrop from "../../../modals/modal-form-backdrop";
-import MainNavigation from "../../navigations/main-navigation";
+import AppNavigation from "../../navigation/app/app-navigation";
 import styles from "./app-layout.module.css";
 import MainBar from "./main-bar/main-bar";
 
@@ -12,7 +12,7 @@ function AppLayout(props: PropsWithChildren) {
   const { itemModalIsOpen } = useItemsContext();
   return (
     <Fragment>
-      <MainNavigation />
+      <AppNavigation />
 
       <AnimatePresence mode="wait">
         {itemModalIsOpen && (

@@ -1,30 +1,30 @@
 /* components\layout\app\item-lists\tile-list.module.css */
-.tileList {
+.slabList {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(270px, 1fr));
+  grid-template-rows: 1fr;
   /* justify-items: center; */
   justify-items: center;
-  padding: 0 20px;
+  padding: 0 1.25rem;
 }
 
-.itemCard {
+.itemSlab {
   position: relative;
   display: flex;
   flex-direction: column;
   align-items: center;
   text-align: center;
-  border-radius: 20px;
-  width: 250px;
-  margin: 30px 0;
-  background-color: var(--card-color);
-  box-shadow: 0 0 5px var(--dark-neon-blue);
-  color: var(--lightest-color);
+  border-radius: 1.25rem;
+  width: 62.5rem;
+  margin: 1.875rem 0;
+  background-color: var(--card);
+  box-shadow: 0 0 .3125rem var(--dark-neon-blue);
+  color: var(--color-L100);
   text-decoration: none;
   cursor: pointer;
   outline: none;
 }
 
-.itemCard::before {
+.itemSlab::before {
   content: "";
   position: absolute;
   z-index: -1;
@@ -35,30 +35,30 @@
   border-radius: inherit;
   background-color: var(--neon-blue);
   transform: scale(1.02);
-  filter: blur(10px);
+  filter: blur(.625rem);
   opacity: 0;
   transition: opacity 200ms linear;
 }
 
-.itemCard:hover::before,
-.itemCard:focus::before {
+.itemSlab:hover::before,
+.itemSlab:focus::before {
   opacity: 1;
 }
 
-.itemCardLink {
+.itemSlabLink {
   height: 100%;
   width: 100%;
   text-decoration: none;
 }
 
-.itemCard h3,
-.itemCard p {
+.itemSlab h3,
+.itemSlab p {
   margin: 0;
 }
 
-.itemCard:last-child {
+/* .itemSlab:last-child {
   justify-content: center;
-}
+} */
 
 .itemImageBox {
   position: relative;
@@ -82,23 +82,22 @@
   position: relative;
   transform: translateY(-50%);
   background-color: hsl(192, 100%, 30%);
-  padding: 5px;
-  border-radius: 10px;
-  letter-spacing: 1px;
+  padding: .3125rem;
+  border-radius: .625rem;
+  letter-spacing: .0625rem;
 }
 
 .itemInfoBox {
   display: flex;
   flex-direction: column;
   /* justify-content: center; */
-  gap: 20px;
+  gap: 1.25rem;
   justify-content: center;
   align-items: center;
   height: 50%;
   width: 100%;
-  letter-spacing: 1px;
-  font-size: 0.9rem;
-
+  letter-spacing: .0625rem;
+  font-size: 14.4px;
 }
 
 .itemInfoBits {
@@ -109,34 +108,34 @@
 
 .operationIcons {
   width: 100%;
-  /* font-size: 1.5rem; */
+  /* font-size: 24px; */
   display: flex;
   flex-direction: row;
   justify-content: space-between;
-  font-size: 35px;
-  padding: 0 10px 10px;
+  font-size: 2.1875rem;
+  padding: 0 .625rem .625rem;
 }
 
 .operationIcon {
   color: var(--dark-neon-blue);
   border-radius: 50%;
-  transition: var(--fast-transition);
+  transition: var(--fast-linear);
 }
 
 .operationIcon:hover {
   transform: scale(1.2);
-  box-shadow: 0 0 10px var(--dark-neon-blue);
-  background-color: var(--half-dark-neon-blue);
+  box-shadow: 0 0 .625rem var(--dark-neon-blue);
+  background-color: var(--dark-neon-blue-T50);
 }
 
-@media (max-width: 628px) {
-  .tileList {
+@media (max-width: 39.25rem) {
+  .slabList {
     grid-template-columns: 1fr;
   }
 
-  .itemCard {
+  .itemSlab {
     width: 90vw;
-    /* height: 370px; */
+    /* height: 23.125rem; */
     /* vw stands for viewport width */
     /* margin: 5vw; */
     /* Adjust margins as per your requirement */
@@ -146,6 +145,6 @@
   }
 
   .operationIcons {
-    font-size: 50px;
+    font-size: 3.125rem;
   }
 }

@@ -3,41 +3,44 @@
   width: 100%;
   height: var(--main-nav-height);
   /* background-color: rgb(0, 0, 0, 0.1); */
-  /* box-shadow: 0 2px 2px var(--dark-neon-blue); */
+  /* box-shadow: 0 .125rem .125rem var(--dark-neon-blue); */
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 10px;
+  padding: .8rem;
+}
+
+.logoLink {
+  border-radius: .6rem;
 }
 
 .logoImage {
-  /* margin-top: 4.8px; */
-  border-radius: 10px;
-  box-shadow: 0 0 5px var(--dark-neon-blue);
+  border-radius: inherit;
+  box-shadow: 0 0 .3125rem var(--dark-neon-blue);
   vertical-align: bottom;
 }
 
 .logoImage:hover,
 .logoImage:focus {
-  box-shadow: 0 0 10px var(--neon-blue);
+  box-shadow: 0 0 .6rem var(--neon-blue);
 }
 /* mainBarMenu */
 .appNavigationBox {
   display: flex;
-  gap: 30px;
+  gap: 1.5rem;
 }
 
 .appNavLink {
   display: flex;
   align-items: center;
   text-decoration: none;
-  color: var(--lightest-color);
-  background-color: var(--dark-bg-color);
-  outline: var(--main-border-size) solid var(--dark-neon-blue);
-  padding: 5px 15px;
-  border-radius: 5px;
-  font-size: 0.8rem;
-  gap: 10px;
+  color: var(--color-L100);
+  background-color: var(--dark-bg);
+  border: var(--main-border-size) solid var(--dark-neon-blue);
+  padding: .3125rem .9375rem;
+  border-radius: .625rem;
+  font-size: .8rem;
+  gap: .625rem;
 }
 
 .appNavLinkActive {

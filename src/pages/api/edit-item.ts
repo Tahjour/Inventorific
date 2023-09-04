@@ -1,14 +1,15 @@
 import { getConnectedClient } from "@/lib/database/mongodb";
-import { ResponseError, handleError } from "@/lib/helpers/errors";
+import { ResponseError, sendResponseError } from "@/lib/helpers/errors";
+import { logger } from "@/lib/helpers/logger";
 import { ErrorMessages, SuccessMessages } from "@/lib/helpers/messages";
-import { ItemResponseData, MongodbItem } from "@/lib/types/item";
+import { ResponseData } from "@/lib/types/api";
+import { MongodbItem } from "@/lib/types/item";
 import { v2 as cloudinary } from "cloudinary";
 import formidable from "formidable";
 import { StatusCodes } from "http-status-codes";
 import { NextApiRequest, NextApiResponse } from "next";
 import { getServerSession } from "next-auth/next";
-import { authOptions } from "./auth/[...nextauth]";
-import { logger } from "@/lib/helpers/logger";
+import { getNextAuthOptions } from "./auth/[...nextauth]";
 
 // API configuration to disable the default bodyParser
 export const config = {
@@ -46,7 +47,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
         }
 
         // Check if the user is authenticated, return an "UserNotAuthorized" error if not
-        const session = await getServerSession(req, res, authOptions);
+        const session = await getServerSession(req, res, getNextAuthOptions());
         if (!session || !session.user) {
           throw new ResponseError(StatusCodes.UNAUTHORIZED, ErrorMessages.UserNotAuthorized);
         }
@@ -160,17 +161,17 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
         }
 
         // Send a response after the update
-        const data: ItemResponseData = {
+        const data: ResponseData = {
           type: "success",
           message: SuccessMessages.ItemEdited,
           editedItem: editedItem,
         };
         res.status(StatusCodes.OK).json(data);
       } catch (error) {
-        handleError(res, error);
+        sendResponseError(error, res);
       }
     });
   } catch (error) {
-    handleError(res, error);
+    sendResponseError(error, res);
   }
 }

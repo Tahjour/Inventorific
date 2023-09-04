@@ -1,13 +1,13 @@
 import { getConnectedClient } from "@/lib/database/mongodb";
-import { ResponseError, handleError } from "@/lib/helpers/errors";
+import { ResponseError, sendResponseError } from "@/lib/helpers/errors";
 import { ErrorMessages, SuccessMessages } from "@/lib/helpers/messages";
-import { ItemResponseData } from "@/lib/types/item";
+import { ResponseData } from "@/lib/types/api";
 import { v2 as cloudinary } from "cloudinary";
 import formidable from "formidable";
 import { StatusCodes } from "http-status-codes";
 import { NextApiRequest, NextApiResponse } from "next";
 import { getServerSession } from "next-auth/next";
-import { authOptions } from "./auth/[...nextauth]";
+import { getNextAuthOptions } from "./auth/[...nextauth]";
 
 export const config = {
   api: {
@@ -36,7 +36,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
           throw new ResponseError(StatusCodes.BAD_REQUEST, ErrorMessages.FormParseFailed);
         }
 
-        const session = await getServerSession(req, res, authOptions);
+        const session = await getServerSession(req, res, getNextAuthOptions());
 
         if (!session || !session.user) {
           throw new ResponseError(StatusCodes.UNAUTHORIZED, ErrorMessages.UserNotAuthorized);
@@ -88,18 +88,18 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
             ErrorMessages.ItemDeleteFailed
           );
         }
-        const data: ItemResponseData = {
+        const data: ResponseData = {
           type: "success",
           message: SuccessMessages.ItemDeleted,
         };
         // Send a response after the deletion
         res.status(StatusCodes.OK).json(data);
       } catch (error) {
-        handleError(res, error);
+        sendResponseError(error, res);
       }
     });
   } catch (error) {
-    handleError(res, error);
+    sendResponseError(error, res);
   }
 }
 

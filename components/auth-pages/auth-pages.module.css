@@ -1,4 +1,4 @@
-/* D:\Projects\Personal_Projects\nextjs-inventory-control\components\auth-pages\auth-pages.module.css */
+/* components\auth-pages\auth-pages.module.css */
 .formBox {
   height: 100%;
   display: grid;
@@ -14,7 +14,7 @@
 .formOuter,
 .formOuterRegister {
   width: 500px;
-  background-color: rgb(30, 30, 30);
+  background-color: var(--main-bg);
   border-radius: 20px;
   text-align: center;
   border-top: var(--main-border-size) solid var(--dark-neon-blue);
@@ -31,7 +31,7 @@
 .formOuter h1,
 .formOuterRegister h1 {
   margin-bottom: 50px;
-  color: white;
+  color: var(--color-L100);
   text-shadow: 0 0 10px var(--dark-neon-blue), 0 0 20px var(--dark-neon-blue),
     0 0 50px var(--dark-neon-blue);
 }
@@ -44,7 +44,7 @@
 }
 
 .form > * {
-  color: rgb(190, 190, 190);
+  color: var(--color-L75);
 }
 
 .inputBox {
@@ -80,15 +80,14 @@
   height: 100%;
   border: 0;
   background-color: transparent;
-  color: rgb(190, 190, 190);
-  outline: 2px solid rgba(190, 190, 190, 1);
-  transition: outline-color 0.3s ease;
+  color: var(--color-L75);
+  outline: 2px solid var(--color-L75);
+  transition: var(--medium-linear);
 }
 
 .textInput:focus {
   /* border: var(--main-border-size) solid var(--dark-neon-blue); */
   outline-color: var(--dark-neon-blue);
-  /* transition: 0.3s ease; */
 }
 
 .inputLabel {
@@ -100,7 +99,7 @@
   color: rgb(190, 190, 190);
   background-color: rgb(30, 30, 30);
   pointer-events: none;
-  transition: 0.3s ease;
+  transition: var(--medium-linear);
 }
 
 .textInput:focus + .inputLabel,
@@ -112,15 +111,15 @@
 
 .errorTextInput,
 .errorTextInput:focus {
-  outline-color: rgba(255, 0, 0, 0.5);
+  outline-color: var(--error);
 }
 
 .errorLabel {
-  color: rgba(255, 0, 0, 0.5);
+  color: var(--error);
 }
 
 .errorMessage {
-  color: rgba(255, 0, 0, 0.8);
+  color: var(--error);
   margin-top: 10px;
 }
 

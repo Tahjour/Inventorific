@@ -1,5 +1,5 @@
 import { Fragment, PropsWithChildren } from "react";
-import MainNavigation from "../layout/navigations/main-navigation";
+import MainNavigation from "../layout/navigation/home/home-navigation";
 
 export default function HomePageLayout(props: PropsWithChildren) {
   return (

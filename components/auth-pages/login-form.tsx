@@ -5,7 +5,6 @@ import { loginValidate } from "@/lib/auth/user-validation/client";
 import { LoginValues } from "@/lib/types/form-authentication";
 import { useFormik } from "formik";
 import { AnimatePresence, motion } from "framer-motion";
-import { signIn } from "next-auth/react";
 import Link from "next/link";
 import { useState } from "react";
 import { FcGoogle } from "react-icons/fc";
@@ -14,7 +13,7 @@ import { MdAlternateEmail } from "react-icons/md";
 import styles from "./auth-pages.module.css";
 
 function LoginForm() {
-  const { loginUser } = useUserInfoContext();
+  const { loginUser, loginUserWithGoogle, getPreferredListType } = useUserInfoContext();
   const { showNotification } = useNotification();
   const { setServerItemsWereLoaded, setServerLoadWasTried } = useUserInfoContext();
   const [showPassword, setShowPassword] = useState(false);
@@ -29,19 +28,11 @@ function LoginForm() {
   });
 
   async function loginFormSubmitHandler(values: LoginValues) {
-    loginUser(values);
+    await loginUser(values);
   }
 
-  async function googleSignInHandler() {
-    showNotification({
-      type: "saving",
-      message: "launching...",
-    });
-    await signIn("google", { callbackUrl: "/inventory" }).catch((e) => {
-      console.error(e);
-    });
-    setServerItemsWereLoaded(false);
-    setServerLoadWasTried(false);
+  async function googleLoginHandler() {
+    await loginUserWithGoogle();
   }
   return (
     <section className={styles.formBox}>
@@ -134,13 +125,13 @@ function LoginForm() {
           </div>
 
           <button type="submit" className={styles.submitBtn}>
-            {"Login"}
+            {"Submit"}
           </button>
 
           <div className={styles.separatorLine}>
             <span>or</span>
           </div>
-          <button type="button" className={styles.googleBtn} onClick={googleSignInHandler}>
+          <button type="button" className={styles.googleBtn} onClick={googleLoginHandler}>
             <FcGoogle size={25} /> {"Login with Google"}
           </button>
 

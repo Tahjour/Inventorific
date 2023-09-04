@@ -1,13 +1,13 @@
 // pages/api/auth/delete-user.js
 import { getConnectedClient } from "@/lib/database/mongodb";
-import { ResponseError, handleError } from "@/lib/helpers/errors";
+import { ResponseError, sendResponseError } from "@/lib/helpers/errors";
 import { ErrorMessages, SuccessMessages } from "@/lib/helpers/messages";
-import { UserResponseData } from "@/lib/types/user";
+import { ResponseData } from "@/lib/types/api";
 import { v2 as cloudinary } from "cloudinary";
 import { StatusCodes } from "http-status-codes";
 import { NextApiRequest, NextApiResponse } from "next";
 import { getServerSession } from "next-auth/next";
-import { authOptions } from "./auth/[...nextauth]";
+import { getNextAuthOptions } from "./auth/[...nextauth]";
 
 // Cloudinary configuration
 cloudinary.config({
@@ -36,7 +36,7 @@ export default async function deleteUserHandler(
     }
 
     // Retrieve the user session
-    const session = await getServerSession(req, res, authOptions);
+    const session = await getServerSession(req, res, getNextAuthOptions());
 
     // Check if the session and user exist
     if (!session || !session.user) {
@@ -88,13 +88,13 @@ export default async function deleteUserHandler(
     }
 
     // Return a success message with the deleted user information
-    const data: UserResponseData = {
+    const data: ResponseData = {
       type: "success",
       message: SuccessMessages.UserDeleted,
     };
     res.status(StatusCodes.OK).json(data);
   } catch (error) {
     // Handle any errors that occur during the process
-    handleError(res, error);
+    sendResponseError(error, res);
   }
 }
