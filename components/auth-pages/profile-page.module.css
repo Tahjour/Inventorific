@@ -107,7 +107,6 @@
   /* Use em instead of px for relative sizing */
   font-size: 1rem;
   /* Use rem for a responsive font size */
-  width: 100%;
   /* Make the buttons full width on small screens */
   transition: 100ms linear;
 }
@@ -119,12 +118,12 @@
 }
 
 .deleteAccountBtn {
-  border: var(--main-border-size) solid rgba(255, 0, 0, 0.5);
+  border: var(--main-border-size) solid var(--error);
 }
 
 .deleteAccountBtn:hover {
-  background-color: rgba(255, 0, 0, 0.5);
-  box-shadow: 0 0 10px rgba(255, 0, 0, 0.5);
+  background-color: var(--error);
+  box-shadow: 0 0 10px var(--error);
   cursor: pointer;
 }
 

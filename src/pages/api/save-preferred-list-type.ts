@@ -46,7 +46,7 @@ export default async function saveListTypeHandler(req: NextApiRequest, res: Next
       { email: session.user.email },
       { $set: { preferred_list_type: preferredListType } }
     );
-    logger.info(updateResult);
+
     if (updateResult.modifiedCount < 1 && updateResult.matchedCount < 1) {
       throw new ResponseError(
         StatusCodes.INTERNAL_SERVER_ERROR,

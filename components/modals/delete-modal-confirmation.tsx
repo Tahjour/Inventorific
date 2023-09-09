@@ -4,7 +4,7 @@ import { useUserInfoContext } from "@/context/user-context";
 import { PendingMessages } from "@/lib/helpers/messages";
 import { motion } from "framer-motion";
 import { AiOutlineWarning } from "react-icons/ai";
-import { FormMotion } from "../ui/animations/reusable-motion-props/form-transition-props";
+import { FormMotion } from "../ui/animations/motion-props/form-transition-props";
 import styles from "./modal-form.module.css";
 
 function DeleteConfirmation() {
@@ -24,14 +24,14 @@ function DeleteConfirmation() {
         type: "loading",
         message: PendingMessages.DeletingItem,
       });
-      deleteItem();
+      await deleteItem();
     }
     if (userInfoToDelete) {
       showNotification({
         type: "loading",
         message: PendingMessages.DeletingUser,
       });
-      deleteUserInfo();
+      await deleteUserInfo();
     }
   }
   return (

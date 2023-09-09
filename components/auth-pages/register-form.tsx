@@ -25,6 +25,7 @@ function RegisterForm() {
     validate: registerValidate,
     onSubmit: SignUpFormSubmitHandler,
   });
+  const { values, errors, touched, handleSubmit, getFieldProps } = formik;
 
   async function SignUpFormSubmitHandler(values: RegisterValues) {
     registerUser(values);
@@ -34,23 +35,23 @@ function RegisterForm() {
       <div className={styles.formOuterRegister}>
         <h1>Create a New Account</h1>
 
-        <form className={styles.form} onSubmit={formik.handleSubmit}>
+        <form className={styles.form} onSubmit={handleSubmit}>
           <div className={styles.inputBox}>
-            <div className={styles.inputSubBox}>
+            <div className={styles.inputBox2}>
               <input
                 className={`${styles.textInput} ${
-                  formik.errors.name && formik.touched.name ? styles.errorTextInput : null
-                }`}
+                  !errors.name && touched.name && styles.successOutline
+                } ${errors.name && touched.name && styles.errorOutline}`}
                 type="text"
                 id="name"
-                {...formik.getFieldProps("name")}
+                {...getFieldProps("name")}
                 required
               ></input>
 
               <label
-                className={`${styles.inputLabel} ${formik.values.name && styles.inputActive} ${
-                  formik.errors.name && formik.touched.name ? styles.errorLabel : null
-                }`}
+                className={`${styles.inputLabel} ${
+                  !errors.name && touched.name && styles.successLabel
+                } ${errors.name && touched.name && styles.errorLabel}`}
               >
                 Username
               </label>
@@ -58,7 +59,7 @@ function RegisterForm() {
               <FiUser className={styles.inputIcons} />
             </div>
             <AnimatePresence>
-              {formik.errors.name && formik.touched.name && (
+              {errors.name && touched.name && (
                 <motion.span
                   className={styles.errorMessage}
                   key="errorMessage"
@@ -67,34 +68,34 @@ function RegisterForm() {
                   exit={{ opacity: 0, height: 0 }}
                   transition={{ duration: 0.2 }}
                 >
-                  {formik.errors.name}
+                  {errors.name}
                 </motion.span>
               )}
             </AnimatePresence>
           </div>
 
           <div className={styles.inputBox}>
-            <div className={styles.inputSubBox}>
+            <div className={styles.inputBox2}>
               <input
                 className={`${styles.textInput} ${
-                  formik.errors.email && formik.touched.email ? styles.errorTextInput : null
-                }`}
+                  !errors.email && touched.email && styles.successOutline
+                } ${errors.email && touched.email && styles.errorOutline}`}
                 type="email"
                 id="email"
-                {...formik.getFieldProps("email")}
+                {...getFieldProps("email")}
                 required
               ></input>
               <label
-                className={`${styles.inputLabel} ${formik.values.email && styles.inputActive} ${
-                  formik.errors.email && formik.touched.email ? styles.errorLabel : null
-                }`}
+                className={`${styles.inputLabel} ${
+                  !errors.email && touched.email && styles.successLabel
+                } ${errors.email && touched.email && styles.errorLabel}`}
               >
                 Email
               </label>
               <MdAlternateEmail className={styles.inputIcons} />
             </div>
             <AnimatePresence>
-              {formik.errors.email && formik.touched.email && (
+              {errors.email && touched.email && (
                 <motion.span
                   className={styles.errorMessage}
                   key="errorMessage"
@@ -103,27 +104,27 @@ function RegisterForm() {
                   exit={{ opacity: 0, height: 0 }}
                   transition={{ duration: 0.2 }}
                 >
-                  {formik.errors.email}
+                  {errors.email}
                 </motion.span>
               )}
             </AnimatePresence>
           </div>
 
           <div className={styles.inputBox}>
-            <div className={styles.inputSubBox}>
+            <div className={styles.inputBox2}>
               <input
                 className={`${styles.textInput} ${
-                  formik.errors.password && formik.touched.password ? styles.errorTextInput : null
-                }`}
+                  !errors.password && touched.password && styles.successOutline
+                } ${errors.password && touched.password && styles.errorOutline}`}
                 type={showPassword.password ? "text" : "password"}
                 id="password"
-                {...formik.getFieldProps("password")}
+                {...getFieldProps("password")}
                 required
               ></input>
               <label
-                className={`${styles.inputLabel} ${formik.values.password && styles.inputActive} ${
-                  formik.errors.password && formik.touched.password ? styles.errorLabel : null
-                }`}
+                className={`${styles.inputLabel} ${
+                  !errors.password && touched.password && styles.successLabel
+                } ${errors.password && touched.password && styles.errorLabel}`}
               >
                 Password
               </label>
@@ -144,7 +145,7 @@ function RegisterForm() {
               )}
             </div>
             <AnimatePresence>
-              {formik.errors.password && formik.touched.password && (
+              {errors.password && touched.password && (
                 <motion.span
                   className={styles.errorMessage}
                   key="errorMessage"
@@ -153,27 +154,27 @@ function RegisterForm() {
                   exit={{ opacity: 0, height: 0 }}
                   transition={{ duration: 0.2 }}
                 >
-                  {formik.errors.password}
+                  {errors.password}
                 </motion.span>
               )}
             </AnimatePresence>
           </div>
 
           <div className={styles.inputBox}>
-            <div className={styles.inputSubBox}>
+            <div className={styles.inputBox2}>
               <input
                 className={`${styles.textInput} ${
-                  formik.errors.cpassword && formik.touched.cpassword ? styles.errorTextInput : null
-                }`}
+                  !errors.cpassword && touched.cpassword && styles.successOutline
+                } ${errors.cpassword && touched.cpassword && styles.errorOutline}`}
                 type={showPassword.cpassword ? "text" : "password"}
                 id="cpassword"
-                {...formik.getFieldProps("cpassword")}
+                {...getFieldProps("cpassword")}
                 required
               ></input>
               <label
-                className={`${styles.inputLabel} ${formik.values.cpassword && styles.inputActive} ${
-                  formik.errors.cpassword && formik.touched.cpassword ? styles.errorLabel : null
-                }`}
+                className={`${styles.inputLabel} ${
+                  !errors.cpassword && touched.cpassword && styles.successLabel
+                } ${errors.cpassword && touched.cpassword && styles.errorLabel}`}
               >
                 Confirm Password
               </label>
@@ -194,7 +195,7 @@ function RegisterForm() {
               )}
             </div>
             <AnimatePresence>
-              {formik.errors.cpassword && formik.touched.cpassword && (
+              {errors.cpassword && touched.cpassword && (
                 <motion.span
                   className={styles.errorMessage}
                   key="errorMessage"
@@ -203,7 +204,7 @@ function RegisterForm() {
                   exit={{ opacity: 0, height: 0 }}
                   transition={{ duration: 0.2 }}
                 >
-                  {formik.errors.cpassword}
+                  {errors.cpassword}
                 </motion.span>
               )}
             </AnimatePresence>
@@ -213,9 +214,9 @@ function RegisterForm() {
             {"Submit"}
           </button>
 
-          <div className={styles.loginOrSignUpPart}>
+          <div className={styles.loginOrSignUpBox}>
             {"Have an account? "}
-            <Link href={"/login"} className={styles.toggleBtn}>
+            <Link href={"/login"} className={styles.loginOrSignUpBtn}>
               {"Login"}
             </Link>
           </div>

@@ -1,6 +1,6 @@
 import { MotionProps } from "framer-motion";
 
-export const ModalBackdropMotion: MotionProps = {
+export const OpacityMotionFast: MotionProps = {
   initial: "hidden",
   animate: "visible",
   exit: "exit",
@@ -10,7 +10,7 @@ export const ModalBackdropMotion: MotionProps = {
     exit: { opacity: 0 },
   },
   transition: {
-    duration: 0.3,
+    duration: 0.2,
   },
 };
 

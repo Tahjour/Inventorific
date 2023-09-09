@@ -7,27 +7,27 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: .8rem;
+  padding: 0.8rem;
 }
 
 .logoLink {
-  border-radius: .6rem;
+  border-radius: 0.6rem;
 }
 
 .logoImage {
   border-radius: inherit;
-  box-shadow: 0 0 .3125rem var(--dark-neon-blue);
+  box-shadow: 0 0 0.3125rem var(--dark-neon-blue);
   vertical-align: bottom;
 }
 
 .logoImage:hover,
 .logoImage:focus {
-  box-shadow: 0 0 .6rem var(--neon-blue);
+  box-shadow: 0 0 0.6rem var(--neon-blue);
 }
 /* mainBarMenu */
 .appNavigationBox {
   display: flex;
-  gap: 1.5rem;
+  gap: 0.625rem;
 }
 
 .appNavLink {
@@ -37,10 +37,10 @@
   color: var(--color-L100);
   background-color: var(--dark-bg);
   border: var(--main-border-size) solid var(--dark-neon-blue);
-  padding: .3125rem .9375rem;
-  border-radius: .625rem;
-  font-size: .8rem;
-  gap: .625rem;
+  padding: 0.3125rem 0.9375rem;
+  border-radius: 0.625rem;
+  font-size: 0.8rem;
+  gap: 0.625rem;
 }
 
 .appNavLinkActive {

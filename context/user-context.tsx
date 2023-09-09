@@ -31,10 +31,12 @@ export function UserContextProvider({ children }: { children: React.ReactNode })
       if (!serverLoadWasTried) {
         const response = await fetch("/api/load-user");
         const data: ResponseData = await response.json();
-        console.log("data: ", data);
         if (data.type === "success" && data.userInfo) {
           setUserInfo(data.userInfo);
           setUserItems(data.userInfo.items);
+          data.userInfo.preferred_list_type === "tiles"
+            ? setPreferredListType("tiles")
+            : setPreferredListType("slabs");
           setServerItemsWereLoaded(true);
         }
       }
@@ -117,14 +119,14 @@ export function UserContextProvider({ children }: { children: React.ReactNode })
     try {
       showNotification({
         type: "saving",
-        message: "launching...",
+        message: PendingMessages.Launching,
       });
       const response = await signIn("google", { callbackUrl: "/inventory" });
 
       if (response?.ok) {
         showNotification({
           type: "success",
-          message: "Success!",
+          message: SuccessMessages.UserSignedIn,
         });
 
         setServerItemsWereLoaded(false);
@@ -133,7 +135,7 @@ export function UserContextProvider({ children }: { children: React.ReactNode })
     } catch (error) {
       showNotification({
         type: "error",
-        message: "Something went wrong!",
+        message: error instanceof Error ? error.message : ErrorMessages.UserLoginFailed,
       });
     }
   }
@@ -181,6 +183,21 @@ export function UserContextProvider({ children }: { children: React.ReactNode })
     }
   }
 
+  async function logoutUser() {
+    try {
+      showNotification({
+        type: "loading",
+        message: PendingMessages.LoggingOut,
+      });
+      await signOut();
+    } catch (error) {
+      showNotification({
+        type: "error",
+        message: error instanceof Error ? error.message : ErrorMessages.UserLogoutFailed,
+      });
+    }
+  }
+
   async function deleteUserInfo() {
     try {
       if (!userInfoToDelete) {
@@ -188,7 +205,7 @@ export function UserContextProvider({ children }: { children: React.ReactNode })
       }
       showNotification({
         type: "saving",
-        message: "Deleting User Data...",
+        message: PendingMessages.DeletingUser,
       });
       const response = await fetch("/api/delete-user", {
         method: "DELETE",
@@ -228,6 +245,7 @@ export function UserContextProvider({ children }: { children: React.ReactNode })
     setServerItemsWereLoaded,
     loginUser,
     loginUserWithGoogle,
+    logoutUser,
     registerUser,
     itemSearchTerm,
     setItemSearchTerm,

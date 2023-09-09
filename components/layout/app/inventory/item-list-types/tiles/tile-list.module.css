@@ -1,64 +1,48 @@
 /* components\layout\app\item-lists\tile-list.module.css */
-.slabList {
+.tileList {
   display: grid;
-  grid-template-rows: 1fr;
+  grid-template-columns: repeat(auto-fill, minmax(270px, 1fr));
   /* justify-items: center; */
   justify-items: center;
-  padding: 0 1.25rem;
+  padding: 0 20px;
 }
 
-.itemSlab {
+.itemCard {
   position: relative;
   display: flex;
   flex-direction: column;
   align-items: center;
   text-align: center;
-  border-radius: 1.25rem;
-  width: 62.5rem;
-  margin: 1.875rem 0;
+  border-radius: 20px;
+  width: 250px;
+  margin: 30px 0;
   background-color: var(--card);
-  box-shadow: 0 0 .3125rem var(--dark-neon-blue);
+  box-shadow: 0 0 5px var(--dark-neon-blue);
   color: var(--color-L100);
   text-decoration: none;
   cursor: pointer;
   outline: none;
+  transition: var(--fast-linear);
 }
 
-.itemSlab::before {
-  content: "";
-  position: absolute;
-  z-index: -1;
-  top: 0;
-  right: 0;
-  bottom: 0;
-  left: 0;
-  border-radius: inherit;
-  background-color: var(--neon-blue);
-  transform: scale(1.02);
-  filter: blur(.625rem);
-  opacity: 0;
-  transition: opacity 200ms linear;
+.itemCard:hover, .itemCard:focus {
+  box-shadow: 0 0 10px var(--neon-blue);
 }
 
-.itemSlab:hover::before,
-.itemSlab:focus::before {
-  opacity: 1;
-}
-
-.itemSlabLink {
+.itemCardLink {
   height: 100%;
   width: 100%;
   text-decoration: none;
 }
 
-.itemSlab h3,
-.itemSlab p {
+.itemCard h3,
+.itemCard p {
   margin: 0;
 }
 
-/* .itemSlab:last-child {
+.itemCard:last-child {
   justify-content: center;
-} */
+}
 
 .itemImageBox {
   position: relative;
@@ -74,7 +58,7 @@
   object-fit: cover;
   border-radius: inherit;
   max-width: 100%;
-  height: auto;
+  /* height: auto; */
   vertical-align: bottom;
 }
 
@@ -82,21 +66,21 @@
   position: relative;
   transform: translateY(-50%);
   background-color: hsl(192, 100%, 30%);
-  padding: .3125rem;
-  border-radius: .625rem;
-  letter-spacing: .0625rem;
+  padding: 5px;
+  border-radius: 10px;
+  letter-spacing: 1px;
 }
 
 .itemInfoBox {
   display: flex;
   flex-direction: column;
   /* justify-content: center; */
-  gap: 1.25rem;
+  gap: 20px;
   justify-content: center;
   align-items: center;
   height: 50%;
   width: 100%;
-  letter-spacing: .0625rem;
+  letter-spacing: 1px;
   font-size: 14.4px;
 }
 
@@ -112,8 +96,8 @@
   display: flex;
   flex-direction: row;
   justify-content: space-between;
-  font-size: 2.1875rem;
-  padding: 0 .625rem .625rem;
+  font-size: 35px;
+  padding: 0 10px 10px;
 }
 
 .operationIcon {
@@ -124,27 +108,23 @@
 
 .operationIcon:hover {
   transform: scale(1.2);
-  box-shadow: 0 0 .625rem var(--dark-neon-blue);
+  box-shadow: 0 0 10px var(--dark-neon-blue);
   background-color: var(--dark-neon-blue-T50);
 }
 
-@media (max-width: 39.25rem) {
-  .slabList {
+@media (max-width: 600px) {
+  .tileList {
     grid-template-columns: 1fr;
   }
 
-  .itemSlab {
-    width: 90vw;
-    /* height: 23.125rem; */
-    /* vw stands for viewport width */
-    /* margin: 5vw; */
-    /* Adjust margins as per your requirement */
+  .itemCard {
+    width: 100%;
   }
   .itemImage {
     width: 90vw;
   }
 
   .operationIcons {
-    font-size: 3.125rem;
+    font-size: 50px;
   }
 }

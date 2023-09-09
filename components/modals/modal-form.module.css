@@ -26,13 +26,13 @@
   background-color: var(--main-bg);
   text-align: center;
   border: var(--main-border-size) solid var(--dark-neon-blue);
-  box-shadow: 0 0 .625rem var(--dark-neon-blue);
+  box-shadow: 0 0 0.625rem var(--dark-neon-blue);
   z-index: 3;
 }
 
 .itemForm {
-  width: 80%;
-  height: 90%;
+  width: 100%;
+  height: 100%;
   display: grid;
   grid-template-columns: 1fr 1fr;
   border-radius: 1.25rem;
@@ -83,15 +83,15 @@
   display: flex;
   justify-content: center;
   align-items: center;
-  gap: .3125rem;
+  gap: 0.3125rem;
   z-index: 2;
   color: var(--color-L100);
 }
 
 .customImageUploadLabelContentsOptions {
   background-color: var(--main-bg);
-  padding: .625rem;
-  border-radius: .625rem;
+  padding: 0.625rem;
+  border-radius: 0.625rem;
   visibility: hidden;
   opacity: 0;
   transition: var(--fast-linear);
@@ -130,7 +130,7 @@
 
 .itemInfoBox::-webkit-scrollbar-thumb {
   background-color: var(--dark-neon-blue);
-  border-radius: .625rem;
+  border-radius: 0.625rem;
 }
 
 .itemInfoBox::-webkit-scrollbar-thumb:hover {
@@ -138,8 +138,8 @@
 }
 
 .itemInfoBox::-webkit-scrollbar-track {
-  margin-block-start: .9375rem;
-  margin-block-end: .9375rem;
+  margin-block-start: 0.9375rem;
+  margin-block-end: 0.9375rem;
 }
 
 .inputBox {
@@ -162,40 +162,40 @@
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  margin-bottom: .625rem;
+  margin-bottom: 0.625rem;
   width: 100%;
 }
 
-.inputText {
+.textInput {
   width: 100%;
   padding: 1.25rem;
-  border-radius: .625rem;
+  border-radius: 0.625rem;
   background-color: transparent;
   border: 0;
   outline: var(--main-border-size) solid var(--color-L75);
   color: var(--color-L100);
   text-align: center;
-  letter-spacing: .0625rem;
-  transition: outline 300ms ease, color 300ms ease;
+  letter-spacing: 0.0625rem;
+  transition: color var(--medium-linear), outline var(--medium-linear);
 }
 
-.inputTextArea {
+.textAreaInput {
   height: 12.5rem;
   width: 100%;
   line-height: 1.25rem;
   text-align: left;
-  letter-spacing: .0625rem;
+  letter-spacing: 0.0625rem;
 }
 
-.successInputText {
+.successOutline {
   outline-color: var(--dark-neon-blue);
 }
 
-.errorInputText {
+.errorOutline {
   outline-color: var(--error);
 }
 
-.inputText:-webkit-autofill {
+.textInput:-webkit-autofill {
   background-color: transparent !important;
   -webkit-text-fill-color: var(--color-L100);
   -webkit-box-shadow: 0 0 0 62.5rem var(--main-bg) inset;
@@ -206,33 +206,31 @@
   position: absolute;
   top: 50%;
   transform: translateY(-50%);
-  border-radius: .625rem;
+  border-radius: 0.625rem;
   pointer-events: none;
   color: var(--color-L100);
   background-color: var(--main-bg);
-  transition: 200ms ease;
+  transition: var(--fast-ease);
 }
 
-.inputText:focus + .inputLabel,
+.textInput:focus + .inputLabel,
 .successLabel,
 .errorLabel {
-  top: -0.125rem;
-  padding: .3125rem;
-  font-size: 80%;
+  top: -0.0625rem;
+  padding: 0.3125rem;
+  font-size: 0.8rem;
 }
 
 .successLabel {
-  letter-spacing: .0625rem;
+  letter-spacing: 0.0625rem;
   font-weight: 500;
 }
 
 .errorLabel {
-  letter-spacing: .0625rem;
-  font-weight: 500;
   color: var(--error);
 }
 
-.errorText {
+.errorMessage {
   color: var(--error);
 }
 
@@ -259,7 +257,7 @@
   background-color: transparent;
   color: var(--color-L100);
   border: var(--main-border-size) solid var(--dark-neon-blue);
-  border-radius: .625rem;
+  border-radius: 0.625rem;
   padding: 10px;
   /* Use em instead of px for relative sizing */
   font-size: 16px;
@@ -271,7 +269,7 @@
 
 .submitBtn:hover {
   background-color: var(--dark-neon-blue);
-  box-shadow: 0 0 .625rem var(--dark-neon-blue);
+  box-shadow: 0 0 0.625rem var(--dark-neon-blue);
   cursor: pointer;
 }
 
@@ -281,25 +279,25 @@
 
 .cancelBtn:hover {
   background-color: var(--error);
-  box-shadow: 0 0 .625rem var(--error);
+  box-shadow: 0 0 0.625rem var(--error);
   cursor: pointer;
 }
 
-.toggleBtn {
+.loginOrSignUpBtn {
   background-color: transparent;
   border: 0;
   color: var(--dark-neon-blue);
   transition: 100ms linear;
 }
 
-.toggleBtn:hover {
+.loginOrSignUpBtn:hover {
   cursor: pointer;
   color: var(--neon-blue);
 }
 
-.errorTextInput,
-.errorTextInput:focus {
-  outline: .125rem solid var(--error);
+.errorOutline,
+.errorOutline:focus {
+  outline: 0.125rem solid var(--error);
 }
 
 @media (hover: none) {
@@ -321,9 +319,9 @@
   .itemForm {
     width: 100%;
     height: 100%;
-    padding: .9375rem;
+    padding: 0.9375rem;
     border-radius: 0;
-    grid-template-columns: 1fr;
+    grid-template-columns: auto;
     grid-template-rows: 1fr 1fr;
     overflow-y: scroll;
     border: 0;
@@ -333,7 +331,7 @@
   .itemForm::-webkit-scrollbar {
     /* background-color: rgb(21, 21, 21); */
     /* background-color: transparent; */
-    width: .3125rem;
+    width: 0.3125rem;
   }
 
   .customImageUploadLabel {
@@ -346,7 +344,7 @@
 
   .itemInfoBox {
     gap: 1.25rem;
-    padding: 1.875rem .625rem;
+    padding: 1.875rem 0.625rem;
     overflow-y: visible;
   }
 

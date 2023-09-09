@@ -1,38 +1,27 @@
 // nextjs-inventory-control\components\layout\app\dropdownmenu.tsx
-import { useNotification } from "@/context/notification-context";
+import { useUserInfoContext } from "@/context/user-context";
 import * as DropdownMenu from "@radix-ui/react-dropdown-menu";
 import { AnimatePresence, motion } from "framer-motion";
-import { signOut, useSession } from "next-auth/react";
+import { useSession } from "next-auth/react";
 import Link from "next/link";
 import { useRouter } from "next/router";
 import { useState } from "react";
 import { AiFillCaretDown, AiOutlineUser, AiOutlineUserSwitch } from "react-icons/ai";
 import { FaHome, FaUserCog } from "react-icons/fa";
 import { MdLaunch } from "react-icons/md";
-import { RiLoginBoxLine, RiLogoutBoxLine } from "react-icons/ri";
-import styles from "./dropdownmenu.module.css";
+import { RiDashboard2Line, RiLoginBoxLine, RiLogoutBoxLine } from "react-icons/ri";
+import styles from "./main-dropdown-menu.module.css";
 
-function DropDownMenu() {
-  const { showNotification } = useNotification();
+function MainDropDownMenu() {
   const { data: session } = useSession();
+  const { logoutUser } = useUserInfoContext();
   const route = useRouter().route;
 
   const [dropdownOpen, setDropdownOpen] = useState(false);
 
   async function logOutHandler() {
-    showNotification({
-      type: "loading",
-      message: "Signing out ...",
-    });
-    const res = await signOut();
-    if (res) {
-      console.log(res);
-    }
+    await logoutUser();
   }
-
-  const handleDropdownTriggerClick = () => {
-    setDropdownOpen(!dropdownOpen);
-  };
 
   return (
     <DropdownMenu.Root open={dropdownOpen} onOpenChange={setDropdownOpen}>
@@ -56,7 +45,7 @@ function DropDownMenu() {
                 exit={{ opacity: 0 }}
                 transition={{ duration: 0.3 }}
               >
-                {route !== "/" ? (
+                {route !== "/" && (
                   <Link href={"/"} className={styles.dropdownLink}>
                     <DropdownMenu.Item className={styles.dropdownItem}>
                       <span className={styles.iconWrapper}>
@@ -65,9 +54,9 @@ function DropDownMenu() {
                       Home
                     </DropdownMenu.Item>
                   </Link>
-                ) : null}
+                )}
 
-                {session && route !== "/profile" ? (
+                {session && route !== "/profile" && (
                   <Link href={"/profile"} className={styles.dropdownLink}>
                     <DropdownMenu.Item className={styles.dropdownItem}>
                       <span className={styles.iconWrapper}>
@@ -76,9 +65,9 @@ function DropDownMenu() {
                       Profile
                     </DropdownMenu.Item>
                   </Link>
-                ) : null}
+                )}
 
-                {!session ? (
+                {!session && (
                   <Link href={"/login"} className={styles.dropdownLink}>
                     <DropdownMenu.Item className={styles.dropdownItem}>
                       <span className={styles.iconWrapper}>
@@ -87,26 +76,31 @@ function DropDownMenu() {
                       Login
                     </DropdownMenu.Item>
                   </Link>
-                ) : null}
+                )}
 
-                {route !== "/inventory" ? (
+                {route !== "dashboard" && (
+                  <Link href={"/dashboard"} className={styles.dropdownLink}>
+                    <DropdownMenu.Item className={styles.dropdownItem}>
+                      <span className={styles.iconWrapper}>
+                        <RiDashboard2Line size={20} />
+                      </span>
+                      Dashboard
+                    </DropdownMenu.Item>
+                  </Link>
+                )}
+
+                {route !== "/inventory" && (
                   <Link href={"/inventory"} className={styles.dropdownLink}>
                     <DropdownMenu.Item className={styles.dropdownItem}>
                       <span className={styles.iconWrapper}>
                         <MdLaunch size={20} />
                       </span>
-                      Launch
+                      Inventory
                     </DropdownMenu.Item>
                   </Link>
-                ) : null}
+                )}
 
-                {/* {session ? <Link href={"/register"} className={styles.dropdownLink}>
-                    <DropdownMenu.Item className={styles.dropdownItem}>
-                        Make New Account
-                    </DropdownMenu.Item>
-                </Link> : null} */}
-
-                {session && route !== "/login" && route !== "/register" ? (
+                {session && route !== "/login" && route !== "/register" && (
                   <Link href={"/login"} className={styles.dropdownLink}>
                     <DropdownMenu.Item className={styles.dropdownItem}>
                       <span className={styles.iconWrapper}>
@@ -115,16 +109,16 @@ function DropDownMenu() {
                       Switch User
                     </DropdownMenu.Item>
                   </Link>
-                ) : null}
+                )}
 
-                {session ? (
+                {session && (
                   <DropdownMenu.Item className={styles.dropdownItem} onClick={logOutHandler}>
                     <span className={styles.iconWrapper}>
                       <RiLogoutBoxLine size={20} />
                     </span>
                     Log Out
                   </DropdownMenu.Item>
-                ) : null}
+                )}
               </motion.div>
             </DropdownMenu.Content>
           </DropdownMenu.Portal>
@@ -134,4 +128,4 @@ function DropDownMenu() {
   );
 }
 
-export default DropDownMenu;
+export default MainDropDownMenu;

@@ -5,10 +5,13 @@
   --main-nav-height: 4rem;
   --main-bar-menu-height: 4rem;
   --main-bar-menu-margin: 10px;
-  --main-border-size: 0.25rem;
+  --main-border-size: 0.15rem;
   --fast-linear: 100ms linear;
   --medium-linear: 300ms linear;
   --slow-linear: 500ms linear;
+  --fast-ease: 100ms ease-in-out;
+  --medium-ease: 300ms ease-in-out;
+  --slow-ease: 500ms ease-in-out;
   --neon-blue: hsl(180, 100%, 50%);
   --neon-blue-T50: hsla(180, 100%, 50%, 0.5);
   --dark-neon-blue: hsl(192, 100%, 30%);

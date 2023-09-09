@@ -2,7 +2,7 @@
 import { UserInfo } from "@/lib/types/user";
 import { Fragment } from "react";
 import { useItemsContext } from "../../context/items-context";
-import DropDownMenu from "../layout/app/drop-down-menu/dropdownmenu";
+import MainDropDownMenu from "../layout/app/drop-down-menu/dropdownmenu";
 import styles from "./profile-page.module.css";
 
 function ProfilePageLayout({ userInfo }: { userInfo: UserInfo }) {
@@ -18,7 +18,7 @@ function ProfilePageLayout({ userInfo }: { userInfo: UserInfo }) {
       <section className={styles.profileBox}>
         <div className={styles.imageAndItemsBox}>
           <div className={styles.dropdownBox}>
-            <DropDownMenu />
+            <MainDropDownMenu />
           </div>
           <div className={styles.userImage}>{userInfo?.name[0]}</div>
           <h3>

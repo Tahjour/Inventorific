@@ -1,13 +1,14 @@
 // components\layout\navigation\main-navigation.tsx
+import { useWindowContext } from "@/context/window-context";
 import Image from "next/image";
 import Link from "next/link";
 import { useRouter } from "next/router";
-import { Fragment } from "react";
 import { FiBox } from "react-icons/fi";
 import { RiDashboard2Line } from "react-icons/ri";
-import DropDownMenu from "../../app/drop-down-menu/dropdownmenu";
+import MainDropDownMenu from "../../app/inventory/drop-down-menu/main-dropdown-menu";
 
 export default function AppNavigation() {
+  const { windowWidth } = useWindowContext();
   const router = useRouter();
   return (
     <header className={"header"}>
@@ -22,23 +23,26 @@ export default function AppNavigation() {
         ></Image>
       </Link>
 
-      <div className={"appNavigationBox"}>
-        <Fragment>
-          <Link href={"/inventory"} className="appNavLink">
+      {windowWidth > 480 && (
+        <div className={"appNavigationBox"}>
+          <Link
+            href={"/dashboard"}
+            className={`appNavLink ${router.pathname === "/dashboard" && "appNavLinkActive"}`}
+          >
             <RiDashboard2Line size={25} />
             Dashboard
           </Link>
           <Link
             href={"/inventory"}
-            className={`appNavLink ${router.pathname === "/inventory" ? "appNavLinkActive" : ""}`}
+            className={`appNavLink ${router.pathname === "/inventory" && "appNavLinkActive"}`}
           >
             <FiBox size={25} />
             Inventory
           </Link>
-        </Fragment>
-      </div>
+        </div>
+      )}
 
-      <DropDownMenu />
+      <MainDropDownMenu />
     </header>
   );
 }

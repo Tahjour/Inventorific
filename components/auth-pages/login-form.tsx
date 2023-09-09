@@ -1,5 +1,4 @@
 // D: \Projects\Personal_Projects\nextjs - inventory - control\components\auth - pages\login - form.js;
-import { useNotification } from "@/context/notification-context";
 import { useUserInfoContext } from "@/context/user-context";
 import { loginValidate } from "@/lib/auth/user-validation/client";
 import { LoginValues } from "@/lib/types/form-authentication";
@@ -13,9 +12,7 @@ import { MdAlternateEmail } from "react-icons/md";
 import styles from "./auth-pages.module.css";
 
 function LoginForm() {
-  const { loginUser, loginUserWithGoogle, getPreferredListType } = useUserInfoContext();
-  const { showNotification } = useNotification();
-  const { setServerItemsWereLoaded, setServerLoadWasTried } = useUserInfoContext();
+  const { loginUser, loginUserWithGoogle } = useUserInfoContext();
   const [showPassword, setShowPassword] = useState(false);
 
   const formik = useFormik({
@@ -26,6 +23,7 @@ function LoginForm() {
     validate: loginValidate,
     onSubmit: loginFormSubmitHandler,
   });
+  const { values, errors, touched, handleSubmit, getFieldProps } = formik;
 
   async function loginFormSubmitHandler(values: LoginValues) {
     await loginUser(values);
@@ -34,33 +32,34 @@ function LoginForm() {
   async function googleLoginHandler() {
     await loginUserWithGoogle();
   }
+
   return (
     <section className={styles.formBox}>
       <div className={styles.formOuter}>
         <h1>Login to Your Account</h1>
 
-        <form className={styles.form} onSubmit={formik.handleSubmit}>
+        <form className={styles.form} onSubmit={handleSubmit}>
           <div className={styles.inputBox}>
-            <div className={styles.inputSubBox}>
+            <div className={styles.inputBox2}>
               <input
                 className={`${styles.textInput} ${
-                  formik.errors.email && formik.touched.email ? styles.errorTextInput : null
-                }`}
+                  !errors.email && touched.email && styles.successOutline
+                } ${errors.email && touched.email && styles.errorOutline}`}
                 type="email"
                 id="email"
-                {...formik.getFieldProps("email")}
+                {...getFieldProps("email")}
               />
               <label
-                className={`${styles.inputLabel} ${formik.values.email && styles.inputActive} ${
-                  formik.errors.email && formik.touched.email ? styles.errorLabel : null
-                }`}
+                className={`${styles.inputLabel} ${
+                  !errors.email && touched.email && styles.successLabel
+                } ${errors.email && touched.email && styles.errorLabel}`}
               >
                 Email
               </label>
               <MdAlternateEmail className={styles.inputIcons} />
             </div>
             <AnimatePresence>
-              {formik.errors.email && formik.touched.email && (
+              {errors.email && touched.email && (
                 <motion.span
                   className={styles.errorMessage}
                   key="errorMessage"
@@ -69,26 +68,26 @@ function LoginForm() {
                   exit={{ opacity: 0, height: 0 }}
                   transition={{ duration: 0.2 }}
                 >
-                  {formik.errors.email}
+                  {errors.email}
                 </motion.span>
               )}
             </AnimatePresence>
           </div>
 
           <div className={styles.inputBox}>
-            <div className={styles.inputSubBox}>
+            <div className={styles.inputBox2}>
               <input
                 className={`${styles.textInput} ${
-                  formik.errors.password && formik.touched.password ? styles.errorTextInput : null
-                }`}
+                  !errors.password && touched.password && styles.successOutline
+                } ${errors.password && touched.password && styles.errorOutline}`}
                 type={showPassword ? "text" : "password"}
                 id="password"
-                {...formik.getFieldProps("password")}
+                {...getFieldProps("password")}
               ></input>
               <label
-                className={`${styles.inputLabel} ${formik.values.password && styles.inputActive} ${
-                  formik.errors.password && formik.touched.password ? styles.errorLabel : null
-                }`}
+                className={`${styles.inputLabel} ${
+                  !errors.password && touched.password && styles.successLabel
+                } ${errors.password && touched.password && styles.errorLabel}`}
               >
                 Password
               </label>
@@ -109,7 +108,7 @@ function LoginForm() {
               )}
             </div>
             <AnimatePresence>
-              {formik.errors.password && formik.touched.password && (
+              {errors.password && touched.password && (
                 <motion.span
                   className={styles.errorMessage}
                   key="errorMessage"
@@ -118,7 +117,7 @@ function LoginForm() {
                   exit={{ opacity: 0, height: 0 }}
                   transition={{ duration: 0.2 }}
                 >
-                  {formik.errors.password}
+                  {errors.password}
                 </motion.span>
               )}
             </AnimatePresence>
@@ -135,9 +134,9 @@ function LoginForm() {
             <FcGoogle size={25} /> {"Login with Google"}
           </button>
 
-          <div className={styles.loginOrSignUpPart}>
+          <div className={styles.loginOrSignUpBox}>
             {"Don't have an account? "}
-            <Link href={"/register"} className={styles.toggleBtn}>
+            <Link href={"/register"} className={styles.loginOrSignUpBtn}>
               {"Sign Up"}
             </Link>
           </div>

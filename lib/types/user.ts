@@ -21,12 +21,13 @@ export type UserContextType = {
   setUserItems: Dispatch<SetStateAction<Item[]>>;
   getUserInfoToDelete: () => UserInfo;
   setUserInfoToDelete: Dispatch<SetStateAction<UserInfo>>;
-  deleteUserInfo: () => void;
+  deleteUserInfo: () => Promise<void>;
   serverLoadWasTried: boolean;
   setServerLoadWasTried: Dispatch<SetStateAction<boolean>>;
   serverItemsWereLoaded: boolean;
   setServerItemsWereLoaded: Dispatch<SetStateAction<boolean>>;
   loginUser: (values: LoginValues) => Promise<void>;
+  logoutUser: () => Promise<void>;
   loginUserWithGoogle: () => Promise<void>;
   registerUser: (values: RegisterValues) => Promise<void>;
   itemSearchTerm: string;

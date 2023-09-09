@@ -29,14 +29,7 @@ export default function TileList({ loadedItems }: { loadedItems: Item[] }) {
   return (
     <motion.section
       className={styles.tileList}
-      variants={{
-        hidden: { opacity: 0 },
-        visible: { opacity: 1 },
-      }}
-      initial="hidden"
-      animate="visible"
-      exit="hidden"
-      transition={{ duration: 0.5 }}
+      
     >
       <AnimatePresence>
         {loadedItems.map((item: Item) => {
@@ -45,7 +38,7 @@ export default function TileList({ loadedItems }: { loadedItems: Item[] }) {
           }
           return (
             <motion.div
-              // className={styles.itemCardBox}
+              className={styles.itemCardBox}
               key={item.id}
               layout={"position"}
               initial="hidden"
@@ -55,7 +48,7 @@ export default function TileList({ loadedItems }: { loadedItems: Item[] }) {
                 hidden: { opacity: 0 },
                 visible: { opacity: 1 },
               }}
-              transition={{ duration: 0.5 }}
+              transition={{ duration: 0.2 }}
             >
               <Link href={`inventory/${item.id}`} className={styles.itemCard}>
                 <div className={styles.itemImageBox}>

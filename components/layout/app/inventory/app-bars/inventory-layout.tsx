@@ -1,24 +1,23 @@
 // components\layout\app\app-layout.js
+import AppNavigation from "@/components/layout/navigation/app/app-navigation";
+import ItemModalForm from "@/components/modals/add-item-modal-form";
+import ModalBackdrop from "@/components/modals/modal-form-backdrop";
+import { useItemsContext } from "@/context/items-context";
 import { AnimatePresence } from "framer-motion";
-import { Fragment, PropsWithChildren } from "react";
-import { useItemsContext } from "../../../../context/items-context";
-import AddItemModalForm from "../../../modals/add-item-modal-form";
-import ModalBackdrop from "../../../modals/modal-form-backdrop";
-import AppNavigation from "../../navigation/app/app-navigation";
-import styles from "./app-layout.module.css";
+import { Fragment } from "react";
+import styles from "./inventory-layout.module.css";
 import MainBar from "./main-bar/main-bar";
 
-function AppLayout(props: PropsWithChildren) {
+export default function InventoryLayout() {
   const { itemModalIsOpen } = useItemsContext();
   return (
     <Fragment>
       <AppNavigation />
-
       <AnimatePresence mode="wait">
         {itemModalIsOpen && (
           <Fragment>
             <ModalBackdrop />
-            <AddItemModalForm key="add-item-modal-form" />
+            <ItemModalForm key="item-modal-form" />
           </Fragment>
         )}
       </AnimatePresence>
@@ -30,5 +29,3 @@ function AppLayout(props: PropsWithChildren) {
     </Fragment>
   );
 }
-
-export default AppLayout;

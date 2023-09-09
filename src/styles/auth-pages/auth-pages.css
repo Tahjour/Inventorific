@@ -54,7 +54,7 @@
   margin-bottom: 20px;
 }
 
-.inputSubBox {
+.inputBox2 {
   position: relative;
   display: flex;
   flex-direction: row;
@@ -110,8 +110,8 @@
   padding: 5px;
 }
 
-.errorTextInput,
-.errorTextInput:focus {
+.errorOutline,
+.errorOutline:focus {
   outline-color: rgba(255, 0, 0, 0.5);
 }
 
@@ -215,19 +215,19 @@
   opacity: 1;
 }
 
-.loginOrSignUpPart {
+.loginOrSignUpBox {
   /* position: absolute; */
   margin: 20px 0;
 }
 
-.form .toggleBtn {
+.form .loginOrSignUpBtn {
   font-size: 1rem;
   text-decoration: none;
   color: var(--dark-neon-blue);
   transition: 100ms linear;
 }
 
-.form .toggleBtn:hover {
+.form .loginOrSignUpBtn:hover {
   cursor: pointer;
   color: var(--neon-blue);
 }

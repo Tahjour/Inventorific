@@ -8,6 +8,7 @@ export const ErrorMessages = {
   PasswordGenerateFailed: "Failed to generate password. Please contact the developer.",
   UserCreationFailed: "Failed to create user. Please contact the developer.",
   UserLoginFailed: "Failed to sign in user. Please contact the developer.",
+  UserLogoutFailed: "Failed to sign out user. Please contact the developer.",
   NoUserToEdit: "No user to edit",
   NoUserToDelete: "No user to delete",
 
@@ -84,10 +85,15 @@ export const SuccessMessages = {
 };
 
 export const PendingMessages = {
-  DeletingUser: "Deleting user...",
-  DeletingItem: "Deleting item...",
-  SavingItem: "Saving item...",
+  Saving: "Saving, please wait...",
+  Loading: "Loading, please wait...",
+  Launching: "Launching, please wait...",
 
-  CreatingUser: "Creating user...",
-  LoggingIn: "Signing in...",
+  DeletingUser: "Deleting user, please wait...",
+  DeletingItem: "Deleting item, please wait...",
+  SavingItem: "Saving item, please wait...",
+
+  CreatingUser: "Creating user, please wait...",
+  LoggingIn: "Signing in, please wait...",
+  LoggingOut: "Signing out, please wait...",
 };

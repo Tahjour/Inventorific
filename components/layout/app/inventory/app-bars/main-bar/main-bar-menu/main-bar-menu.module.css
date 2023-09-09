@@ -18,7 +18,7 @@
   width: 60%;
 }
 
-.mainBarMenuBtns {
+.mainBarMenuBtnBox {
   height: 100%;
   display: flex;
   margin-left: 10px;
@@ -43,7 +43,15 @@
 }
 
 .listTypeBtn {
-  border: var(--main-border-size) solid var(--dark-bg);
+  border: none;
+  padding: 0.625rem 0.9375rem;
+}
+
+.listTypeBtn:first-child {
+  border-radius: 10px 0 0 10px;
+}
+.listTypeBtn:last-child {
+  border-radius: 0 10px 10px 0;
 }
 
 .listTypeBtn:hover,
@@ -58,7 +66,7 @@
   /* border: var(--main-border-size) solid var(--dark-bg); */
 }
 
-.mainBarMenuBtnIcons {
+.mainBarMenuListTypeBtnBox {
   display: flex;
   align-items: center;
   justify-content: center;
@@ -102,7 +110,6 @@
   }
 
   .mainBarMenu {
-    margin-top: 5px;
     width: 100%;
   }
 }

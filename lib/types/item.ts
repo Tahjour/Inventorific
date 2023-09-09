@@ -7,9 +7,9 @@ export type ItemsContextType = {
   deleteModalIsOpen: boolean;
   getItemToEdit: () => Item;
   getItemToDelete: () => Item;
-  addItem: (newItem: Item) => void;
-  deleteItem: () => void;
-  saveEditedItem: (editedItem: Item) => void;
+  addItem: (newItem: Item) => Promise<void>;
+  deleteItem: () => Promise<void>;
+  saveEditedItem: (editedItem: Item) => Promise<void>;
   showItemModal: (itemToEdit: Item) => void;
   closeItemModal: () => void;
   showDeleteModal: (itemToDelete: Item, userInfoToDelete: UserInfo) => void;

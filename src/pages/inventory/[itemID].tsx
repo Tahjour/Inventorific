@@ -1,4 +1,4 @@
-import ItemDetails from "@/components/layout/app/item-details/item-details";
+import ItemDetails from "@/components/layout/app/inventory/item-details/item-details";
 import Loader from "@/components/ui/loading/loader";
 import { useUserInfoContext } from "@/context/user-context";
 import { AnimatePresence } from "framer-motion";

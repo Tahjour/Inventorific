@@ -76,13 +76,15 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
         const editedItemImagePublicId = `${mainFolder}/${userFolder}/${editedItemImageFolder}`;
         let updatedImageURL = editedItemImageURL[0];
 
+        //if edited image file is not provided
         if (!files.editedItemImageFile) {
-          //if edited image file is not provided
+          // Checking if the user didn't change the image, but changed the name of the item
+          // Since the cloudinary image folder uses the name of the item,
+          // a simple rename is made to the existing image folder in Cloudinary instead of deleting and then reuploading
           if (
             editedItemImageURL[0] !== process.env.CLOUDINARY_DEFAULT_IMAGE_URL &&
             itemToEditImagePublicId.toLowerCase() !== editedItemImagePublicId.toLowerCase()
           ) {
-            logger.info(`renaming ${itemToEditImagePublicId} to ${editedItemImagePublicId}`);
             const renameResponse = await cloudinary.uploader.rename(
               itemToEditImagePublicId,
               editedItemImagePublicId
@@ -96,8 +98,8 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
             updatedImageURL = renameResponse.secure_url;
           }
         }
+        //if edited image file is provided
         if (files.editedItemImageFile) {
-          //if edited image file is provided
           const editedItemImageFile = files.editedItemImageFile[0].filepath;
           if (itemToEditImageURL[0] !== process.env.CLOUDINARY_DEFAULT_IMAGE_URL) {
             const destroyResponse = await cloudinary.uploader.destroy(itemToEditImagePublicId);

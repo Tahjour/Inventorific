@@ -1,6 +1,7 @@
 // tile-list.tsx
 import Loader from "@/components/ui/loading/loader";
 import { useItemsContext } from "@/context/items-context";
+import { useWindowContext } from "@/context/window-context";
 import { Item } from "@/lib/types/item";
 import { AnimatePresence, motion } from "framer-motion";
 import Image from "next/image";
@@ -10,7 +11,8 @@ import { BiEdit } from "react-icons/bi";
 import { BsTrash } from "react-icons/bs";
 import styles from "./slab-list.module.css";
 
-export default function TileList({ loadedItems }: { loadedItems: Item[] }) {
+export default function SlabList({ loadedItems }: { loadedItems: Item[] }) {
+  const { windowWidth } = useWindowContext();
   const { showItemModal, showDeleteModal } = useItemsContext();
   const [imageLoaded, setImageLoaded] = useState(false);
 
@@ -27,7 +29,17 @@ export default function TileList({ loadedItems }: { loadedItems: Item[] }) {
   }
 
   return (
-    <motion.section className={styles.slabList} exit={{ opacity: 0 }}>
+    <motion.section
+      className={styles.slabList}
+      variants={{
+        hidden: { opacity: 0 },
+        visible: { opacity: 1 },
+      }}
+      initial="hidden"
+      animate="visible"
+      exit="hidden"
+      transition={{ duration: 0.5 }}
+    >
       <AnimatePresence>
         {loadedItems.map((item: Item) => {
           if (!item) {
@@ -35,7 +47,7 @@ export default function TileList({ loadedItems }: { loadedItems: Item[] }) {
           }
           return (
             <motion.div
-              // className={styles.itemCardBox}
+              className={styles.itemSlabBox}
               key={item.id}
               layout={"position"}
               initial="hidden"
@@ -47,7 +59,7 @@ export default function TileList({ loadedItems }: { loadedItems: Item[] }) {
               }}
               transition={{ duration: 0.2 }}
             >
-              <Link href={`inventory/${item.id}`} className={styles.itemCard}>
+              <Link href={`inventory/${item.id}`} className={styles.itemSlab}>
                 <div className={styles.itemImageBox}>
                   {!imageLoaded && <Loader message="loading image..." />}
                   {/* Show the loader when the image is not loaded */}
@@ -55,34 +67,33 @@ export default function TileList({ loadedItems }: { loadedItems: Item[] }) {
                     className={styles.itemImage}
                     src={item.imageURL}
                     alt={"Item's image"}
-                    // fill
-                    width={250}
-                    height={250}
-                    sizes="100vw"
+                    width={windowWidth > 740 ? 100 : windowWidth > 450 ? 80 : 50}
+                    height={windowWidth > 740 ? 100 : windowWidth > 450 ? 80 : 50}
+                    sizes="50vw"
                     onLoadingComplete={handleImageLoad}
                   />
                 </div>
-                <div className={styles.itemPriceTagBox}>
-                  {item.price.length > 12 ? `$${item.price.slice(0, 12)}+` : `$${item.price}`}
-                </div>
+
                 <div className={styles.itemInfoBox}>
-                  {/* <div className={styles.itemInfoHighlight}> */}
                   <div className={styles.itemInfoBits}>
-                    {/* <h3>Name</h3> */}
                     <p>{item.name.length > 25 ? `${item.name.slice(0, 25)}...` : item.name}</p>
-                  </div>
-                  {/* <div className={styles.itemInfoBits}>
-                    <strong>Price</strong>
-                    {item.price.length > 11 ? `$${item.price.slice(0, 11)}...` : `$${item.price}`}
-                  </div> */}
-                  <div className={styles.itemInfoBits}>
-                    {/* <h3>Amount</h3> */}
                     <p>
                       {item.amount.length > 12 ? `${item.amount.slice(0, 12)}+` : `${item.amount}`}{" "}
                       in stock
                     </p>
+                    <div className={styles.itemPriceTagBox}>
+                      {item.price.length > 12 ? `$${item.price.slice(0, 12)}+` : `$${item.price}`}
+                    </div>
                   </div>
-                  {/* </div> */}
+
+                  {windowWidth > 600 && (
+                    <div className={styles.itemInfoBits}>
+                      <h6>Created</h6>
+                      <p>{`${item.date_created} ${item.time_created}`}</p>
+                      <h6>Modified</h6>
+                      <p>{`${item.date_modified} ${item.time_modified}`}</p>
+                    </div>
+                  )}
 
                   <div className={styles.operationIcons}>
                     <BiEdit

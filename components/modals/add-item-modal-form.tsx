@@ -2,6 +2,7 @@
 import { useNotification } from "@/context/notification-context";
 import { itemValidate } from "@/lib/auth/item-validation/client";
 import { getFormattedDate, getFormattedTime } from "@/lib/helpers/date";
+import { PendingMessages } from "@/lib/helpers/messages";
 import { ItemValues } from "@/lib/types/form-authentication";
 import { useFormik } from "formik";
 import { AnimatePresence, motion } from "framer-motion";
@@ -10,11 +11,11 @@ import { Fragment, useState } from "react";
 import { BiImageAdd } from "react-icons/bi";
 import { v4 as uuidv4 } from "uuid";
 import { useItemsContext } from "../../context/items-context";
-import { FormMotion } from "../ui/animations/reusable-motion-props/form-transition-props";
+import { FormMotion } from "../ui/animations/motion-props/form-transition-props";
 import Loader from "../ui/loading/loader";
 import styles from "./modal-form.module.css";
 
-function AddItemModalForm() {
+function ItemModalForm() {
   const { showNotification } = useNotification();
   const { getItemToEdit, saveEditedItem, closeItemModal, addItem } = useItemsContext();
   const itemToEdit = getItemToEdit();
@@ -41,8 +42,9 @@ function AddItemModalForm() {
 
     showNotification({
       type: "saving",
-      message: "Saving...",
+      message: PendingMessages.Saving,
     });
+    closeItemModal();
 
     if (itemToEdit) {
       const editedItem = {
@@ -58,7 +60,7 @@ function AddItemModalForm() {
         imageURL: enteredImageURL,
         imageFile: imageFile,
       };
-      saveEditedItem(editedItem);
+      await saveEditedItem(editedItem);
     } else {
       const newItem = {
         id: uuidv4(),
@@ -73,9 +75,8 @@ function AddItemModalForm() {
         imageURL: enteredImageURL,
         imageFile: imageFile,
       };
-      addItem(newItem);
+      await addItem(newItem);
     }
-    closeItemModal();
   }
 
   function imageInputChangeHandler(event: React.ChangeEvent<HTMLInputElement>) {
@@ -132,14 +133,14 @@ function AddItemModalForm() {
           <div className={styles.inputBox}>
             <div className={styles.inputBox2}>
               <input
-                className={`${styles.inputText} ${
+                className={`${styles.textInput} ${
                   itemToEdit
-                    ? !errors.name && styles.successInputText
-                    : !errors.name && touched.name && styles.successInputText
+                    ? !errors.name && styles.successOutline
+                    : !errors.name && touched.name && styles.successOutline
                 } ${
                   itemToEdit
-                    ? errors.name && styles.errorInputText
-                    : errors.name && touched.name && styles.errorInputText
+                    ? errors.name && styles.errorOutline
+                    : errors.name && touched.name && styles.errorOutline
                 }`}
                 type="text"
                 id="name"
@@ -163,7 +164,7 @@ function AddItemModalForm() {
             <AnimatePresence>
               {errors.name && touched.name && (
                 <motion.span
-                  className={styles.errorText}
+                  className={styles.errorMessage}
                   key="errorMessage"
                   initial={{ opacity: 0, height: 0 }}
                   animate={{ opacity: 1, height: "auto" }}
@@ -178,14 +179,14 @@ function AddItemModalForm() {
           <div className={styles.inputBox}>
             <div className={styles.inputBox2}>
               <input
-                className={`${styles.inputText} ${
+                className={`${styles.textInput} ${
                   itemToEdit
-                    ? !errors.price && styles.successInputText
-                    : !errors.price && touched.price && styles.successInputText
+                    ? !errors.price && styles.successOutline
+                    : !errors.price && touched.price && styles.successOutline
                 } ${
                   itemToEdit
-                    ? errors.price && styles.errorInputText
-                    : errors.price && touched.price && styles.errorInputText
+                    ? errors.price && styles.errorOutline
+                    : errors.price && touched.price && styles.errorOutline
                 }`}
                 type="text"
                 id="price"
@@ -209,7 +210,7 @@ function AddItemModalForm() {
             <AnimatePresence>
               {errors.price && touched.price && (
                 <motion.span
-                  className={styles.errorText}
+                  className={styles.errorMessage}
                   key="errorMessage"
                   initial={{ opacity: 0, height: 0 }}
                   animate={{ opacity: 1, height: "auto" }}
@@ -224,14 +225,14 @@ function AddItemModalForm() {
           <div className={styles.inputBox}>
             <div className={styles.inputBox2}>
               <input
-                className={`${styles.inputText} ${
+                className={`${styles.textInput} ${
                   itemToEdit
-                    ? !errors.amount && styles.successInputText
-                    : !errors.amount && touched.amount && styles.successInputText
+                    ? !errors.amount && styles.successOutline
+                    : !errors.amount && touched.amount && styles.successOutline
                 } ${
                   itemToEdit
-                    ? errors.amount && styles.errorInputText
-                    : errors.amount && touched.amount && styles.errorInputText
+                    ? errors.amount && styles.errorOutline
+                    : errors.amount && touched.amount && styles.errorOutline
                 }`}
                 type="text"
                 id="amount"
@@ -255,7 +256,7 @@ function AddItemModalForm() {
             <AnimatePresence>
               {errors.amount && touched.amount && (
                 <motion.span
-                  className={styles.errorText}
+                  className={styles.errorMessage}
                   key="errorMessage"
                   initial={{ opacity: 0, height: 0 }}
                   animate={{ opacity: 1, height: "auto" }}
@@ -270,14 +271,14 @@ function AddItemModalForm() {
           <div className={styles.inputBox}>
             <div className={styles.inputBox2}>
               <textarea
-                className={`${styles.inputText} ${styles.inputTextArea} ${
+                className={`${styles.textInput} ${styles.textAreaInput} ${
                   itemToEdit
-                    ? !errors.description && styles.successInputText
-                    : !errors.description && touched.description && styles.successInputText
+                    ? !errors.description && styles.successOutline
+                    : !errors.description && touched.description && styles.successOutline
                 } ${
                   itemToEdit
-                    ? errors.description && styles.errorInputText
-                    : errors.description && touched.description && styles.errorInputText
+                    ? errors.description && styles.errorOutline
+                    : errors.description && touched.description && styles.errorOutline
                 }`}
                 id="description"
                 {...getFieldProps("description")}
@@ -301,7 +302,7 @@ function AddItemModalForm() {
             <AnimatePresence>
               {errors.description && touched.description && (
                 <motion.span
-                  className={styles.errorText}
+                  className={styles.errorMessage}
                   key="errorMessage"
                   initial={{ opacity: 0, height: 0 }}
                   animate={{ opacity: 1, height: "auto" }}
@@ -328,4 +329,4 @@ function AddItemModalForm() {
   );
 }
 
-export default AddItemModalForm;
+export default ItemModalForm;

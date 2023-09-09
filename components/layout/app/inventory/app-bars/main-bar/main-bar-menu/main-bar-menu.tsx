@@ -2,6 +2,8 @@
 import { useItemsContext } from "@/context/items-context";
 import { useNotification } from "@/context/notification-context";
 import { useUserInfoContext } from "@/context/user-context";
+import { useWindowContext } from "@/context/window-context";
+import { PendingMessages } from "@/lib/helpers/messages";
 import { ResponseData } from "@/lib/types/api";
 import { ListType } from "@/lib/types/list";
 import { Fragment } from "react";
@@ -11,6 +13,7 @@ import { IoGrid } from "react-icons/io5";
 import styles from "./main-bar-menu.module.css";
 
 export default function MainBarMenu() {
+  const { windowWidth } = useWindowContext();
   const { showItemModal } = useItemsContext();
   const { showNotification } = useNotification();
   const { itemSearchTerm, setItemSearchTerm, getPreferredListType, changePreferredListType } =
@@ -30,7 +33,7 @@ export default function MainBarMenu() {
   async function changePreferredListTypeHandler(preferredListType: ListType) {
     showNotification({
       type: "saving",
-      message: "saving...",
+      message: PendingMessages.Saving,
     });
     // Change the list type specifically to the desired type
     changePreferredListType(preferredListType);
@@ -71,22 +74,20 @@ export default function MainBarMenu() {
             ></input>
             <BsSearch className={styles.searchIcon} />
           </div>
-          <div className={styles.mainBarMenuBtns}>
-            <div className={styles.mainBarMenuBtnIcons}>
+          <div className={styles.mainBarMenuBtnBox}>
+            <div className={styles.mainBarMenuListTypeBtnBox}>
               <button
                 className={`${styles.listTypeBtn} ${
-                  listType === "slabs" ? styles.activeListTypeBtn : ""
+                  listType === "slabs" && styles.activeListTypeBtn
                 }`}
-                // Call changePreferredListTypeHandler with the desired type on click
                 onClick={() => changePreferredListTypeHandler("slabs")}
               >
                 <FaListUl />
               </button>
               <button
                 className={`${styles.listTypeBtn} ${
-                  listType === "tiles" ? styles.activeListTypeBtn : ""
+                  listType === "tiles" && styles.activeListTypeBtn
                 }`}
-                // Call changePreferredListTypeHandler with the desired type on click
                 onClick={() => changePreferredListTypeHandler("tiles")}
               >
                 <IoGrid />

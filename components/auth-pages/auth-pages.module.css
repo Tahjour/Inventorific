@@ -54,15 +54,15 @@
   margin-bottom: 20px;
 }
 
-.inputSubBox {
+.inputBox2 {
   position: relative;
   display: flex;
   flex-direction: row;
   align-items: center;
   justify-content: center;
-  border-radius: 10px;
   width: 100%;
-  height: 50px;
+  /* height: 50px; */
+  margin-bottom: 0.625rem;
   background-color: transparent;
 }
 
@@ -73,21 +73,18 @@
 }
 
 .textInput {
+  padding: 1.25rem;
   padding-left: 20px;
   padding-right: 35px;
   border-radius: 10px;
+  letter-spacing: 0.0625rem;
   width: 100%;
   height: 100%;
   border: 0;
   background-color: transparent;
-  color: var(--color-L75);
-  outline: 2px solid var(--color-L75);
-  transition: var(--medium-linear);
-}
-
-.textInput:focus {
-  /* border: var(--main-border-size) solid var(--dark-neon-blue); */
-  outline-color: var(--dark-neon-blue);
+  color: var(--color-L100);
+  outline: var(--main-border-size) solid var(--color-L75);
+  transition: outline var(--medium-linear), color var(--medium-linear);
 }
 
 .inputLabel {
@@ -95,23 +92,32 @@
   top: 50%;
   left: 20px;
   transform: translateY(-50%);
-  font-size: 1em;
-  color: rgb(190, 190, 190);
-  background-color: rgb(30, 30, 30);
+  font-size: 16px;
+  color: var(--color-L75);
+  background-color: var(--main-bg);
   pointer-events: none;
-  transition: var(--medium-linear);
+  transition: var(--fast-ease);
 }
 
 .textInput:focus + .inputLabel,
-.inputActive {
-  top: 0px;
-  font-size: 0.8em;
-  padding: 5px;
+.successLabel,
+.errorLabel {
+  top: 0;
+  padding: 0.3125rem;
+  font-size: 0.75rem;
 }
 
-.errorTextInput,
-.errorTextInput:focus {
+.successOutline {
+  outline-color: var(--dark-neon-blue);
+}
+
+.errorOutline {
   outline-color: var(--error);
+}
+
+.successLabel {
+  letter-spacing: 0.0625rem;
+  font-weight: 500;
 }
 
 .errorLabel {
@@ -120,14 +126,13 @@
 
 .errorMessage {
   color: var(--error);
-  margin-top: 10px;
 }
 
 .textInput:-webkit-autofill {
   background-color: transparent !important;
-  -webkit-text-fill-color: rgb(190, 190, 190);
-  box-shadow: 0 0 0 1000px rgb(30, 30, 30) inset;
-  caret-color: white;
+  -webkit-text-fill-color: var(--color-L100);
+  box-shadow: 0 0 0 1000px var(--main-bg) inset;
+  caret-color: var(--color-L100);
   /* Above is a hack to stop the background color from when the user autofills saved input */
 }
 
@@ -155,41 +160,26 @@
   margin: 0;
 }
 
-.form .submitBtn,
+.submitBtn,
 .googleBtn {
   position: relative;
   z-index: 1;
-  background-color: black;
-  background-image: linear-gradient(to right, var(--dark-neon-blue), rgba(89, 0, 148, 0.5));
-  color: white;
+  background-color: var(--dark-neon-blue);
+  color: var(--color-L100);
   border: none;
   border-radius: 10px;
   width: 30%;
   height: 50px;
   text-align: center;
   cursor: pointer;
-}
-.googleBtn {
-  background-image: none;
+  transition: var(--fast-linear);
 }
 
-.form .submitBtn::before,
-.googleBtn::before {
-  position: absolute;
-  content: "";
-  top: 0;
-  bottom: 0;
-  left: 0;
-  right: 0;
-  background-image: linear-gradient(to right, var(--neon-blue), rgba(89, 0, 148, 1));
+.submitBtn:hover,
+.submitBtn:focus {
+  background-color: var(--neon-blue);
   box-shadow: 0 0 10px var(--neon-blue);
-  border-radius: 10px;
-  z-index: -1;
-  opacity: 0;
-  transition: opacity 100ms ease-in-out;
-}
-.googleBtn::before {
-  background-image: none;
+  color: var(--main-bg);
 }
 
 .googleBtn {
@@ -199,34 +189,27 @@
   justify-content: center;
   gap: 4px;
   width: 50%;
-  /* background-image: linear-gradient(to right, rgba(51, 103, 214, 0.51), rgba(0, 79, 250, 0.51)); */
-  /* background-color: var(--dark-neon-blue); */
-  background-color: rgba(0, 79, 250, 0.51);
+  background-color: hsla(221, 100%, 49%, 0.51);
+}
+.googleBtn:hover,
+.googleBtn:focus {
+  background-color: hsla(221, 100%, 49%);
+  box-shadow: 0 0 10px hsla(221, 100%, 49%);
 }
 
-.googleBtn::before {
-  background-color: rgba(0, 79, 250, 1);
-  box-shadow: 0 0 10px rgba(0, 79, 250, 0.51);
-}
-
-.form .submitBtn:hover::before,
-.googleBtn:hover::before {
-  opacity: 1;
-}
-
-.loginOrSignUpPart {
+.loginOrSignUpBox {
   /* position: absolute; */
   margin: 20px 0;
 }
 
-.form .toggleBtn {
+.form .loginOrSignUpBtn {
   font-size: 1rem;
   text-decoration: none;
   color: var(--dark-neon-blue);
-  transition: 100ms linear;
+  transition: var(--fast-linear);
 }
 
-.form .toggleBtn:hover {
+.form .loginOrSignUpBtn:hover {
   cursor: pointer;
   color: var(--neon-blue);
 }
