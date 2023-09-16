@@ -4,7 +4,13 @@ import { ResponseData } from "@/lib/types/api";
 import { LoginValues, RegisterValues } from "@/lib/types/form-authentication";
 import { Item } from "@/lib/types/item";
 import { ListType } from "@/lib/types/list";
-import { UserContextType, UserInfo } from "@/lib/types/user";
+import { UserInventoryStats } from "@/lib/types/stats";
+import {
+  DocumentOrUserOperationsData,
+  UserContextType,
+  UserInfo,
+  UserOperationsLabelsList,
+} from "@/lib/types/user";
 import { signIn, signOut, useSession } from "next-auth/react";
 import { useRouter } from "next/router";
 import { createContext, useContext, useEffect, useState } from "react";
@@ -19,6 +25,13 @@ export function UserContextProvider({ children }: { children: React.ReactNode })
   const [userInfo, setUserInfo] = useState<UserInfo>(null);
   const [userItems, setUserItems] = useState<Item[]>([]);
   const [userInfoToDelete, setUserInfoToDelete] = useState<UserInfo>(null);
+  const [userOperations, setUserOperations] = useState<DocumentOrUserOperationsData[]>([]);
+  const [userInventoryStats, setUserInventoryStats] = useState<UserInventoryStats>({
+    totalItemsChangeOvertime: [],
+    totalPriceChangeOvertime: [],
+    totalAmountChangeOvertime: [],
+  });
+
   const [serverItemsWereLoaded, setServerItemsWereLoaded] = useState(false);
   const [serverLoadWasTried, setServerLoadWasTried] = useState(false);
   const [itemSearchTerm, setItemSearchTerm] = useState("");
@@ -34,9 +47,12 @@ export function UserContextProvider({ children }: { children: React.ReactNode })
         if (data.type === "success" && data.userInfo) {
           setUserInfo(data.userInfo);
           setUserItems(data.userInfo.items);
-          data.userInfo.preferred_list_type === "tiles"
-            ? setPreferredListType("tiles")
-            : setPreferredListType("slabs");
+          if (data.userInfo.preferred_list_type) {
+            setPreferredListType(data.userInfo.preferred_list_type);
+          }
+          if (data.userInfo.user_operations) {
+            setUserOperations(data.userInfo.user_operations);
+          }
           setServerItemsWereLoaded(true);
         }
       }
@@ -55,6 +71,52 @@ export function UserContextProvider({ children }: { children: React.ReactNode })
     return () => clearTimeout(timeoutId);
   }, [itemSearchTerm]);
 
+  function getUserInfo() {
+    return userInfo;
+  }
+
+  function getUserInfoToDelete() {
+    return userInfoToDelete;
+  }
+
+  function getPreferredListType() {
+    return preferredListType;
+  }
+
+  function getUserOperations() {
+    return userOperations;
+  }
+
+  function getUserInventoryStats() {
+    return userInventoryStats;
+  }
+
+  function getTotalUserItemsPrice() {
+    return userItems.reduce((total, item) => {
+      if (!item) return total;
+      let collectivePrice = parseFloat(
+        (parseFloat(item.price) * parseFloat(item.amount)).toFixed(2)
+      );
+      return total + collectivePrice;
+    }, 0);
+  }
+
+  function getTotalUserItemsAmount() {
+    return userItems.reduce((total, item) => {
+      if (!item) return total;
+      let amount = parseFloat(item.amount);
+      return total + amount;
+    }, 0);
+  }
+
+  function getTotalForEachUserOperationList() {
+    return UserOperationsLabelsList.map((userOperationLabel) => {
+      return userOperations.reduce((sum, userOperation) => {
+        return sum + (userOperation[userOperationLabel] || 0);
+      }, 0);
+    });
+  }
+
   function getUserItems() {
     if (debouncedSearchTerm === "") {
       return userItems;
@@ -69,20 +131,49 @@ export function UserContextProvider({ children }: { children: React.ReactNode })
     return userItems.find((item) => item?.id === itemID);
   }
 
-  function getUserInfo() {
-    return userInfo;
-  }
+  async function changePreferredListType(listType: ListType) {
+    try {
+      showNotification({
+        type: "saving",
+        message: PendingMessages.Saving,
+      });
 
-  function getUserInfoToDelete() {
-    return userInfoToDelete;
-  }
+      setPreferredListType(listType);
 
-  function getPreferredListType() {
-    return preferredListType;
-  }
+      if (!session) {
+        showNotification({
+          type: "success",
+          message: SuccessMessages.PreferredListTypeSaved,
+        });
+        return;
+      }
 
-  function changePreferredListType(preferredListType: ListType) {
-    setPreferredListType(preferredListType);
+      const response = await fetch("/api/save-preferred-list-type", {
+        method: "POST",
+        body: JSON.stringify({ preferredListType: listType }),
+        headers: {
+          "Content-Type": "application/json",
+          Accept: "application/json",
+        },
+      });
+      const data: ResponseData = await response.json();
+      if (data.type === "error") {
+        showNotification({
+          type: "error",
+          message: data.message,
+        });
+        return;
+      }
+      showNotification({
+        type: "success",
+        message: data.message,
+      });
+    } catch (error) {
+      showNotification({
+        type: "error",
+        message: error instanceof Error ? error.message : ErrorMessages.PreferredListTypeSaveFailed,
+      });
+    }
   }
 
   async function loginUser(values: LoginValues) {
@@ -233,9 +324,16 @@ export function UserContextProvider({ children }: { children: React.ReactNode })
 
   const context: UserContextType = {
     getUserInfo,
+    getUserInventoryStats,
+    setUserInventoryStats,
+    getUserOperations,
+    setUserOperations,
+    getTotalForEachUserOperationList,
     getUserItems,
-    getUserItem,
     setUserItems,
+    getUserItem,
+    getTotalUserItemsPrice,
+    getTotalUserItemsAmount,
     getUserInfoToDelete,
     setUserInfoToDelete,
     deleteUserInfo,

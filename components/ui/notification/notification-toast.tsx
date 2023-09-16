@@ -2,30 +2,23 @@ import { NotificationContextType } from "@/lib/types/notification";
 import { motion } from "framer-motion";
 import { BiError } from "react-icons/bi";
 import { IoMdDoneAll } from "react-icons/io";
-import styles from "./notification-popup.module.css";
 
 function NotificationToast({ notification, hideNotification }: NotificationContextType) {
   const { type, message } = notification!;
 
   let statusClasses = "";
 
-  if (type === "success") {
-    statusClasses = styles.success;
-  }
-
   if (type === "error") {
-    statusClasses = styles.error;
+    statusClasses = "notificationToastError";
   }
 
   if (type === "loading" || type === "saving") {
-    statusClasses = styles.loading;
+    statusClasses = "notificationToastLoading";
   }
-
-  const notificationToast = `${styles.notificationToast} ${statusClasses}`;
-
+  
   return (
     <motion.section
-      className={styles.notificationToastBox}
+      className={"notificationToastSectionBox"}
       initial="hidden"
       animate="visible"
       exit="exit"
@@ -38,11 +31,14 @@ function NotificationToast({ notification, hideNotification }: NotificationConte
         duration: 0.5,
       }}
     >
-      <motion.div className={notificationToast} onClick={hideNotification}>
+      <motion.div
+        className={`${"notificationToastBox"} ${statusClasses}`}
+        onClick={hideNotification}
+      >
         {(type === "saving" || type === "loading") && (
           <motion.div
             key="loader"
-            className={styles.notificationLoader}
+            className={"notificationToastLoaderCircle"}
             animate={{
               rotate: [0, 360],
               transition: {
@@ -53,7 +49,7 @@ function NotificationToast({ notification, hideNotification }: NotificationConte
         )}
         {type === "error" && (
           <motion.div
-            className={styles.typeIconBox}
+            className={"notificationToastIconTypeBox"}
             key="icon"
             initial={{ scale: 0 }}
             animate={{ scale: 1 }}
@@ -64,7 +60,7 @@ function NotificationToast({ notification, hideNotification }: NotificationConte
         )}
         {type === "success" && (
           <motion.div
-            className={styles.typeIconBox}
+            className={"notificationToastIconTypeBox"}
             key="icon"
             initial={{ scale: 0 }}
             animate={{ scale: 1 }}

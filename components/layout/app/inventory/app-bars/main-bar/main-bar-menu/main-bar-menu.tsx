@@ -3,14 +3,11 @@ import { useItemsContext } from "@/context/items-context";
 import { useNotification } from "@/context/notification-context";
 import { useUserInfoContext } from "@/context/user-context";
 import { useWindowContext } from "@/context/window-context";
-import { PendingMessages } from "@/lib/helpers/messages";
-import { ResponseData } from "@/lib/types/api";
 import { ListType } from "@/lib/types/list";
 import { Fragment } from "react";
 import { BsSearch } from "react-icons/bs";
 import { FaListUl } from "react-icons/fa";
 import { IoGrid } from "react-icons/io5";
-import styles from "./main-bar-menu.module.css";
 
 export default function MainBarMenu() {
   const { windowWidth } = useWindowContext();
@@ -30,70 +27,44 @@ export default function MainBarMenu() {
   }
 
   // Updated changePreferredListTypeHandler to take a desired type
-  async function changePreferredListTypeHandler(preferredListType: ListType) {
-    showNotification({
-      type: "saving",
-      message: PendingMessages.Saving,
-    });
-    // Change the list type specifically to the desired type
-    changePreferredListType(preferredListType);
-
-    const response = await fetch("/api/save-preferred-list-type", {
-      method: "POST",
-      body: JSON.stringify({ preferredListType: preferredListType }),
-      headers: {
-        "Content-Type": "application/json",
-        Accept: "application/json",
-      },
-    });
-    const data: ResponseData = await response.json();
-    if (data.type === "error") {
-      showNotification({
-        type: "error",
-        message: data.message,
-      });
-      return;
-    }
-    showNotification({
-      type: "success",
-      message: data.message,
-    });
+  async function changePreferredListTypeHandler(listType: ListType) {
+    await changePreferredListType(listType);
   }
 
   return (
     <Fragment>
-      <section className={styles.mainBarMenuBox}>
-        <div className={styles.mainBarMenu}>
-          <div className={styles.searchBarBox}>
+      <section className={"mainBarMenuSectionBox"}>
+        <div className={"mainBarMenuBox"}>
+          <div className={"mainBarMenuSearchBarBox"}>
             <input
-              className={styles.searchBar}
+              className={"mainBarMenuSearchInput"}
               type="text"
               placeholder="search..."
               onChange={handleSearchTermChange}
               value={itemSearchTerm}
             ></input>
-            <BsSearch className={styles.searchIcon} />
+            <BsSearch className={"mainBarMenuSearchIcon"} />
           </div>
-          <div className={styles.mainBarMenuBtnBox}>
-            <div className={styles.mainBarMenuListTypeBtnBox}>
+          <div className={"mainBarMenuBtnBox"}>
+            <div className={"mainBarMenuListTypeBtnBox"}>
               <button
-                className={`${styles.listTypeBtn} ${
-                  listType === "slabs" && styles.activeListTypeBtn
+                className={`${"mainBarMenuListTypeBtn"} ${
+                  listType === "slabs" && "mainBarMenuActiveListTypeBtn"
                 }`}
                 onClick={() => changePreferredListTypeHandler("slabs")}
               >
                 <FaListUl />
               </button>
               <button
-                className={`${styles.listTypeBtn} ${
-                  listType === "tiles" && styles.activeListTypeBtn
+                className={`${"mainBarMenuListTypeBtn"} ${
+                  listType === "tiles" && "mainBarMenuActiveListTypeBtn"
                 }`}
                 onClick={() => changePreferredListTypeHandler("tiles")}
               >
                 <IoGrid />
               </button>
             </div>
-            <button className={styles.mainBarMenuBtn} onClick={addNewItemHandler}>
+            <button className={"mainBarMenuBtn"} onClick={addNewItemHandler}>
               Add Item
             </button>
           </div>

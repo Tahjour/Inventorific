@@ -1,9 +1,9 @@
 // context\items-context.tsx
+import { getFormattedDate, getFormattedTime } from "@/lib/helpers/date";
 import { ErrorMessages, SuccessMessages } from "@/lib/helpers/messages";
 import { ResponseData } from "@/lib/types/api";
 import { Item, ItemsContextType } from "@/lib/types/item";
-import { ListType } from "@/lib/types/list";
-import { UserInfo } from "@/lib/types/user";
+import { UserInfo, UserOperationsData } from "@/lib/types/user";
 import { useSession } from "next-auth/react";
 import { PropsWithChildren, createContext, useContext, useState } from "react";
 import { useNotification } from "./notification-context";
@@ -14,7 +14,15 @@ const ItemsContext = createContext<ItemsContextType>({} as ItemsContextType);
 export function ItemsContextProvider(props: PropsWithChildren) {
   const { data: session } = useSession();
   const { showNotification } = useNotification();
-  const { setUserInfoToDelete, setUserItems } = useUserInfoContext();
+  const {
+    setUserInfoToDelete,
+    setUserItems,
+    setUserOperations,
+    setUserInventoryStats,
+    getTotalUserItemsPrice,
+    getTotalUserItemsAmount,
+    getUserItems,
+  } = useUserInfoContext();
   const [itemToEdit, setItemToEdit] = useState<Item>(null);
   const [itemToDelete, setItemToDelete] = useState<Item>(null);
   const [itemModalIsOpen, setItemModalIsOpen] = useState(false);
@@ -47,14 +55,13 @@ export function ItemsContextProvider(props: PropsWithChildren) {
     return itemToDelete;
   }
 
-
+  /**
+   * Adds a new item to the user's list of items.
+   *
+   * @param newItem - The new item to be added.
+   * @returns None.
+   */
   async function addItem(newItem: Item) {
-    /**
-     * Adds a new item to the user's list of items.
-     *
-     * @param newItem - The new item to be added.
-     * @returns None.
-     */
     try {
       if (!newItem) {
         throw new Error(ErrorMessages.NoItemToCreate);
@@ -62,6 +69,73 @@ export function ItemsContextProvider(props: PropsWithChildren) {
 
       setUserItems((prevItems) => {
         return [...prevItems, newItem];
+      });
+      setUserOperations((prevUserOperations) => {
+        const currentDate = getFormattedDate();
+        let updatedUserOperations = [...prevUserOperations];
+        const operationIndex = updatedUserOperations.findIndex(
+          (operation) => operation.date === currentDate
+        );
+
+        if (operationIndex !== -1) {
+          // If found, increment the property
+          if (updatedUserOperations[operationIndex]) {
+            const updatedUserOperation = {
+              ...updatedUserOperations[operationIndex],
+              item_additions: updatedUserOperations[operationIndex].item_additions + 1,
+            };
+            updatedUserOperations[operationIndex] = updatedUserOperation;
+          }
+        } else {
+          // If not found, create a new object and add to the array
+          const newUserOperations: UserOperationsData = {
+            date: currentDate,
+            item_additions: 1,
+            item_deletions: 0,
+            item_edits: 0,
+          };
+          updatedUserOperations = [...updatedUserOperations, newUserOperations];
+        }
+
+        // Return the updated operations array
+        return updatedUserOperations;
+      });
+
+      setUserInventoryStats((prevUserInventoryStats) => {
+        const currentDate = getFormattedDate();
+        const currentTime = getFormattedTime();
+        const newUserItemsLength = getUserItems().length + 1;
+        const newTotalUserItemsPrice =
+          getTotalUserItemsPrice() +
+          parseFloat((parseFloat(newItem.price) * parseFloat(newItem.amount)).toFixed(2));
+        const newTotalUserItemsAmount = getTotalUserItemsAmount() + parseFloat(newItem.amount);
+
+        return {
+          totalItemsChangeOvertime: [
+            ...prevUserInventoryStats.totalItemsChangeOvertime,
+            {
+              date: currentDate,
+              time: currentTime,
+              value: newUserItemsLength,
+            },
+          ],
+          totalPriceChangeOvertime: [
+            ...prevUserInventoryStats.totalPriceChangeOvertime,
+            {
+              date: currentDate,
+              time: currentTime,
+              value: newTotalUserItemsPrice,
+            },
+          ],
+          totalAmountChangeOvertime: [
+            ...prevUserInventoryStats.totalAmountChangeOvertime,
+            {
+              date: currentDate,
+              time: currentTime,
+              value: newTotalUserItemsAmount,
+            },
+          ],
+        };
       });
 
       if (!session) {
@@ -122,6 +196,80 @@ export function ItemsContextProvider(props: PropsWithChildren) {
       }
       setUserItems((prevItems) => {
         return prevItems.map((item) => (item?.id === editedItem.id ? editedItem : item));
+      });
+      setUserOperations((prevUserOperations) => {
+        const currentDate = getFormattedDate();
+        let updatedUserOperations = [...prevUserOperations];
+        const operationIndex = updatedUserOperations.findIndex(
+          (userOperation) => userOperation.date === currentDate
+        );
+
+        if (operationIndex !== -1) {
+          // If found, increment the property
+          if (updatedUserOperations[operationIndex]) {
+            const updatedUserOperation = {
+              ...updatedUserOperations[operationIndex],
+              item_edits: updatedUserOperations[operationIndex].item_edits + 1,
+            };
+            updatedUserOperations[operationIndex] = updatedUserOperation;
+          }
+        } else {
+          // If not found, create a new object and add to the array
+          const newUserOperations: UserOperationsData = {
+            date: currentDate,
+            item_additions: 0,
+            item_deletions: 0,
+            item_edits: 1,
+          };
+          updatedUserOperations = [...updatedUserOperations, newUserOperations];
+        }
+
+        // Return the updated operations array
+        return updatedUserOperations;
+      });
+
+      setUserInventoryStats((prevUserInventoryStats) => {
+        const currentDate = getFormattedDate();
+        const currentTime = getFormattedTime();
+        const itemAmountDifference = parseFloat(
+          (parseFloat(editedItem.amount) - parseFloat(itemToEdit.amount)).toFixed(2)
+        );
+        const itemPriceDifference = parseFloat(
+          (
+            parseFloat(editedItem.price) * parseFloat(editedItem.amount) -
+            parseFloat(itemToEdit.price) * parseFloat(itemToEdit.amount)
+          ).toFixed(2)
+        );
+        const newUserItemsLength = getUserItems().length; // This remains the same as we're editing, not adding or removing an item
+        const newTotalUserItemsPrice = getTotalUserItemsPrice() + itemPriceDifference;
+        const newTotalUserItemsAmount = getTotalUserItemsAmount() + itemAmountDifference;
+
+        return {
+          totalItemsChangeOvertime: [
+            ...prevUserInventoryStats.totalItemsChangeOvertime,
+            {
+              date: currentDate,
+              time: currentTime,
+              value: newUserItemsLength,
+            },
+          ],
+          totalPriceChangeOvertime: [
+            ...prevUserInventoryStats.totalPriceChangeOvertime,
+            {
+              date: currentDate,
+              time: currentTime,
+              value: newTotalUserItemsPrice,
+            },
+          ],
+          totalAmountChangeOvertime: [
+            ...prevUserInventoryStats.totalAmountChangeOvertime,
+            {
+              date: currentDate,
+              time: currentTime,
+              value: newTotalUserItemsAmount,
+            },
+          ],
+        };
       });
 
       if (!session) {
@@ -196,6 +344,74 @@ export function ItemsContextProvider(props: PropsWithChildren) {
       }
       setUserItems((prevItems) => {
         return prevItems.filter((item) => item?.id !== itemToDelete.id);
+      });
+      setUserOperations((prevUserOperations) => {
+        const currentDate = getFormattedDate();
+        let updatedUserOperations = [...prevUserOperations];
+        const operationIndex = updatedUserOperations.findIndex(
+          (userOperation) => userOperation.date === currentDate
+        );
+
+        if (operationIndex !== -1) {
+          // If found, increment the property
+          if (updatedUserOperations[operationIndex]) {
+            const updatedUserOperation = {
+              ...updatedUserOperations[operationIndex],
+              item_deletions: updatedUserOperations[operationIndex].item_deletions + 1,
+            };
+            updatedUserOperations[operationIndex] = updatedUserOperation;
+          }
+        } else {
+          // If not found, create a new object and add to the array
+          const newUserOperations: UserOperationsData = {
+            date: currentDate,
+            item_additions: 0,
+            item_deletions: 1,
+            item_edits: 0,
+          };
+          updatedUserOperations = [...updatedUserOperations, newUserOperations];
+        }
+
+        // Return the updated operations array
+        return updatedUserOperations;
+      });
+
+      const itemAmountDifference = parseFloat(itemToDelete.amount);
+      const itemPriceDifference = parseFloat(itemToDelete.price) * parseFloat(itemToDelete.amount);
+
+      setUserInventoryStats((prevUserInventoryStats) => {
+        const currentDate = getFormattedDate();
+        const currentTime = getFormattedTime();
+        const newUserItemsLength = getUserItems().length - 1;
+        const newTotalUserItemsPrice = getTotalUserItemsPrice() - itemPriceDifference;
+        const newTotalUserItemsAmount = getTotalUserItemsAmount() - itemAmountDifference;
+
+        return {
+          totalItemsChangeOvertime: [
+            ...prevUserInventoryStats.totalItemsChangeOvertime,
+            {
+              date: currentDate,
+              time: currentTime,
+              value: newUserItemsLength,
+            },
+          ],
+          totalPriceChangeOvertime: [
+            ...prevUserInventoryStats.totalPriceChangeOvertime,
+            {
+              date: currentDate,
+              time: currentTime,
+              value: newTotalUserItemsPrice,
+            },
+          ],
+          totalAmountChangeOvertime: [
+            ...prevUserInventoryStats.totalAmountChangeOvertime,
+            {
+              date: currentDate,
+              time: currentTime,
+              value: newTotalUserItemsAmount,
+            },
+          ],
+        };
       });
       if (!session) {
         showNotification({

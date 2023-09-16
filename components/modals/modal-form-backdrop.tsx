@@ -1,7 +1,6 @@
 import { motion } from "framer-motion";
 import { useItemsContext } from "../../context/items-context";
-import { OpacityMotionFast } from "../ui/animations/motion-props/form-transition-props";
-import styles from "./modal-form.module.css";
+import { OpacityFadeFast } from "../ui/animations/motion-props/form-transition-props";
 function ModalBackdrop() {
   const { itemModalIsOpen, deleteModalIsOpen, closeItemModal, closeDeleteModal } =
     useItemsContext();
@@ -15,9 +14,9 @@ function ModalBackdrop() {
   }
   return (
     <motion.div
-      className={styles.modalBackdrop}
+      className={"modalFormModalBackdrop"}
       onClick={handleModalClose}
-      {...OpacityMotionFast}
+      {...OpacityFadeFast}
     ></motion.div>
   );
 }

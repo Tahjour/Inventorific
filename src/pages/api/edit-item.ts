@@ -1,6 +1,6 @@
 import { getConnectedClient } from "@/lib/database/mongodb";
+import { getFormattedDate } from "@/lib/helpers/date";
 import { ResponseError, sendResponseError } from "@/lib/helpers/errors";
-import { logger } from "@/lib/helpers/logger";
 import { ErrorMessages, SuccessMessages } from "@/lib/helpers/messages";
 import { ResponseData } from "@/lib/types/api";
 import { MongodbItem } from "@/lib/types/item";
@@ -144,9 +144,9 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
             ErrorMessages.DatabaseConnectionFailed
           );
 
-        const database = process.env.MONGODB_DATABASE;
+        const databaseName = process.env.MONGODB_DATABASE;
         const collection = process.env.MONGODB_USERS_COLLECTION!;
-        const users = mongoClient.db(database).collection(collection);
+        const users = mongoClient.db(databaseName).collection(collection);
 
         // Find the existing user in the database
         const existingUser = await users.findOne({ email: session.user.email });
@@ -160,6 +160,24 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
         );
         if (!updateResult || updateResult.modifiedCount === 0) {
           throw new ResponseError(StatusCodes.INTERNAL_SERVER_ERROR, ErrorMessages.ItemEditFailed);
+        }
+
+        const usersOperationsCollectionName = process.env.MONGODB_USERS_OPERATIONS_COLLECTION!;
+        const usersOperationsCollection = mongoClient
+          .db(databaseName)
+          .collection(usersOperationsCollectionName);
+
+        const operationsUpdateResult = await usersOperationsCollection.updateOne(
+          { email: session.user.email, date: getFormattedDate() },
+          { $inc: { item_additions: 0, item_edits: 1, item_deletions: 0 } },
+          { upsert: true }
+        );
+
+        if (operationsUpdateResult.upsertedCount < 1 && operationsUpdateResult.modifiedCount < 1) {
+          throw new ResponseError(
+            StatusCodes.INTERNAL_SERVER_ERROR,
+            ErrorMessages.UserOperationsUpdateFailed
+          );
         }
 
         // Send a response after the update

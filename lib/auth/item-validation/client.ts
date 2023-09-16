@@ -13,17 +13,17 @@ export function itemValidate(values: ItemValues) {
 
   if (!values.price || !values.price.trim()) {
     errors.price = "Price is required";
-  } else if (!/^\d+(\.\d{2})?$/.test(values.price)) {
-    errors.price = "Invalid price: must be a number with up to 2 decimal places";
+  } else if (!/^[1-9]\d*(\.\d{2})?$/.test(values.price)) {
+    errors.price =
+      "Invalid price: must be a number starting from 1 to 9 with up to 2 decimal places";
   } else if (values.price.length > 12) {
     errors.price = "Seems unlikely. Please contact the developer.";
   }
 
-
   if (!values.amount || !values.amount.trim()) {
     errors.amount = "Amount is required";
-  } else if (/[^\d]/.test(values.amount)) {
-    errors.amount = "Invalid Amount: contains symbols or whitespace";
+  } else if (!/^[1-9]\d*$/.test(values.amount)) {
+    errors.amount = "Invalid Amount: must be a number starting from 1 to 9";
   } else if (values.amount.length > 12) {
     errors.amount = "Seems unlikely. Please contact the developer.";
   }

@@ -4,7 +4,7 @@
 :root {
   --main-nav-height: 4rem;
   --main-bar-menu-height: 4rem;
-  --main-bar-menu-margin: 10px;
+  --main-bar-menu-margin: 0.625rem;
   --main-border-size: 0.15rem;
   --fast-linear: 100ms linear;
   --medium-linear: 300ms linear;
@@ -38,27 +38,31 @@
   box-sizing: border-box;
   /* font-family: 'Open Sans', 'Lato', sans-serif; */
   font-family: Arial, Helvetica, sans-serif;
+  margin: 0;
+  padding: 0;
+}
+
+html {
+  background-color: black;
+  background: linear-gradient(rgba(0, 0, 0, 0.5), rgb(0, 0, 0)),
+    radial-gradient(circle, var(--main-bg), var(--neon-blue), var(--main-bg));
 }
 
 body {
-  background: linear-gradient(rgba(0, 0, 0, 0.5), rgb(0, 0, 0)),
-    radial-gradient(circle, var(--main-bg), var(--neon-blue), var(--main-bg));
-  /* background-color: var(--main-bg); */
-  margin: 0;
-  padding: 0;
+  height: 100vh;
   overflow: hidden;
 }
 
 ::-webkit-scrollbar {
   background-color: transparent;
-  width: 10px;
+  width: 0.625rem;
 }
 
 ::-webkit-scrollbar-thumb {
   background-color: var(--dark-neon-blue);
-  border: 3px solid var(--main-bg);
+  border: 0.1875rem solid var(--main-bg);
   /* background-image: linear-gradient(var(--half-main-color-2), var(--dark-neon-blue)); */
-  border-radius: 10px;
+  border-radius: 0.625rem;
 }
 
 ::-webkit-scrollbar-thumb:hover {
@@ -67,7 +71,7 @@ body {
 }
 
 ::-webkit-scrollbar-track {
-  border-radius: 10px;
+  border-radius: 0.625rem;
 }
 
 textarea {
@@ -80,4 +84,1529 @@ textarea::placeholder {
 
 button {
   color: inherit;
+  border: 0;
 }
+
+/* Main Loader ------------------------------------------------------------------------------------------------- */
+.mainLoaderBox {
+  width: 100%;
+  height: 100%;
+  position: absolute;
+  top: 0;
+  left: 0;
+  background-color: rgb(0, 0, 0, 0.3);
+  backdrop-filter: blur(10px);
+  border-radius: inherit;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: 20px;
+  color: white;
+  z-index: 2;
+}
+
+.mainLoaderCircle {
+  border: 10px solid var(--neon-blue);
+  border-radius: 50%;
+  border-top: 10px solid var(--dark-bg);
+  width: 50px;
+  height: 50px;
+}
+
+/* Notification Toast ------------------------------------------------------------------------------------------------- */
+.notificationToastSectionBox {
+  position: absolute;
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  bottom: 0;
+  cursor: pointer;
+}
+
+.notificationToastBox {
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 3px 20px;
+  background-color: var(--dark-neon-blue);
+  border-radius: 10px;
+  color: white;
+  font-size: 12px;
+  transition: var(--fast-linear);
+}
+
+.notificationToastLoaderCircle {
+  border: 10px solid var(--neon-blue);
+  border-radius: 50%;
+  border-top: 10px solid var(--dark-bg);
+  width: 30px;
+  height: 30px;
+}
+
+.notificationToastIconTypeBox {
+  display: flex;
+  align-items: center;
+}
+
+.notificationToastLoading {
+  background-color: hsl(200, 100%, 40%);
+}
+
+.notificationToastError {
+  background: var(--error);
+}
+
+/* Navigation Header------------------------------------------------------------------------------------------------- */
+.navigationHeader {
+  position: relative;
+  width: 100%;
+  height: var(--main-nav-height);
+  /* background-color: rgb(0, 0, 0, 0.1); */
+  /* box-shadow: 0 .125rem .125rem var(--dark-neon-blue); */
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0.8rem;
+}
+
+.navigationLogoLink {
+  border-radius: 0.6rem;
+}
+
+.navigationLogoImage {
+  border-radius: inherit;
+  vertical-align: bottom;
+}
+
+.navigationLogoImage:hover,
+.navigationLogoImage:focus {
+  box-shadow: 0 0 0.6rem var(--neon-blue);
+}
+/* mainBarMenu */
+.appNavigationBox {
+  display: flex;
+  gap: 0.625rem;
+}
+
+.appNavLink {
+  display: flex;
+  align-items: center;
+  text-decoration: none;
+  color: var(--color-L100);
+  background-color: var(--dark-bg);
+  border: var(--main-border-size) solid var(--dark-neon-blue);
+  padding: 0.3125rem 0.9375rem;
+  border-radius: 0.625rem;
+  font-size: 0.8rem;
+  gap: 0.625rem;
+}
+
+.appNavLinkActive {
+  background-color: var(--dark-neon-blue);
+}
+
+/* Home Page----------------------------------------------------------------------------------------- */
+.homePageContentBox {
+  color: var(--color-L100);
+  height: calc(100% - var(--main-nav-height));
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+.homePageIntroBox {
+  margin-top: -4rem;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+.homePageIntroBox h1 {
+  margin: 0;
+  font-size: 4rem;
+  text-align: center;
+}
+
+.homePageLaunchLink {
+  margin-top: 1.25rem;
+  text-decoration: none;
+  font-size: 1.2rem;
+  background-color: transparent;
+  color: white;
+  /* border: 0.125em solid var(--dark-neon-blue); */
+  outline: 0;
+  border-radius: 0.4em;
+  padding: 0.375em 0.625em;
+  text-shadow: 0 0 0.45em var(--neon-blue);
+  box-shadow:
+    inset 0 0 0.5em 0 var(--neon-blue),
+    0 0 0.5em 0 var(--neon-blue);
+  position: relative;
+  cursor: pointer;
+  transition: 100ms linear;
+}
+
+.homePageLaunchLink::before {
+  pointer-events: none;
+  content: "";
+  position: absolute;
+  top: 120%;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: var(--neon-blue);
+  transform: perspective(1em) rotateX(40deg) scale(1, 0.5);
+  filter: blur(1em);
+  opacity: 0.7;
+  transition: opacity 100ms linear;
+}
+
+.homePageLaunchLink::after {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  border-radius: inherit;
+  background-color: var(--dark-neon-blue);
+  box-shadow: 0 0 2em 0.5em var(--neon-blue);
+  opacity: 0;
+  z-index: -1;
+  transition: opacity 100ms linear;
+}
+
+.homePageLaunchLink:hover::before,
+.homePageLaunchLink:focus::before {
+  opacity: 1;
+}
+
+.homePageLaunchLink:hover::after,
+.homePageLaunchLink:focus::after {
+  opacity: 1;
+}
+
+/* Profile Page----------------------------------------------------------------------------------------- */
+.profileSectionBox {
+  width: 100%;
+  height: 100%;
+  display: grid;
+  grid-template-rows: min-content;
+  justify-items: center;
+  align-items: start;
+  color: var(--color-L100);
+  overflow-y: scroll;
+  padding: 0.625rem;
+}
+
+.profileImageAndItemsBox {
+  position: relative;
+  width: 60%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: 1.25rem;
+  background-color: var(--dark-bg);
+  border-radius: 0.625rem;
+  padding: 1.25rem;
+  margin: 1.25rem 0;
+}
+
+.profileDropdownBox {
+  position: absolute;
+  top: 0;
+  right: 0;
+  margin: 0.625rem;
+}
+
+.profileUserInitialBox {
+  width: 12.5rem;
+  height: 12.5rem;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 5em;
+  border-radius: 50%;
+  background-color: var(--main-bg);
+}
+
+.profileFormBox {
+  position: relative;
+  width: 60%;
+  display: grid;
+  grid-template-columns: 1fr;
+  padding: 1.25rem;
+  background-color: var(--dark-bg);
+  border-radius: 0.625rem;
+}
+
+.profileFormGroup {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1.875rem;
+}
+
+.profileTextInput {
+  text-align: center;
+  border-radius: 0.3125rem;
+  border: 0;
+  padding: 0.625rem;
+  background-color: var(--main-bg);
+  color: var(--color-L100);
+}
+
+.profileTextInput:focus,
+.profileTextInput:hover {
+  /* border: var(--main-border-size) solid var(--dark-neon-blue); */
+  outline: 0.3125rem solid var(--dark-neon-blue);
+}
+
+.profileButtons {
+  display: grid;
+  justify-items: center;
+  gap: 1.875rem;
+}
+
+.button {
+  width: 3.125rem;
+  background-color: transparent;
+  color: var(--color-L100);
+  border: var(--main-border-size) solid var(--dark-neon-blue);
+  border-radius: 0.625rem;
+  padding: 0.625rem;
+  font-size: 1rem;
+  width: 100%;
+  margin-bottom: 1.875rem;
+  transition: 100ms linear;
+}
+
+.profileUpdateInfoBtn,
+.profileDeleteAccountBtn {
+  background-color: transparent;
+  color: var(--color-L100);
+  border: var(--main-border-size) solid var(--dark-neon-blue);
+  border-radius: 0.625rem;
+  padding: 0.625em;
+  font-size: 1rem;
+  transition: 100ms linear;
+}
+
+.profileUpdateInfoBtn:hover {
+  background-color: var(--dark-neon-blue);
+  box-shadow: 0 0 0.625rem var(--dark-neon-blue);
+  cursor: pointer;
+}
+
+.profileDeleteAccountBtn {
+  border: var(--main-border-size) solid var(--error);
+}
+
+.profileDeleteAccountBtn:hover {
+  background-color: var(--error);
+  box-shadow: 0 0 0.625rem var(--error);
+  cursor: pointer;
+}
+
+@media screen and (max-width: 26.25rem) {
+  .profileFormGroup {
+    flex-direction: column;
+    gap: 0.625rem;
+  }
+}
+
+@media screen and (max-width: 56.25rem) {
+  .profileImageAndItemsBox {
+    width: 100%;
+  }
+
+  .profileFormBox {
+    width: 100%;
+  }
+}
+
+/* Login & Register Pages----------------------------------------------------------------------------------------- */
+.authFormSectionBox {
+  height: 100%;
+  display: grid;
+  justify-items: center;
+  align-items: center;
+  overflow-y: scroll;
+}
+
+.authFormSectionBox::-webkit-scrollbar {
+  width: 0.1875rem;
+}
+
+.authFormBox,
+.authFormBoxRegister {
+  width: 31.25rem;
+  background-color: var(--main-bg);
+  border-radius: 1.25rem;
+  text-align: center;
+  border-top: var(--main-border-size) solid var(--dark-neon-blue);
+  border-bottom: var(--main-border-size) solid var(--dark-neon-blue);
+  /* border: var(--main-border-size) solid var(--dark-neon-blue); */
+  box-shadow: 0 0 0.625rem var(--dark-neon-blue);
+}
+
+.authFormBox::-webkit-scrollbar,
+.authFormBoxRegister::-webkit-scrollbar {
+  width: 0.3125rem;
+}
+
+.authFormBox h1,
+.authFormBoxRegister h1 {
+  margin: 1.25rem 0 3.125rem;
+  color: var(--color-L100);
+  text-shadow:
+    0 0 0.625rem var(--dark-neon-blue),
+    0 0 1.25rem var(--dark-neon-blue),
+    0 0 3.125rem var(--dark-neon-blue);
+}
+
+.authForm {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+.authForm > * {
+  color: var(--color-L75);
+}
+
+.authInputBox {
+  display: flex;
+  flex-direction: column;
+  width: 70%;
+  margin-bottom: 1.25rem;
+}
+
+.authInputBox2 {
+  position: relative;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  /* height: 3.125rem; */
+  margin-bottom: 0.625rem;
+  background-color: transparent;
+}
+
+.authInputIcons {
+  position: absolute;
+  right: 0.625rem;
+  cursor: pointer;
+}
+
+.authTextInput {
+  padding: 1.25rem;
+  padding-left: 1.25rem;
+  padding-right: 2.1875rem;
+  border-radius: 0.625rem;
+  letter-spacing: 0.0625rem;
+  width: 100%;
+  height: 100%;
+  border: 0;
+  background-color: transparent;
+  color: var(--color-L100);
+  outline: var(--main-border-size) solid var(--color-L75);
+  transition:
+    outline var(--medium-linear),
+    color var(--medium-linear);
+}
+
+.authInputLabel {
+  position: absolute;
+  top: 50%;
+  left: 1.25rem;
+  transform: translateY(-50%);
+  font-size: 1rem;
+  color: var(--color-L75);
+  background-color: var(--main-bg);
+  pointer-events: none;
+  transition: var(--fast-ease);
+}
+
+.authTextInput:focus + .authInputLabel,
+.authSuccessLabel,
+.authErrorLabel {
+  top: 0;
+  padding: 0.3125rem;
+  font-size: 0.75rem;
+}
+
+.authSuccessOutline {
+  outline-color: var(--dark-neon-blue);
+}
+
+.authErrorOutline {
+  outline-color: var(--error);
+}
+
+.authSuccessLabel {
+  letter-spacing: 0.0625rem;
+  font-weight: 500;
+}
+
+.authErrorLabel {
+  color: var(--error);
+}
+
+.authErrorMessage {
+  color: var(--error);
+}
+
+.authTextInput:-webkit-autofill {
+  background-color: transparent !important;
+  -webkit-text-fill-color: var(--color-L100);
+  box-shadow: 0 0 0 62.5rem var(--main-bg) inset;
+  caret-color: var(--color-L100);
+  /* Above is a hack to stop the background color from when the user autofills saved input */
+}
+
+.authSeparatorLine {
+  display: flex;
+  flex-direction: row;
+  width: 70%;
+  /* text-transform: uppercase; */
+  margin: 1.25rem 0;
+  font-size: 1rem;
+}
+
+.authSeparatorLine::before,
+.authSeparatorLine::after {
+  content: "";
+  border-bottom: 0.0625rem solid var(--neon-blue);
+  flex: 1 0 auto;
+  margin: 0;
+  transform: translateY(-40%);
+}
+
+.authSeparatorLine span {
+  text-align: center;
+  flex: 0.2 0 auto;
+  margin: 0;
+}
+
+.authSubmitBtn,
+.authGoogleBtn {
+  position: relative;
+  z-index: 1;
+  background-color: var(--dark-neon-blue);
+  color: var(--color-L100);
+  border: none;
+  border-radius: 0.625rem;
+  width: 30%;
+  height: 3.125rem;
+  text-align: center;
+  cursor: pointer;
+  transition: var(--fast-linear);
+}
+
+.authSubmitBtn:hover,
+.authSubmitBtn:focus {
+  background-color: var(--neon-blue);
+  box-shadow: 0 0 0.625rem var(--neon-blue);
+  color: var(--main-bg);
+}
+
+.authGoogleBtn {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+  gap: 0.25rem;
+  width: 50%;
+  background-color: hsla(221, 100%, 49%, 0.51);
+}
+.authGoogleBtn:hover,
+.authGoogleBtn:focus {
+  background-color: hsla(221, 100%, 49%);
+  box-shadow: 0 0 0.625rem hsla(221, 100%, 49%);
+}
+
+.authLoginOrSignUpBox {
+  /* position: absolute; */
+  margin: 1.25rem 0;
+}
+
+.authLoginOrSignUpBtn {
+  font-size: 1rem;
+  text-decoration: none;
+  color: var(--dark-neon-blue);
+  transition: var(--fast-linear);
+}
+
+.authLoginOrSignUpBtn:hover {
+  cursor: pointer;
+  color: var(--neon-blue);
+}
+
+@media screen and (min-width: 160rem) {
+  .authFormBox,
+  .authFormBoxRegister {
+    width: 62.5rem;
+  }
+}
+
+@media screen and (max-width: 75rem) {
+  .authFormBox,
+  .authFormBoxRegister {
+    width: 60%;
+  }
+}
+
+@media screen and (max-width: 46.875rem) {
+  .authFormBox,
+  .authFormBoxRegister {
+    width: 100%;
+  }
+}
+
+/* Item Modal----------------------------------------------------------------------------------------- */
+.modalFormModalBackdrop {
+  position: absolute;
+  z-index: 3;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100%;
+  background-color: var(--dark-bg-T75);
+}
+
+.modalFormSectionBox {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.modalFormItemForm,
+.modalFormDeleteForm {
+  position: relative;
+  background-color: var(--main-bg);
+  text-align: center;
+  border: var(--main-border-size) solid var(--dark-neon-blue);
+  box-shadow: 0 0 0.625rem var(--dark-neon-blue);
+  z-index: 3;
+}
+
+.modalFormItemForm {
+  width: 100%;
+  height: 100%;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  border-radius: 1.25rem;
+}
+
+.modalFormDeleteForm {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  gap: 1.5625rem;
+  border-radius: 1.25rem;
+  color: var(--color-L100);
+  background-color: var(--dark-bg);
+  width: 40%;
+  height: 50%;
+  padding: 1.25rem;
+}
+
+.modalFormImageFileInput {
+  display: none;
+}
+
+.modalFormUploadLabel {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  padding: 1.875rem;
+  cursor: pointer;
+  text-align: center;
+  border-radius: 1.25rem;
+  border: 0;
+  background-color: var(--dark-bg);
+  overflow: hidden;
+}
+
+.modalFormUploadLabel img {
+  object-fit: cover;
+  max-width: 100%;
+  height: auto;
+}
+
+.modalFormUploadLabelOptionBox {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 0.3125rem;
+  z-index: 2;
+  color: var(--color-L100);
+}
+
+.modalFormUploadLabelOption {
+  background-color: var(--main-bg);
+  padding: 0.625rem;
+  border-radius: 0.625rem;
+  visibility: hidden;
+  opacity: 0;
+  transition: var(--fast-linear);
+}
+
+.modalFormUploadLabel:hover .modalFormUploadLabelOption,
+.modalFormUploadLabel:focus .modalFormUploadLabelOption {
+  visibility: visible;
+  opacity: 1;
+}
+
+.modalFormUploadLabelOptionVisible {
+  visibility: visible;
+  opacity: 1;
+}
+
+.modalFormUploadLabelOptionBox svg {
+  font-size: 19.2px;
+}
+
+.modalFormUploadLabelOptionBox p {
+  margin: 0;
+}
+
+.modalFormItemInfoBox {
+  width: 100%;
+  display: grid;
+  align-content: start; /* changed from align-items: start */
+  justify-items: center;
+  padding: 1.25rem;
+  border-radius: 1.25rem;
+  color: var(--color-L100);
+  overflow-y: scroll;
+  scrollbar-gutter: stable both-edges;
+}
+
+.modalFormItemInfoBox::-webkit-scrollbar-thumb {
+  background-color: var(--dark-neon-blue);
+  border-radius: 0.625rem;
+}
+
+.modalFormItemInfoBox::-webkit-scrollbar-thumb:hover {
+  background-color: var(--neon-blue);
+}
+
+.modalFormItemInfoBox::-webkit-scrollbar-track {
+  margin-block-start: 0.9375rem;
+  margin-block-end: 0.9375rem;
+}
+
+.modalFormInputBox {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  margin-bottom: 1.875rem;
+}
+
+.modalFormInputBox:last-child {
+  margin-bottom: 0;
+}
+
+.modalFormInputBox2 {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 0.625rem;
+  width: 100%;
+}
+
+.modalFormTextInput {
+  width: 100%;
+  padding: 1.25rem;
+  border-radius: 0.625rem;
+  background-color: transparent;
+  border: 0;
+  outline: var(--main-border-size) solid var(--color-L75);
+  color: var(--color-L100);
+  text-align: center;
+  letter-spacing: 0.0625rem;
+  transition:
+    color var(--medium-linear),
+    outline var(--medium-linear);
+}
+
+.modalFormTextAreaInput {
+  height: 18.75rem;
+  width: 100%;
+  line-height: 1.25rem;
+  text-align: left;
+  letter-spacing: 0.0625rem;
+}
+
+.modalFormSuccessOutline {
+  outline-color: var(--dark-neon-blue);
+}
+
+.modalFormErrorOutline {
+  outline-color: var(--error);
+}
+
+.modalFormTextInput:-webkit-autofill {
+  background-color: transparent !important;
+  -webkit-text-fill-color: var(--color-L100);
+  -webkit-box-shadow: 0 0 0 62.5rem var(--main-bg) inset;
+  caret-color: var(--color-L100);
+}
+
+.modalFormInputLabel {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  border-radius: 0.625rem;
+  pointer-events: none;
+  color: var(--color-L100);
+  background-color: var(--main-bg);
+  transition: var(--fast-ease);
+}
+
+.modalFormTextInput:focus + .modalFormInputLabel,
+.modalFormSuccessLabel,
+.modalFormErrorLabel {
+  top: -0.0625rem;
+  padding: 0.3125rem;
+  font-size: 0.8rem;
+}
+
+.modalFormSuccessLabel {
+  letter-spacing: 0.0625rem;
+  font-weight: 500;
+}
+
+.modalFormErrorLabel {
+  color: var(--error);
+}
+
+.modalFormErrorMessage {
+  color: var(--error);
+}
+
+.modalFormSubmitBtns {
+  display: flex;
+  gap: 3.125rem;
+}
+
+.modalFormSubmitBtn,
+.modalFormCancelBtn {
+  background-color: transparent;
+  color: var(--color-L100);
+  border: var(--main-border-size) solid var(--dark-neon-blue);
+  border-radius: 0.625rem;
+  padding: 10px;
+  /* Use em instead of px for relative sizing */
+  font-size: 16px;
+  /* Use rem for a responsive font size */
+  width: auto;
+  padding: 16px 32px;
+  transition: var(--fast-linear);
+}
+
+.modalFormSubmitBtn:hover {
+  background-color: var(--dark-neon-blue);
+  box-shadow: 0 0 0.625rem var(--dark-neon-blue);
+  cursor: pointer;
+}
+
+.modalFormCancelBtn {
+  border: var(--main-border-size) solid var(--error);
+}
+
+.modalFormCancelBtn:hover {
+  background-color: var(--error);
+  box-shadow: 0 0 0.625rem var(--error);
+  cursor: pointer;
+}
+
+@media (hover: none) {
+  .modalFormUploadLabel .modalFormUploadLabelOptionBoxOptions {
+    /* Styles for devices without hover capabilities go here */
+    visibility: visible;
+    opacity: 1;
+  }
+}
+
+@media (max-width: 72.5rem) {
+  .modalFormDeleteForm {
+    height: 70%;
+    width: 80%;
+  }
+}
+
+@media (max-width: 62.5rem) {
+  .modalFormItemForm {
+    width: 100%;
+    height: 100%;
+    padding: 0.9375rem;
+    border-radius: 0;
+    grid-template-columns: auto;
+    grid-template-rows: 1fr 1fr;
+    overflow-y: scroll;
+    border: 0;
+    box-shadow: none;
+  }
+
+  .modalFormItemForm::-webkit-scrollbar {
+    /* background-color: rgb(21, 21, 21); */
+    /* background-color: transparent; */
+    width: 0.3125rem;
+  }
+
+  .modalFormUploadLabel {
+    height: 25rem;
+  }
+
+  .modalFormTextAreaBox {
+    width: 100%;
+  }
+
+  .modalFormItemInfoBox {
+    gap: 1.25rem;
+    padding: 1.875rem 0.625rem;
+    overflow-y: visible;
+  }
+
+  .modalFormItemInfoBox::-webkit-scrollbar {
+    /* background-color: rgb(21, 21, 21); */
+    /* background-color: transparent; */
+    width: 0rem;
+  }
+
+  .modalFormTextInput {
+    width: 100%;
+  }
+
+  .modalFormTextArea {
+    width: 100%;
+  }
+}
+
+@media (max-width: 31.25rem) {
+  .modalFormDeleteForm {
+    width: 100%;
+    height: 100%;
+    border: 0;
+    box-shadow: none;
+  }
+}
+
+/* Inventory Dashboard----------------------------------------------------------------------------------------- */
+
+.dashboardSectionBox {
+  height: 100%;
+  background-color: var(--main-bg-T50);
+}
+
+.dashboardLayoutBox {
+  width: 100%;
+  height: calc(100% - var(--main-nav-height));
+  color: var(--color-L100);
+  padding: 1.25rem;
+  overflow-y: scroll;
+}
+
+.dashboardInfoCardBox {
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
+  margin-bottom: 1.875rem;
+}
+
+.dashboardInfoCard {
+  width: 15.625rem;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: 0.625rem;
+  background-color: var(--dark-bg);
+  border-radius: 0.625rem;
+  padding: 0.625rem;
+  box-shadow: 0 0 0.3125rem var(--neon-blue);
+  margin: 1.25rem;
+}
+
+.dashboardChartsBox {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  justify-items: center;
+}
+
+.dashboardChartBox {
+  width: 95%;
+  height: 25rem;
+  display: flex;
+  justify-content: center;
+  /* align-items: center; */
+  background-color: var(--dark-bg);
+  border-radius: 0.625rem;
+  margin: 0.625rem;
+  padding: 0.625rem;
+  box-shadow: 0 0 0.3125rem var(--neon-blue);
+}
+
+@media screen and (max-width: 93.75rem) {
+  .dashboardChartsBox {
+    grid-template-columns: repeat(1, minmax(0, 1fr));
+    grid-template-rows: repeat(2, auto);
+  }
+
+  .dashboardChartBox {
+    height: auto;
+  }
+}
+
+@media screen and (max-width: 31.25rem) {
+  .dashboardLayoutBox {
+    padding: 0.625rem;
+  }
+}
+
+/* Main Dropdown Menu ---------------------------------------------------------------------------------------------- */
+.mainDropDownMenuTrigger {
+  position: relative;
+  cursor: pointer;
+  display: flex;
+  justify-content: center;
+  display: flex;
+  align-items: center;
+  color: white;
+  background-color: var(--dark-bg);
+  padding: 10px;
+  border-radius: 10px;
+  height: 50px;
+  border: 3px solid var(--dark-neon-blue);
+  z-index: 2;
+  cursor: pointer;
+  transition: var(--fast-linear);
+}
+
+.mainDropDownMenuTrigger:hover,
+/* .mainDropDownMenuTrigger:focus, */
+.mainDropDownMenuTrigger[data-state="open"] {
+  background-color: var(--dark-neon-blue);
+}
+
+.mainDropDownMenuUserIconBox {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.mainDropDownMenuContent {
+  margin-top: 5px;
+  margin-right: 5px;
+  border-radius: 10px;
+  cursor: pointer;
+  padding: 10px;
+  border: 3px solid var(--dark-neon-blue);
+  background-color: var(--dark-bg);
+  z-index: 2;
+}
+
+.mainDropDownMenuLink {
+  text-decoration: none;
+  color: white;
+  font-weight: bold;
+  transition:
+    color,
+    text-shadow linear;
+  font-weight: normal;
+
+  transition-duration: 200ms;
+}
+
+.mainDropDownMenuItem {
+  font-size: 15px;
+  line-height: 1;
+  color: white;
+  border-radius: 10px;
+  display: flex;
+  align-items: center;
+  /* justify-content: space-between; */
+  height: 50px;
+  padding: 10px;
+  margin: 5px;
+  position: relative;
+  /* padding-left: 25px; */
+  font-weight: normal;
+  user-select: none;
+  outline: none;
+  /* transition: var(--fast-linear); */
+}
+
+.mainDropDownMenuItem:hover,
+.mainDropDownMenuItem:focus {
+  background-color: var(--dark-neon-blue);
+}
+
+.mainDropDownMenuIconWrapper {
+  margin-right: 10px;
+}
+
+/* Inventory Layout --------------------------------------------------------------------------------------------- */
+.inventoryLayoutSectionBox {
+  height: 100%;
+  width: 100%;
+  background-color: var(--main-bg-T50);
+  color: var(--color-L100);
+}
+
+/* Main Bar ----------------------------------------------------------------------------------------------- */
+.mainBarSectionBox {
+  /* position: relative; */
+  width: 100%;
+  height: 100%;
+}
+
+/* Main Bar Menu ---------------------------------------------------------------------------------------------- */
+.mainBarMenuSectionBox {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  height: var(--main-bar-menu-height);
+  z-index: 1;
+  padding: 10px 0;
+}
+
+.mainBarMenuBox {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 10px;
+  height: 100%;
+  width: 60%;
+}
+
+.mainBarMenuBtnBox {
+  height: 100%;
+  display: flex;
+  margin-left: 10px;
+  gap: 10px;
+  justify-content: space-evenly;
+}
+
+.mainBarMenuListTypeBtnBox {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: var(--dark-bg);
+  border-radius: 10px;
+}
+
+.mainBarMenuBtn,
+.mainBarMenuListTypeBtn {
+  height: 100%;
+  position: relative;
+  z-index: 1;
+  display: flex;
+  align-items: center;
+  background-color: var(--dark-bg);
+  color: white;
+  border: var(--main-border-size) solid var(--dark-neon-blue);
+  border-radius: 10px;
+  padding: 10px;
+  cursor: pointer;
+  transition: var(--fast-linear);
+}
+
+.mainBarMenuListTypeBtn {
+  border: none;
+  padding: 0.625rem 0.9375rem;
+}
+
+.mainBarMenuListTypeBtn:first-child {
+  border-radius: 10px 0 0 10px;
+}
+.mainBarMenuListTypeBtn:last-child {
+  border-radius: 0 10px 10px 0;
+}
+
+.mainBarMenuListTypeBtn:hover,
+.mainBarMenuListTypeBtn:focus {
+  background-color: var(--dark-neon-blue);
+}
+
+/* hover with background color */
+.mainBarMenuBtn:hover,
+.mainBarMenuActiveListTypeBtn {
+  background-color: var(--dark-neon-blue);
+  /* border: var(--main-border-size) solid var(--dark-bg); */
+}
+
+.mainBarMenuSearchBarBox {
+  position: relative;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100%;
+  /* flex: 0.5; */
+}
+
+.mainBarMenuSearchInput {
+  width: 100%;
+  height: 100%;
+  background-color: var(--dark-bg);
+  border: var(--main-border-size) solid var(--dark-neon-blue);
+  color: white;
+  border-radius: 10px;
+  padding: 0 10px 0 50px;
+}
+
+.mainBarMenuSearchInput:focus {
+  box-shadow: 0 0 10px var(--neon-blue-accent);
+}
+
+.mainBarMenuSearchIcon {
+  position: absolute;
+  left: 20px;
+  color: white;
+}
+
+@media screen and (max-width: 900px) {
+  .mainBarMenuSection {
+    margin: 0;
+  }
+
+  .mainBarMenu {
+    width: 100%;
+  }
+}
+
+
+/* List Bar ---------------------------------------------------------------------------------------------- */
+.listBarSectionBox {
+  width: 100%;
+  height: calc(100% - var(--main-bar-menu-height) - var(--main-nav-height));
+  overflow-y: scroll;
+  overflow-x: hidden;
+  scrollbar-gutter: stable both-edges;
+}
+
+.listBarNoItemsDisplayBox {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.listBarNoItemsDisplayBox h1 {
+  margin: 0;
+  font-size: 1rem;
+}
+
+/* Inventory Tile List----------------------------------------------------------------------------------------- */
+.tileListSectionBox {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(16.875rem, 1fr));
+  justify-items: center;
+  padding: 0 1.25rem;
+}
+
+.tileListItemCard {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  border-radius: 1.25rem;
+  font-size: 0.9rem;
+  width: 15.625rem;
+  margin: 1.875rem 0;
+  background-color: var(--card);
+  box-shadow: 0 0 0.3125rem var(--dark-neon-blue);
+  color: var(--color-L100);
+  text-decoration: none;
+  border: 0;
+  cursor: pointer;
+  transition: var(--fast-linear);
+}
+
+.tileListItemCard:hover,
+.tileListItemCard:focus {
+  box-shadow: 0 0 0.625rem var(--neon-blue);
+}
+
+.tileListItemCardLink {
+  height: 100%;
+  width: 100%;
+  text-decoration: none;
+}
+
+.tileListItemCard h3,
+.tileListItemCard p {
+  margin: 0;
+}
+
+.tileListItemCard:last-child {
+  justify-content: center;
+}
+
+.tileListItemImageBox {
+  position: relative;
+  width: 100%;
+  border-radius: inherit;
+  border-bottom: var(--main-border-size) solid var(--dark-neon-blue);
+}
+
+.tileListItemImage {
+  object-fit: cover;
+  border-radius: inherit;
+  max-width: 100%;
+  vertical-align: bottom;
+}
+
+.tileListItemPriceTagBox {
+  position: relative;
+  transform: translateY(-50%);
+  background-color: hsl(192, 100%, 30%);
+  padding: 0.3125rem;
+  border-radius: 0.625rem;
+  letter-spacing: 0.0625rem;
+}
+
+.tileListItemInfoBox {
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+  justify-content: center;
+  align-items: center;
+  height: 50%;
+  width: 100%;
+  letter-spacing: 0.0625rem;
+  font-size: 0.9rem;
+}
+
+.tileListItemInfoBits {
+  width: 100%;
+  display: grid;
+  align-items: center;
+}
+
+.tileListOperationIcons {
+  width: 100%;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  padding: 0 0.625rem 0.625rem;
+}
+
+.tileListOperationButton {
+  background-color: transparent;
+  height: min-content;
+  line-height: 0;
+  font-size: 2.1875rem;
+  cursor: pointer;
+}
+
+.tileListOperationIcon {
+  color: var(--dark-neon-blue);
+  border-radius: 50%;
+  transition: var(--fast-linear);
+}
+
+.tileListOperationIcon:hover {
+  transform: scale(1.2);
+  box-shadow: 0 0 0.625rem var(--dark-neon-blue);
+  background-color: var(--dark-neon-blue-T50);
+}
+
+@media (max-width: 37.5rem) {
+  .tileList {
+    grid-template-columns: 1fr;
+  }
+
+  .tileListItemCard {
+    width: 100%;
+  }
+  .tileListItemImage {
+    width: 90vw;
+  }
+
+  .tileListOperationIcons {
+    font-size: 3.125rem;
+  }
+}
+
+/* Inventory Slab List----------------------------------------------------------------------------------------- */
+.slabListSectionBox {
+  display: grid;
+  grid-template-rows: 1fr;
+  width: 100%;
+  align-items: center;
+  justify-items: center;
+  padding: 0 1.25rem;
+}
+
+.slabListItemSlabBox {
+  width: 70%;
+  display: flex;
+  justify-content: center;
+}
+
+.slabListItemSlab {
+  position: relative;
+  display: flex;
+  align-items: center;
+  border-radius: 1.25rem;
+  width: 100%;
+  margin: 0.9375rem 0;
+  background-color: var(--card);
+  box-shadow: 0 0 0.3125rem var(--dark-neon-blue);
+  color: var(--color-L100);
+  text-decoration: none;
+  cursor: pointer;
+  outline: none;
+  transition: var(--fast-linear);
+}
+
+.slabListItemSlab:hover,
+.slabListItemSlab:focus {
+  box-shadow: 0 0 0.625rem var(--neon-blue);
+}
+
+.slabListItemSlabLink {
+  height: 100%;
+  width: 100%;
+  text-decoration: none;
+}
+
+.slabListItemSlab h6,
+.slabListItemSlab p {
+  margin: 0;
+}
+
+.slabListItemImageBox {
+  position: relative;
+  border-top-left-radius: inherit;
+  border-bottom-left-radius: inherit;
+}
+
+.slabListItemImage {
+  object-fit: cover;
+  border-radius: inherit;
+  max-height: 100%;
+  vertical-align: bottom;
+}
+
+.slabListItemPriceTagBox {
+  position: absolute;
+  top: 0;
+  transform: translateY(-50%);
+  background-color: hsl(192, 100%, 30%);
+  padding: 0.3125rem;
+  border-radius: 0.625rem;
+  letter-spacing: 0.0625rem;
+}
+
+.slabListItemInfoBox {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  gap: 1.25rem;
+  justify-content: center;
+  align-items: center;
+  height: 100%;
+  width: 100%;
+  letter-spacing: 0.0625rem;
+  font-size: 0.9rem;
+  margin-left: 3.125rem;
+}
+
+.slabListItemInfoBits {
+  display: flex;
+  flex-direction: column;
+  gap: 0.3125rem;
+  align-items: flex-start;
+  padding: 0.625rem 0;
+}
+
+.slabListOperationIcons {
+  width: 100%;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  gap: 1.875rem;
+  max-width: fit-content;
+  font-size: 2.1875rem;
+  justify-self: center;
+}
+
+.slabListOperationIcon {
+  color: var(--dark-neon-blue);
+  border-radius: 50%;
+  transition: var(--fast-linear);
+}
+
+.slabListOperationIcon:hover {
+  transform: scale(1.2);
+  box-shadow: 0 0 0.625rem var(--dark-neon-blue);
+  background-color: var(--dark-neon-blue-T50);
+}
+
+@media screen and (max-width: 79.375rem) {
+  .slabListItemSlabBox {
+    width: 100%;
+  }
+}
+
+@media screen and (max-width: 56.875rem) {
+  .slabListItemInfoBox {
+    margin-left: 1.25rem;
+  }
+}
+
+@media screen and (max-width: 46.25rem) {
+  .slabListItemInfoBox {
+    font-size: 0.6rem;
+  }
+}
+
+@media screen and (max-width: 37.5rem) {
+  .slabList {
+    padding: 0 0.1875rem;
+  }
+  .slabListItemInfoBox {
+    grid-template-columns: 1fr 1fr;
+  }
+}
+
+@media screen and (max-width: 28.125rem) {
+  .slabListItemInfoBox {
+    margin-left: 0.625rem;
+  }
+
+  .slabListItemPriceTagBox {
+    padding: 0.125rem;
+  }
+}
+
+/* Profile Page----------------------------------------------------------------------------------------- */

@@ -1,14 +1,12 @@
 // tile-list.tsx
-import Loader from "@/components/ui/loading/loader";
+import MainLoader from "@/components/ui/loading/main-loader";
 import { useItemsContext } from "@/context/items-context";
 import { Item } from "@/lib/types/item";
 import { AnimatePresence, motion } from "framer-motion";
 import Image from "next/image";
-import Link from "next/link";
-import { useState } from "react";
+import React, { useState } from "react";
 import { BiEdit } from "react-icons/bi";
 import { BsTrash } from "react-icons/bs";
-import styles from "./tile-list.module.css";
 
 export default function TileList({ loadedItems }: { loadedItems: Item[] }) {
   const { showItemModal, showDeleteModal } = useItemsContext();
@@ -27,10 +25,7 @@ export default function TileList({ loadedItems }: { loadedItems: Item[] }) {
   }
 
   return (
-    <motion.section
-      className={styles.tileList}
-      
-    >
+    <motion.section className="tileListSectionBox">
       <AnimatePresence>
         {loadedItems.map((item: Item) => {
           if (!item) {
@@ -38,7 +33,7 @@ export default function TileList({ loadedItems }: { loadedItems: Item[] }) {
           }
           return (
             <motion.div
-              className={styles.itemCardBox}
+              className="tileListItemCardBox"
               key={item.id}
               layout={"position"}
               initial="hidden"
@@ -50,12 +45,27 @@ export default function TileList({ loadedItems }: { loadedItems: Item[] }) {
               }}
               transition={{ duration: 0.2 }}
             >
-              <Link href={`inventory/${item.id}`} className={styles.itemCard}>
-                <div className={styles.itemImageBox}>
-                  {!imageLoaded && <Loader message="loading image..." />}
+              <div
+                className="tileListItemCard"
+                tabIndex={0}
+                onClick={(e: React.MouseEvent) => {
+                  e.preventDefault();
+                  e.stopPropagation();
+                  editItemHandler(item);
+                }}
+                onKeyDown={(e: React.KeyboardEvent) => {
+                  if (e.key === "Enter") {
+                    e.preventDefault();
+                    e.stopPropagation();
+                    editItemHandler(item);
+                  }
+                }}
+              >
+                <div className="tileListItemImageBox">
+                  {!imageLoaded && <MainLoader message="loading image..." />}
                   {/* Show the loader when the image is not loaded */}
                   <Image
-                    className={styles.itemImage}
+                    className="tileListItemImage"
                     src={item.imageURL}
                     alt={"Item's image"}
                     // fill
@@ -65,48 +75,42 @@ export default function TileList({ loadedItems }: { loadedItems: Item[] }) {
                     onLoadingComplete={handleImageLoad}
                   />
                 </div>
-                <div className={styles.itemPriceTagBox}>
-                  {item.price.length > 12 ? `$${item.price.slice(0, 12)}+` : `$${item.price}`}
+                <div className="tileListItemPriceTagBox">
+                  {`$${parseFloat(item.price).toLocaleString("en-US")}`}
                 </div>
-                <div className={styles.itemInfoBox}>
-                  {/* <div className={styles.itemInfoHighlight}> */}
-                  <div className={styles.itemInfoBits}>
-                    {/* <h3>Name</h3> */}
+                <div className="tileListItemInfoBox">
+                  <div className="tileListItemInfoBits">
                     <p>{item.name.length > 25 ? `${item.name.slice(0, 25)}...` : item.name}</p>
                   </div>
-                  {/* <div className={styles.itemInfoBits}>
-                    <strong>Price</strong>
-                    {item.price.length > 11 ? `$${item.price.slice(0, 11)}...` : `$${item.price}`}
-                  </div> */}
-                  <div className={styles.itemInfoBits}>
-                    {/* <h3>Amount</h3> */}
-                    <p>
-                      {item.amount.length > 12 ? `${item.amount.slice(0, 12)}+` : `${item.amount}`}{" "}
-                      in stock
-                    </p>
+                  <div className="tileListItemInfoBits">
+                    <p>{`${parseFloat(item.amount).toLocaleString("en-US")} in stock`}</p>
                   </div>
-                  {/* </div> */}
 
-                  <div className={styles.operationIcons}>
-                    <BiEdit
-                      className={`${styles.operationIcon} ${styles.editIcon}`}
+                  <div className="tileListOperationIcons">
+                    <button
+                      className="tileListOperationButton"
                       onClick={(e: React.MouseEvent) => {
                         e.preventDefault();
                         e.stopPropagation();
                         editItemHandler(item);
                       }}
-                    />
-                    <BsTrash
-                      className={`${styles.operationIcon} ${styles.deleteIcon}`}
+                    >
+                      <BiEdit className={`tileListOperationIcon`} />
+                    </button>
+
+                    <button
+                      className="tileListOperationButton"
                       onClick={async (e: React.MouseEvent) => {
                         e.preventDefault();
                         e.stopPropagation();
                         deleteItemHandler(item);
                       }}
-                    />
+                    >
+                      <BsTrash className={`tileListOperationIcon`} />
+                    </button>
                   </div>
                 </div>
-              </Link>
+              </div>
             </motion.div>
           );
         })}

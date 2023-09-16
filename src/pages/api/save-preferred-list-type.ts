@@ -1,7 +1,6 @@
 // src\pages\api\load-user.ts
 import { getConnectedClient } from "@/lib/database/mongodb";
 import { ResponseError, sendResponseError } from "@/lib/helpers/errors";
-import { logger } from "@/lib/helpers/logger";
 import { ErrorMessages, SuccessMessages } from "@/lib/helpers/messages";
 import { ResponseData } from "@/lib/types/api";
 import { ListType } from "@/lib/types/list";
@@ -47,7 +46,7 @@ export default async function saveListTypeHandler(req: NextApiRequest, res: Next
       { $set: { preferred_list_type: preferredListType } }
     );
 
-    if (updateResult.modifiedCount < 1 && updateResult.matchedCount < 1) {
+    if (updateResult.matchedCount < 1 && updateResult.modifiedCount < 1) {
       throw new ResponseError(
         StatusCodes.INTERNAL_SERVER_ERROR,
         ErrorMessages.PreferredListTypeSaveFailed

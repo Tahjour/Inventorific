@@ -5,10 +5,10 @@ import MainDropDownMenu from "../../app/inventory/drop-down-menu/main-dropdown-m
 
 export default function MainNavigation() {
   return (
-    <header className={"header"}>
-      <Link className={"logoLink"} href="/">
+    <header className={"navigationHeader"}>
+      <Link className={"navigationLogoLink"} href="/">
         <Image
-          className={"logoImage"}
+          className={"navigationLogoImage"}
           src={"/Logo smaller.png"}
           alt={"The app's logo"}
           width={55}

@@ -9,7 +9,6 @@ import { useState } from "react";
 import { FcGoogle } from "react-icons/fc";
 import { FiEye, FiEyeOff } from "react-icons/fi";
 import { MdAlternateEmail } from "react-icons/md";
-import styles from "./auth-pages.module.css";
 
 function LoginForm() {
   const { loginUser, loginUserWithGoogle } = useUserInfoContext();
@@ -23,7 +22,7 @@ function LoginForm() {
     validate: loginValidate,
     onSubmit: loginFormSubmitHandler,
   });
-  const { values, errors, touched, handleSubmit, getFieldProps } = formik;
+  const { errors, touched, handleSubmit, getFieldProps } = formik;
 
   async function loginFormSubmitHandler(values: LoginValues) {
     await loginUser(values);
@@ -34,34 +33,34 @@ function LoginForm() {
   }
 
   return (
-    <section className={styles.formBox}>
-      <div className={styles.formOuter}>
+    <section className="authFormSectionBox">
+      <div className="authFormBox">
         <h1>Login to Your Account</h1>
 
-        <form className={styles.form} onSubmit={handleSubmit}>
-          <div className={styles.inputBox}>
-            <div className={styles.inputBox2}>
+        <form className="authForm" onSubmit={handleSubmit}>
+          <div className="authInputBox">
+            <div className="authInputBox2">
               <input
-                className={`${styles.textInput} ${
-                  !errors.email && touched.email && styles.successOutline
-                } ${errors.email && touched.email && styles.errorOutline}`}
+                className={`${"authTextInput"} ${
+                  !errors.email && touched.email && "authSuccessOutline"
+                } ${errors.email && touched.email && "authErrorOutline"}`}
                 type="email"
                 id="email"
                 {...getFieldProps("email")}
               />
               <label
-                className={`${styles.inputLabel} ${
-                  !errors.email && touched.email && styles.successLabel
-                } ${errors.email && touched.email && styles.errorLabel}`}
+                className={`${"authInputLabel"} ${
+                  !errors.email && touched.email && "authSuccessLabel"
+                } ${errors.email && touched.email && "authErrorLabel"}`}
               >
                 Email
               </label>
-              <MdAlternateEmail className={styles.inputIcons} />
+              <MdAlternateEmail className="authInputIcons" />
             </div>
             <AnimatePresence>
               {errors.email && touched.email && (
                 <motion.span
-                  className={styles.errorMessage}
+                  className="authErrorMessage"
                   key="errorMessage"
                   initial={{ opacity: 0, height: 0 }}
                   animate={{ opacity: 1, height: "auto" }}
@@ -74,33 +73,33 @@ function LoginForm() {
             </AnimatePresence>
           </div>
 
-          <div className={styles.inputBox}>
-            <div className={styles.inputBox2}>
+          <div className="authInputBox">
+            <div className="authInputBox2">
               <input
-                className={`${styles.textInput} ${
-                  !errors.password && touched.password && styles.successOutline
-                } ${errors.password && touched.password && styles.errorOutline}`}
+                className={`${"authTextInput"} ${
+                  !errors.password && touched.password && "authSuccessOutline"
+                } ${errors.password && touched.password && "authErrorOutline"}`}
                 type={showPassword ? "text" : "password"}
                 id="password"
                 {...getFieldProps("password")}
               ></input>
               <label
-                className={`${styles.inputLabel} ${
-                  !errors.password && touched.password && styles.successLabel
-                } ${errors.password && touched.password && styles.errorLabel}`}
+                className={`${"authInputLabel"} ${
+                  !errors.password && touched.password && "authSuccessLabel"
+                } ${errors.password && touched.password && "authErrorLabel"}`}
               >
                 Password
               </label>
               {showPassword ? (
                 <FiEye
-                  className={styles.inputIcons}
+                  className="authInputIcons"
                   onClick={() => {
                     setShowPassword(false);
                   }}
                 />
               ) : (
                 <FiEyeOff
-                  className={styles.inputIcons}
+                  className="authInputIcons"
                   onClick={() => {
                     setShowPassword(true);
                   }}
@@ -110,7 +109,7 @@ function LoginForm() {
             <AnimatePresence>
               {errors.password && touched.password && (
                 <motion.span
-                  className={styles.errorMessage}
+                  className="authErrorMessage"
                   key="errorMessage"
                   initial={{ opacity: 0, height: 0 }}
                   animate={{ opacity: 1, height: "auto" }}
@@ -123,20 +122,20 @@ function LoginForm() {
             </AnimatePresence>
           </div>
 
-          <button type="submit" className={styles.submitBtn}>
+          <button type="submit" className="authSubmitBtn">
             {"Submit"}
           </button>
 
-          <div className={styles.separatorLine}>
+          <div className="authSeparatorLine">
             <span>or</span>
           </div>
-          <button type="button" className={styles.googleBtn} onClick={googleLoginHandler}>
+          <button type="button" className="authGoogleBtn" onClick={googleLoginHandler}>
             <FcGoogle size={25} /> {"Login with Google"}
           </button>
 
-          <div className={styles.loginOrSignUpBox}>
+          <div className="authLoginOrSignUpBox">
             {"Don't have an account? "}
-            <Link href={"/register"} className={styles.loginOrSignUpBtn}>
+            <Link href={"/register"} className="authLoginOrSignUpBtn">
               {"Sign Up"}
             </Link>
           </div>

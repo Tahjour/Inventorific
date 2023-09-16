@@ -1,7 +1,7 @@
 // components\layout\main-layout.tsx
 import DeleteConfirmation from "@/components/modals/delete-modal-confirmation";
 import ModalBackdrop from "@/components/modals/modal-form-backdrop";
-import NotificationToast from "@/components/ui/notification/notification-popup";
+import NotificationToast from "@/components/ui/notification/notification-toast";
 import { useItemsContext } from "@/context/items-context";
 import { useNotification } from "@/context/notification-context";
 import { useWindowContext } from "@/context/window-context";
@@ -9,7 +9,6 @@ import { AnimatePresence } from "framer-motion";
 import { useRouter } from "next/router";
 import { Fragment, PropsWithChildren } from "react";
 import PageAnimation from "../ui/animations/pages/page-animation";
-import styles from "./main-layout.module.css";
 
 export default function MainLayout({ children }: PropsWithChildren) {
   const { windowHeight } = useWindowContext();
@@ -18,9 +17,9 @@ export default function MainLayout({ children }: PropsWithChildren) {
   const router = useRouter();
 
   return (
-    <section className={styles.mainLayoutBox} style={{ height: windowHeight }}>
+    <section style={{ height: windowHeight || "100vh" }}>
       <AnimatePresence mode="wait">
-        <PageAnimation key={router.pathname}>{children}</PageAnimation>
+        <PageAnimation key={router.asPath}>{children}</PageAnimation>
       </AnimatePresence>
 
       <AnimatePresence>

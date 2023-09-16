@@ -1,21 +1,17 @@
-import { LoaderProps } from "@/lib/types/client-loading";
+import { MainLoaderProps } from "@/lib/types/client-loading";
 import { motion } from "framer-motion";
-import styles from "./loader.module.css";
-import { OpacityMotionFast } from "../animations/motion-props/form-transition-props";
+import { OpacityFadeFast } from "../animations/motion-props/form-transition-props";
 
-export default function Loader({ message }: LoaderProps) {
+export default function MainLoader({ message }: MainLoaderProps) {
   return (
-    <motion.div
-      className={styles.wrapper}
-      {...OpacityMotionFast}
-    >
+    <motion.div className={"mainLoaderBox"} {...OpacityFadeFast}>
       <motion.div
+        className={"mainLoaderCircle"}
         animate={{ scale: [1, 0.8, 1], rotate: [0, 360] }}
         transition={{
           scale: { duration: 1, repeat: Infinity, repeatType: "loop", ease: "easeInOut" },
           rotate: { duration: 0.5, repeat: Infinity, ease: "linear" },
         }}
-        className={styles.loader}
       ></motion.div>
       {message}
     </motion.div>

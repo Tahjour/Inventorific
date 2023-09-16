@@ -11,10 +11,10 @@ export default function AppNavigation() {
   const { windowWidth } = useWindowContext();
   const router = useRouter();
   return (
-    <header className={"header"}>
-      <Link className={"logoLink"} href="/">
+    <header className={"navigationHeader"}>
+      <Link className={"navigationLogoLink"} href="/">
         <Image
-          className={"logoImage"}
+          className={"navigationLogoImage"}
           src={"/Logo smaller.png"}
           alt={"The app's logo"}
           width={55}

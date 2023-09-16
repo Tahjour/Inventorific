@@ -6,7 +6,6 @@ import { AnimatePresence, motion } from "framer-motion";
 import { useEffect, useState } from "react";
 import SlabList from "../../../item-list-types/slabs/slab-list";
 import TileList from "../../../item-list-types/tiles/tile-list";
-import styles from "./list-bar.module.css";
 
 export default function ListBar() {
   const { serverLoadWasTried, getUserItems, getPreferredListType } = useUserInfoContext();
@@ -22,7 +21,7 @@ export default function ListBar() {
   }, [getUserItems]);
 
   return (
-    <section className={styles.listBar}>
+    <section className={"listBarSectionBox"}>
       <AnimatePresence mode="wait">
         {serverLoadWasTried &&
           !itemsAreLoading &&
@@ -63,7 +62,7 @@ export default function ListBar() {
           )}
 
         {serverLoadWasTried && !itemsAreLoading && loadedItems.length < 1 && (
-          <motion.div key={"no-items"} className={styles.noItemsDisplayBox}>
+          <motion.div key={"no-items"} className={"listBarNoItemsDisplayBox"}>
             <motion.h1
               initial="hidden"
               animate="visible"

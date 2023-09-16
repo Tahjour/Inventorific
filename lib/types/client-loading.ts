@@ -1,3 +1,3 @@
-export interface LoaderProps {
-    message: string | null;
+export interface MainLoaderProps {
+  message: string | null;
 }

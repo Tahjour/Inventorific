@@ -2,10 +2,9 @@
 import { UserInfo } from "@/lib/types/user";
 import { Fragment } from "react";
 import { useItemsContext } from "../../context/items-context";
-import MainDropDownMenu from "../layout/app/drop-down-menu/dropdownmenu";
-import styles from "./profile-page.module.css";
+import MainDropDownMenu from "../layout/app/inventory/drop-down-menu/main-dropdown-menu";
 
-function ProfilePageLayout({ userInfo }: { userInfo: UserInfo }) {
+export default function ProfilePageLayout({ userInfo }: { userInfo: UserInfo }) {
   const { showDeleteModal } = useItemsContext();
 
   async function deleteUserHandler() {
@@ -14,13 +13,12 @@ function ProfilePageLayout({ userInfo }: { userInfo: UserInfo }) {
 
   return (
     <Fragment>
-      {/* <MainNavigation /> */}
-      <section className={styles.profileBox}>
-        <div className={styles.imageAndItemsBox}>
-          <div className={styles.dropdownBox}>
+      <section className="profileSectionBox">
+        <div className="profileImageAndItemsBox">
+          <div className="profileDropdownBox">
             <MainDropDownMenu />
           </div>
-          <div className={styles.userImage}>{userInfo?.name[0]}</div>
+          <div className="profileUserInitialBox">{userInfo?.name[0]}</div>
           <h3>
             {userInfo?.login_type === "oauth" ? "Signed in with Google" : "Signed in with password"}
           </h3>
@@ -30,22 +28,22 @@ function ProfilePageLayout({ userInfo }: { userInfo: UserInfo }) {
               : `${userInfo?.items.length} items`}
           </h3>
         </div>
-        <div className={styles.formBox}>
+        <div className="profileFormBox">
           <form>
-            <div className={styles.formGroup}>
+            <div className="profileFormGroup">
               <label>Date joined</label>
               <input
-                className={styles.textInput}
+                className="profileTextInput"
                 type="text"
                 defaultValue={userInfo?.date_created}
                 disabled
               ></input>
             </div>
             {
-              <div className={styles.formGroup}>
+              <div className="profileFormGroup">
                 <label>Email Address</label>
                 <input
-                  className={styles.textInput}
+                  className="profileTextInput"
                   type="email"
                   defaultValue={userInfo?.email}
                   disabled={userInfo?.login_type === "oauth" ? true : false}
@@ -53,10 +51,10 @@ function ProfilePageLayout({ userInfo }: { userInfo: UserInfo }) {
               </div>
             }
             {
-              <div className={styles.formGroup}>
+              <div className="profileFormGroup">
                 <label>Username</label>
                 <input
-                  className={styles.textInput}
+                  className="profileTextInput"
                   type="text"
                   defaultValue={userInfo?.name}
                   disabled={userInfo?.login_type === "oauth" ? true : false}
@@ -64,13 +62,13 @@ function ProfilePageLayout({ userInfo }: { userInfo: UserInfo }) {
               </div>
             }
 
-            <div className={styles.buttons}>
+            <div className="profileButtons">
               {userInfo?.login_type === "credentials" && (
-                <button className={styles.updateInfoBtn} type="button">
+                <button className="profileUpdateInfoBtn" type="button">
                   Update Info
                 </button>
               )}
-              <button className={styles.deleteAccountBtn} type="button" onClick={deleteUserHandler}>
+              <button className="profileDeleteAccountBtn" type="button" onClick={deleteUserHandler}>
                 Delete User
               </button>
             </div>
@@ -80,5 +78,3 @@ function ProfilePageLayout({ userInfo }: { userInfo: UserInfo }) {
     </Fragment>
   );
 }
-
-export default ProfilePageLayout;

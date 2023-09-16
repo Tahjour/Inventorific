@@ -7,7 +7,6 @@ import Link from "next/link";
 import { useState } from "react";
 import { FiEye, FiEyeOff, FiUser } from "react-icons/fi";
 import { MdAlternateEmail } from "react-icons/md";
-import styles from "./auth-pages.module.css";
 
 function RegisterForm() {
   const { registerUser } = useUserInfoContext();
@@ -31,17 +30,17 @@ function RegisterForm() {
     registerUser(values);
   }
   return (
-    <section className={styles.formBox}>
-      <div className={styles.formOuterRegister}>
+    <section className={"authFormSectionBox"}>
+      <div className={"authFormBoxRegister"}>
         <h1>Create a New Account</h1>
 
-        <form className={styles.form} onSubmit={handleSubmit}>
-          <div className={styles.inputBox}>
-            <div className={styles.inputBox2}>
+        <form className={"authForm"} onSubmit={handleSubmit}>
+          <div className={"authInputBox"}>
+            <div className={"authInputBox2"}>
               <input
-                className={`${styles.textInput} ${
-                  !errors.name && touched.name && styles.successOutline
-                } ${errors.name && touched.name && styles.errorOutline}`}
+                className={`${"authTextInput"} ${
+                  !errors.name && touched.name && "authSuccessOutline"
+                } ${errors.name && touched.name && "authErrorOutline"}`}
                 type="text"
                 id="name"
                 {...getFieldProps("name")}
@@ -49,19 +48,19 @@ function RegisterForm() {
               ></input>
 
               <label
-                className={`${styles.inputLabel} ${
-                  !errors.name && touched.name && styles.successLabel
-                } ${errors.name && touched.name && styles.errorLabel}`}
+                className={`${"authInputLabel"} ${
+                  !errors.name && touched.name && "authSuccessLabel"
+                } ${errors.name && touched.name && "authErrorLabel"}`}
               >
                 Username
               </label>
 
-              <FiUser className={styles.inputIcons} />
+              <FiUser className={"authInputIcons"} />
             </div>
             <AnimatePresence>
               {errors.name && touched.name && (
                 <motion.span
-                  className={styles.errorMessage}
+                  className={"authErrorMessage"}
                   key="errorMessage"
                   initial={{ opacity: 0, height: 0 }}
                   animate={{ opacity: 1, height: "auto" }}
@@ -74,30 +73,30 @@ function RegisterForm() {
             </AnimatePresence>
           </div>
 
-          <div className={styles.inputBox}>
-            <div className={styles.inputBox2}>
+          <div className={"authInputBox"}>
+            <div className={"authInputBox2"}>
               <input
-                className={`${styles.textInput} ${
-                  !errors.email && touched.email && styles.successOutline
-                } ${errors.email && touched.email && styles.errorOutline}`}
+                className={`${"authTextInput"} ${
+                  !errors.email && touched.email && "authSuccessOutline"
+                } ${errors.email && touched.email && "authErrorOutline"}`}
                 type="email"
                 id="email"
                 {...getFieldProps("email")}
                 required
               ></input>
               <label
-                className={`${styles.inputLabel} ${
-                  !errors.email && touched.email && styles.successLabel
-                } ${errors.email && touched.email && styles.errorLabel}`}
+                className={`${"authInputLabel"} ${
+                  !errors.email && touched.email && "authSuccessLabel"
+                } ${errors.email && touched.email && "authErrorLabel"}`}
               >
                 Email
               </label>
-              <MdAlternateEmail className={styles.inputIcons} />
+              <MdAlternateEmail className={"authInputIcons"} />
             </div>
             <AnimatePresence>
               {errors.email && touched.email && (
                 <motion.span
-                  className={styles.errorMessage}
+                  className={"authErrorMessage"}
                   key="errorMessage"
                   initial={{ opacity: 0, height: 0 }}
                   animate={{ opacity: 1, height: "auto" }}
@@ -110,34 +109,34 @@ function RegisterForm() {
             </AnimatePresence>
           </div>
 
-          <div className={styles.inputBox}>
-            <div className={styles.inputBox2}>
+          <div className={"authInputBox"}>
+            <div className={"authInputBox2"}>
               <input
-                className={`${styles.textInput} ${
-                  !errors.password && touched.password && styles.successOutline
-                } ${errors.password && touched.password && styles.errorOutline}`}
+                className={`${"authTextInput"} ${
+                  !errors.password && touched.password && "authSuccessOutline"
+                } ${errors.password && touched.password && "authErrorOutline"}`}
                 type={showPassword.password ? "text" : "password"}
                 id="password"
                 {...getFieldProps("password")}
                 required
               ></input>
               <label
-                className={`${styles.inputLabel} ${
-                  !errors.password && touched.password && styles.successLabel
-                } ${errors.password && touched.password && styles.errorLabel}`}
+                className={`${"authInputLabel"} ${
+                  !errors.password && touched.password && "authSuccessLabel"
+                } ${errors.password && touched.password && "authErrorLabel"}`}
               >
                 Password
               </label>
               {showPassword.password ? (
                 <FiEye
-                  className={styles.inputIcons}
+                  className={"authInputIcons"}
                   onClick={() => {
                     setShowPassword({ ...showPassword, password: false });
                   }}
                 />
               ) : (
                 <FiEyeOff
-                  className={styles.inputIcons}
+                  className={"authInputIcons"}
                   onClick={() => {
                     setShowPassword({ ...showPassword, password: true });
                   }}
@@ -147,7 +146,7 @@ function RegisterForm() {
             <AnimatePresence>
               {errors.password && touched.password && (
                 <motion.span
-                  className={styles.errorMessage}
+                  className={"authErrorMessage"}
                   key="errorMessage"
                   initial={{ opacity: 0, height: 0 }}
                   animate={{ opacity: 1, height: "auto" }}
@@ -160,34 +159,34 @@ function RegisterForm() {
             </AnimatePresence>
           </div>
 
-          <div className={styles.inputBox}>
-            <div className={styles.inputBox2}>
+          <div className={"authInputBox"}>
+            <div className={"authInputBox2"}>
               <input
-                className={`${styles.textInput} ${
-                  !errors.cpassword && touched.cpassword && styles.successOutline
-                } ${errors.cpassword && touched.cpassword && styles.errorOutline}`}
+                className={`${"authTextInput"} ${
+                  !errors.cpassword && touched.cpassword && "authSuccessOutline"
+                } ${errors.cpassword && touched.cpassword && "authErrorOutline"}`}
                 type={showPassword.cpassword ? "text" : "password"}
                 id="cpassword"
                 {...getFieldProps("cpassword")}
                 required
               ></input>
               <label
-                className={`${styles.inputLabel} ${
-                  !errors.cpassword && touched.cpassword && styles.successLabel
-                } ${errors.cpassword && touched.cpassword && styles.errorLabel}`}
+                className={`${"authInputLabel"} ${
+                  !errors.cpassword && touched.cpassword && "authSuccessLabel"
+                } ${errors.cpassword && touched.cpassword && "authErrorLabel"}`}
               >
                 Confirm Password
               </label>
               {showPassword.cpassword ? (
                 <FiEye
-                  className={styles.inputIcons}
+                  className={"authInputIcons"}
                   onClick={() => {
                     setShowPassword({ ...showPassword, cpassword: false });
                   }}
                 />
               ) : (
                 <FiEyeOff
-                  className={styles.inputIcons}
+                  className={"authInputIcons"}
                   onClick={() => {
                     setShowPassword({ ...showPassword, cpassword: true });
                   }}
@@ -197,7 +196,7 @@ function RegisterForm() {
             <AnimatePresence>
               {errors.cpassword && touched.cpassword && (
                 <motion.span
-                  className={styles.errorMessage}
+                  className={"authErrorMessage"}
                   key="errorMessage"
                   initial={{ opacity: 0, height: 0 }}
                   animate={{ opacity: 1, height: "auto" }}
@@ -210,13 +209,13 @@ function RegisterForm() {
             </AnimatePresence>
           </div>
 
-          <button type="submit" className={styles.submitBtn}>
+          <button type="submit" className={"authSubmitBtn"}>
             {"Submit"}
           </button>
 
-          <div className={styles.loginOrSignUpBox}>
+          <div className={"authLoginOrSignUpBox"}>
             {"Have an account? "}
-            <Link href={"/login"} className={styles.loginOrSignUpBtn}>
+            <Link href={"/login"} className={"authLoginOrSignUpBtn"}>
               {"Login"}
             </Link>
           </div>

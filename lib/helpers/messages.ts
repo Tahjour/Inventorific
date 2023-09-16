@@ -22,6 +22,7 @@ export const ErrorMessages = {
   NoItemToDelete: "No item to delete",
   ItemValidationFailed: "Item validation failed",
   PreferredListTypeSaveFailed: "Failed to save preferred list type. Please contact the developer.",
+  UserOperationsUpdateFailed: "Failed to update user operations. Please contact the developer.",
 
   InvalidImageFile: "Invalid image file",
   ImageUploadFailed: "Failed to upload image on server. Please contact the developer.",
@@ -96,4 +97,6 @@ export const PendingMessages = {
   CreatingUser: "Creating user, please wait...",
   LoggingIn: "Signing in, please wait...",
   LoggingOut: "Signing out, please wait...",
+
+  LoadingInventory: "Loading inventory, please wait...",
 };

@@ -5,9 +5,8 @@ import { PendingMessages } from "@/lib/helpers/messages";
 import { motion } from "framer-motion";
 import { AiOutlineWarning } from "react-icons/ai";
 import { FormMotion } from "../ui/animations/motion-props/form-transition-props";
-import styles from "./modal-form.module.css";
 
-function DeleteConfirmation() {
+export default function DeleteConfirmation() {
   const { showNotification } = useNotification();
   const { getUserInfoToDelete, deleteUserInfo } = useUserInfoContext();
   const { getItemToDelete, deleteItem } = useItemsContext();
@@ -35,19 +34,19 @@ function DeleteConfirmation() {
     }
   }
   return (
-    <section className={styles.formBox}>
-      <motion.form className={styles.deleteForm} onSubmit={deleteConfirmation} {...FormMotion}>
+    <section className={"modalFormSectionBox"}>
+      <motion.form className={"modalFormDeleteForm"} onSubmit={deleteConfirmation} {...FormMotion}>
         <AiOutlineWarning size={100} color="red" />
         <h1>
           {userInfoToDelete
             ? "Deleting a user is permanent. Are you sure?"
             : "Are you sure you want to delete this item?"}
         </h1>
-        <div className={styles.submitAndCancelBtns}>
-          <button type="button" className={styles.cancelBtn} onClick={closeDeleteModal}>
+        <div className={"modalFormSubmitBtns"}>
+          <button type="button" className={"modalFormCancelBtn"} onClick={closeDeleteModal}>
             Cancel
           </button>
-          <button type="submit" className={styles.submitBtn}>
+          <button type="submit" className={"modalFormSubmitBtn"}>
             {"Delete"}
           </button>
         </div>
@@ -55,5 +54,3 @@ function DeleteConfirmation() {
     </section>
   );
 }
-
-export default DeleteConfirmation;

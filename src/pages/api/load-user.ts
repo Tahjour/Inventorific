@@ -1,6 +1,7 @@
 // src\pages\api\load-user.ts
 import { getConnectedClient } from "@/lib/database/mongodb";
 import { ResponseError, sendResponseError } from "@/lib/helpers/errors";
+import { logger } from "@/lib/helpers/logger";
 import { ErrorMessages, SuccessMessages } from "@/lib/helpers/messages";
 import { ResponseData } from "@/lib/types/api";
 import { UserInfo } from "@/lib/types/user";
@@ -25,7 +26,7 @@ export default async function loadUser(req: NextApiRequest, res: NextApiResponse
     }
 
     // Get the database and collection names from environment variables.
-    const database = process.env.MONGODB_DATABASE;
+    const databaseName = process.env.MONGODB_DATABASE;
     const collection = process.env.MONGODB_USERS_COLLECTION!;
 
     // Connect to the MongoDB database using `getConnectedClient` function.
@@ -38,13 +39,20 @@ export default async function loadUser(req: NextApiRequest, res: NextApiResponse
     }
 
     // Retrieve the user's data from the database based on the email in the session.
-    const users = mongoClient.db(database).collection(collection);
+    const users = mongoClient.db(databaseName).collection(collection);
     const existingUser = await users.findOne({ email: session.user.email });
 
     // If no user is found, throw a "Not Found" error.
     if (!existingUser) {
       throw new ResponseError(StatusCodes.NOT_FOUND, ErrorMessages.UserNotFound);
     }
+
+    const usersOperationsCollectionName = process.env.MONGODB_USERS_OPERATIONS_COLLECTION!;
+    const usersOperationsCollection = mongoClient
+      .db(databaseName)
+      .collection(usersOperationsCollectionName);
+    const existingUserOperations = await usersOperationsCollection
+      .find({ email: session.user.email }).toArray();
 
     // Create a `userInfo` object with the user's data.
     const userInfo: UserInfo = {
@@ -56,6 +64,7 @@ export default async function loadUser(req: NextApiRequest, res: NextApiResponse
       date_created: existingUser.date_created,
       time_created: existingUser.time_created,
       preferred_list_type: existingUser.preferred_list_type,
+      user_operations: existingUserOperations,
     };
     // Create a `data` object with a success message and the `userInfo`.
     const data: ResponseData = {

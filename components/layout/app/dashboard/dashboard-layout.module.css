@@ -1,7 +1,0 @@
-.dashboardLayoutBox {
-  height: 100%;
-}
-.dashboardLayout {
-  height: calc(100% - var(--main-nav-height));
-  color: var(--color-L100);
-}

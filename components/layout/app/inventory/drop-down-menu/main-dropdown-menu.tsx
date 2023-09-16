@@ -10,9 +10,8 @@ import { AiFillCaretDown, AiOutlineUser, AiOutlineUserSwitch } from "react-icons
 import { FaHome, FaUserCog } from "react-icons/fa";
 import { MdLaunch } from "react-icons/md";
 import { RiDashboard2Line, RiLoginBoxLine, RiLogoutBoxLine } from "react-icons/ri";
-import styles from "./main-dropdown-menu.module.css";
 
-function MainDropDownMenu() {
+export default function MainDropDownMenu() {
   const { data: session } = useSession();
   const { logoutUser } = useUserInfoContext();
   const route = useRouter().route;
@@ -25,11 +24,11 @@ function MainDropDownMenu() {
 
   return (
     <DropdownMenu.Root open={dropdownOpen} onOpenChange={setDropdownOpen}>
-      <DropdownMenu.Trigger className={styles.dropdownTrigger}>
+      <DropdownMenu.Trigger className={"mainDropDownMenuTrigger"}>
         <FaUserCog size={20} />
 
         <motion.div
-          className={styles.dropdownUserIconBox}
+          className={"mainDropDownMenuUserIconBox"}
           animate={{ rotate: dropdownOpen ? 180 : 0 }}
         >
           <AiFillCaretDown size={15} />
@@ -38,7 +37,7 @@ function MainDropDownMenu() {
       <AnimatePresence>
         {dropdownOpen && (
           <DropdownMenu.Portal forceMount>
-            <DropdownMenu.Content className={styles.dropdownContent} asChild>
+            <DropdownMenu.Content className={"mainDropDownMenuContent"} asChild>
               <motion.div
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 1 }}
@@ -46,9 +45,9 @@ function MainDropDownMenu() {
                 transition={{ duration: 0.3 }}
               >
                 {route !== "/" && (
-                  <Link href={"/"} className={styles.dropdownLink}>
-                    <DropdownMenu.Item className={styles.dropdownItem}>
-                      <span className={styles.iconWrapper}>
+                  <Link href={"/"} className={"mainDropDownMenuLink"}>
+                    <DropdownMenu.Item className={"mainDropDownMenuItem"}>
+                      <span className={"mainDropDownMenuIconWrapper"}>
                         <FaHome size={20} />
                       </span>
                       Home
@@ -57,9 +56,9 @@ function MainDropDownMenu() {
                 )}
 
                 {session && route !== "/profile" && (
-                  <Link href={"/profile"} className={styles.dropdownLink}>
-                    <DropdownMenu.Item className={styles.dropdownItem}>
-                      <span className={styles.iconWrapper}>
+                  <Link href={"/profile"} className={"mainDropDownMenuLink"}>
+                    <DropdownMenu.Item className={"mainDropDownMenuItem"}>
+                      <span className={"mainDropDownMenuIconWrapper"}>
                         <AiOutlineUser size={20} />
                       </span>
                       Profile
@@ -68,9 +67,9 @@ function MainDropDownMenu() {
                 )}
 
                 {!session && (
-                  <Link href={"/login"} className={styles.dropdownLink}>
-                    <DropdownMenu.Item className={styles.dropdownItem}>
-                      <span className={styles.iconWrapper}>
+                  <Link href={"/login"} className={"mainDropDownMenuLink"}>
+                    <DropdownMenu.Item className={"mainDropDownMenuItem"}>
+                      <span className={"mainDropDownMenuIconWrapper"}>
                         <RiLoginBoxLine size={20} />
                       </span>
                       Login
@@ -79,9 +78,9 @@ function MainDropDownMenu() {
                 )}
 
                 {route !== "dashboard" && (
-                  <Link href={"/dashboard"} className={styles.dropdownLink}>
-                    <DropdownMenu.Item className={styles.dropdownItem}>
-                      <span className={styles.iconWrapper}>
+                  <Link href={"/dashboard"} className={"mainDropDownMenuLink"}>
+                    <DropdownMenu.Item className={"mainDropDownMenuItem"}>
+                      <span className={"mainDropDownMenuIconWrapper"}>
                         <RiDashboard2Line size={20} />
                       </span>
                       Dashboard
@@ -90,9 +89,9 @@ function MainDropDownMenu() {
                 )}
 
                 {route !== "/inventory" && (
-                  <Link href={"/inventory"} className={styles.dropdownLink}>
-                    <DropdownMenu.Item className={styles.dropdownItem}>
-                      <span className={styles.iconWrapper}>
+                  <Link href={"/inventory"} className={"mainDropDownMenuLink"}>
+                    <DropdownMenu.Item className={"mainDropDownMenuItem"}>
+                      <span className={"mainDropDownMenuIconWrapper"}>
                         <MdLaunch size={20} />
                       </span>
                       Inventory
@@ -101,9 +100,9 @@ function MainDropDownMenu() {
                 )}
 
                 {session && route !== "/login" && route !== "/register" && (
-                  <Link href={"/login"} className={styles.dropdownLink}>
-                    <DropdownMenu.Item className={styles.dropdownItem}>
-                      <span className={styles.iconWrapper}>
+                  <Link href={"/login"} className={"mainDropDownMenuLink"}>
+                    <DropdownMenu.Item className={"mainDropDownMenuItem"}>
+                      <span className={"mainDropDownMenuIconWrapper"}>
                         <AiOutlineUserSwitch size={20} />
                       </span>
                       Switch User
@@ -112,8 +111,8 @@ function MainDropDownMenu() {
                 )}
 
                 {session && (
-                  <DropdownMenu.Item className={styles.dropdownItem} onClick={logOutHandler}>
-                    <span className={styles.iconWrapper}>
+                  <DropdownMenu.Item className={"mainDropDownMenuItem"} onClick={logOutHandler}>
+                    <span className={"mainDropDownMenuIconWrapper"}>
                       <RiLogoutBoxLine size={20} />
                     </span>
                     Log Out
@@ -127,5 +126,3 @@ function MainDropDownMenu() {
     </DropdownMenu.Root>
   );
 }
-
-export default MainDropDownMenu;

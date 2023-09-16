@@ -1,5 +1,5 @@
 // tile-list.tsx
-import Loader from "@/components/ui/loading/loader";
+import MainLoader from "@/components/ui/loading/main-loader";
 import { useItemsContext } from "@/context/items-context";
 import { useWindowContext } from "@/context/window-context";
 import { Item } from "@/lib/types/item";
@@ -9,7 +9,6 @@ import Link from "next/link";
 import { useState } from "react";
 import { BiEdit } from "react-icons/bi";
 import { BsTrash } from "react-icons/bs";
-import styles from "./slab-list.module.css";
 
 export default function SlabList({ loadedItems }: { loadedItems: Item[] }) {
   const { windowWidth } = useWindowContext();
@@ -30,7 +29,7 @@ export default function SlabList({ loadedItems }: { loadedItems: Item[] }) {
 
   return (
     <motion.section
-      className={styles.slabList}
+      className="slabListSectionBox"
       variants={{
         hidden: { opacity: 0 },
         visible: { opacity: 1 },
@@ -47,7 +46,7 @@ export default function SlabList({ loadedItems }: { loadedItems: Item[] }) {
           }
           return (
             <motion.div
-              className={styles.itemSlabBox}
+              className="slabListItemSlabBox"
               key={item.id}
               layout={"position"}
               initial="hidden"
@@ -59,12 +58,12 @@ export default function SlabList({ loadedItems }: { loadedItems: Item[] }) {
               }}
               transition={{ duration: 0.2 }}
             >
-              <Link href={`inventory/${item.id}`} className={styles.itemSlab}>
-                <div className={styles.itemImageBox}>
-                  {!imageLoaded && <Loader message="loading image..." />}
+              <Link href={`inventory/${item.id}`} className="slabListItemSlab">
+                <div className="slabListItemImageBox">
+                  {!imageLoaded && <MainLoader message="loading image..." />}
                   {/* Show the loader when the image is not loaded */}
                   <Image
-                    className={styles.itemImage}
+                    className="slabListItemImage"
                     src={item.imageURL}
                     alt={"Item's image"}
                     width={windowWidth > 740 ? 100 : windowWidth > 450 ? 80 : 50}
@@ -74,20 +73,19 @@ export default function SlabList({ loadedItems }: { loadedItems: Item[] }) {
                   />
                 </div>
 
-                <div className={styles.itemInfoBox}>
-                  <div className={styles.itemInfoBits}>
+                <div className="slabListItemInfoBox">
+                  <div className="slabListItemInfoBits">
                     <p>{item.name.length > 25 ? `${item.name.slice(0, 25)}...` : item.name}</p>
                     <p>
-                      {item.amount.length > 12 ? `${item.amount.slice(0, 12)}+` : `${item.amount}`}{" "}
-                      in stock
+                      <p>{`${parseFloat(item.amount).toLocaleString("en-US")} in stock`}</p>
                     </p>
-                    <div className={styles.itemPriceTagBox}>
-                      {item.price.length > 12 ? `$${item.price.slice(0, 12)}+` : `$${item.price}`}
+                    <div className="slabListItemPriceTagBox">
+                      {`$${parseFloat(item.price).toLocaleString("en-US")}`}
                     </div>
                   </div>
 
                   {windowWidth > 600 && (
-                    <div className={styles.itemInfoBits}>
+                    <div className="slabListItemInfoBits">
                       <h6>Created</h6>
                       <p>{`${item.date_created} ${item.time_created}`}</p>
                       <h6>Modified</h6>
@@ -95,9 +93,9 @@ export default function SlabList({ loadedItems }: { loadedItems: Item[] }) {
                     </div>
                   )}
 
-                  <div className={styles.operationIcons}>
+                  <div className="slabListOperationIcons">
                     <BiEdit
-                      className={`${styles.operationIcon} ${styles.editIcon}`}
+                      className={`slabListOperationIcon slabListEditIcon`}
                       onClick={(e: React.MouseEvent) => {
                         e.preventDefault();
                         e.stopPropagation();
@@ -105,7 +103,7 @@ export default function SlabList({ loadedItems }: { loadedItems: Item[] }) {
                       }}
                     />
                     <BsTrash
-                      className={`${styles.operationIcon} ${styles.deleteIcon}`}
+                      className={`slabListOperationIcon slabListDeleteIcon`}
                       onClick={async (e: React.MouseEvent) => {
                         e.preventDefault();
                         e.stopPropagation();

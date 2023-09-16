@@ -12,8 +12,7 @@ import { BiImageAdd } from "react-icons/bi";
 import { v4 as uuidv4 } from "uuid";
 import { useItemsContext } from "../../context/items-context";
 import { FormMotion } from "../ui/animations/motion-props/form-transition-props";
-import Loader from "../ui/loading/loader";
-import styles from "./modal-form.module.css";
+import MainLoader from "../ui/loading/main-loader";
 
 function ItemModalForm() {
   const { showNotification } = useNotification();
@@ -96,17 +95,17 @@ function ItemModalForm() {
   }
 
   return (
-    <section className={styles.formBox}>
-      <motion.form className={styles.itemForm} onSubmit={handleSubmit} {...FormMotion}>
-        <label className={styles.customImageUploadLabel}>
+    <section className={"modalFormSectionBox"}>
+      <motion.form className={"modalFormItemForm"} onSubmit={handleSubmit} {...FormMotion}>
+        <label className={"modalFormUploadLabel"}>
           <input
-            className={styles.imageFileInput}
+            className={"modalFormImageFileInput"}
             type={"file"}
             onChange={imageInputChangeHandler}
           />
           {imageURL ? (
             <Fragment>
-              {!imageLoaded && <Loader message="loading image..." />}
+              {!imageLoaded && <MainLoader message="loading image..." />}
               {/* Show the loader when the image is not loaded */}
               <Image
                 src={imageURL}
@@ -117,10 +116,10 @@ function ItemModalForm() {
               />
             </Fragment>
           ) : null}
-          <div className={styles.customImageUploadLabelContents}>
+          <div className={"modalFormUploadLabelOptionBox"}>
             <div
-              className={`${styles.customImageUploadLabelContentsOptions} ${
-                imageURL ? "" : styles.visible
+              className={`${"modalFormUploadLabelOption"} ${
+                imageURL ? "" : "modalFormUploadLabelOptionVisible"
               }`}
             >
               <BiImageAdd />
@@ -129,32 +128,32 @@ function ItemModalForm() {
           </div>
         </label>
 
-        <div className={styles.itemInfoBox}>
-          <div className={styles.inputBox}>
-            <div className={styles.inputBox2}>
+        <div className={"modalFormItemInfoBox"}>
+          <div className={"modalFormInputBox"}>
+            <div className={"modalFormInputBox2"}>
               <input
-                className={`${styles.textInput} ${
+                className={`${"modalFormTextInput"} ${
                   itemToEdit
-                    ? !errors.name && styles.successOutline
-                    : !errors.name && touched.name && styles.successOutline
+                    ? !errors.name && "modalFormSuccessOutline"
+                    : !errors.name && touched.name && "modalFormSuccessOutline"
                 } ${
                   itemToEdit
-                    ? errors.name && styles.errorOutline
-                    : errors.name && touched.name && styles.errorOutline
+                    ? errors.name && "modalFormErrorOutline"
+                    : errors.name && touched.name && "modalFormErrorOutline"
                 }`}
                 type="text"
                 id="name"
                 {...getFieldProps("name")}
               />
               <label
-                className={`${styles.inputLabel} ${
+                className={`${"modalFormInputLabel"} ${
                   itemToEdit
-                    ? !errors.name && styles.successLabel
-                    : !errors.name && touched.name && styles.successLabel
+                    ? !errors.name && "modalFormSuccessLabel"
+                    : !errors.name && touched.name && "modalFormSuccessLabel"
                 } ${
                   itemToEdit
-                    ? errors.name && styles.errorLabel
-                    : errors.name && touched.name && styles.errorLabel
+                    ? errors.name && "modalFormErrorLabel"
+                    : errors.name && touched.name && "modalFormErrorLabel"
                 }`}
                 htmlFor="name"
               >
@@ -164,8 +163,8 @@ function ItemModalForm() {
             <AnimatePresence>
               {errors.name && touched.name && (
                 <motion.span
-                  className={styles.errorMessage}
-                  key="errorMessage"
+                  className={"modalFormErrorMessage"}
+                  key="modalFormErrorMessage"
                   initial={{ opacity: 0, height: 0 }}
                   animate={{ opacity: 1, height: "auto" }}
                   exit={{ opacity: 0, height: 0 }}
@@ -176,31 +175,31 @@ function ItemModalForm() {
               )}
             </AnimatePresence>
           </div>
-          <div className={styles.inputBox}>
-            <div className={styles.inputBox2}>
+          <div className={"modalFormInputBox"}>
+            <div className={"modalFormInputBox2"}>
               <input
-                className={`${styles.textInput} ${
+                className={`${"modalFormTextInput"} ${
                   itemToEdit
-                    ? !errors.price && styles.successOutline
-                    : !errors.price && touched.price && styles.successOutline
+                    ? !errors.price && "modalFormSuccessOutline"
+                    : !errors.price && touched.price && "modalFormSuccessOutline"
                 } ${
                   itemToEdit
-                    ? errors.price && styles.errorOutline
-                    : errors.price && touched.price && styles.errorOutline
+                    ? errors.price && "modalFormErrorOutline"
+                    : errors.price && touched.price && "modalFormErrorOutline"
                 }`}
                 type="text"
                 id="price"
                 {...getFieldProps("price")}
               />
               <label
-                className={`${styles.inputLabel} ${
+                className={`${"modalFormInputLabel"} ${
                   itemToEdit
-                    ? !errors.price && styles.successLabel
-                    : !errors.price && touched.price && styles.successLabel
+                    ? !errors.price && "modalFormSuccessLabel"
+                    : !errors.price && touched.price && "modalFormSuccessLabel"
                 } ${
                   itemToEdit
-                    ? errors.price && styles.errorLabel
-                    : errors.price && touched.price && styles.errorLabel
+                    ? errors.price && "modalFormErrorLabel"
+                    : errors.price && touched.price && "modalFormErrorLabel"
                 }`}
                 htmlFor="price"
               >
@@ -210,8 +209,8 @@ function ItemModalForm() {
             <AnimatePresence>
               {errors.price && touched.price && (
                 <motion.span
-                  className={styles.errorMessage}
-                  key="errorMessage"
+                  className={"modalFormErrorMessage"}
+                  key="modalFormErrorMessage"
                   initial={{ opacity: 0, height: 0 }}
                   animate={{ opacity: 1, height: "auto" }}
                   exit={{ opacity: 0, height: 0 }}
@@ -222,31 +221,31 @@ function ItemModalForm() {
               )}
             </AnimatePresence>
           </div>
-          <div className={styles.inputBox}>
-            <div className={styles.inputBox2}>
+          <div className={"modalFormInputBox"}>
+            <div className={"modalFormInputBox2"}>
               <input
-                className={`${styles.textInput} ${
+                className={`${"modalFormTextInput"} ${
                   itemToEdit
-                    ? !errors.amount && styles.successOutline
-                    : !errors.amount && touched.amount && styles.successOutline
+                    ? !errors.amount && "modalFormSuccessOutline"
+                    : !errors.amount && touched.amount && "modalFormSuccessOutline"
                 } ${
                   itemToEdit
-                    ? errors.amount && styles.errorOutline
-                    : errors.amount && touched.amount && styles.errorOutline
+                    ? errors.amount && "modalFormErrorOutline"
+                    : errors.amount && touched.amount && "modalFormErrorOutline"
                 }`}
                 type="text"
                 id="amount"
                 {...getFieldProps("amount")}
               />
               <label
-                className={`${styles.inputLabel} ${
+                className={`${"modalFormInputLabel"} ${
                   itemToEdit
-                    ? !errors.amount && styles.successLabel
-                    : !errors.amount && touched.amount && styles.successLabel
+                    ? !errors.amount && "modalFormSuccessLabel"
+                    : !errors.amount && touched.amount && "modalFormSuccessLabel"
                 } ${
                   itemToEdit
-                    ? errors.amount && styles.errorLabel
-                    : errors.amount && touched.amount && styles.errorLabel
+                    ? errors.amount && "modalFormErrorLabel"
+                    : errors.amount && touched.amount && "modalFormErrorLabel"
                 }`}
                 htmlFor="amount"
               >
@@ -256,8 +255,8 @@ function ItemModalForm() {
             <AnimatePresence>
               {errors.amount && touched.amount && (
                 <motion.span
-                  className={styles.errorMessage}
-                  key="errorMessage"
+                  className={"modalFormErrorMessage"}
+                  key="modalFormErrorMessage"
                   initial={{ opacity: 0, height: 0 }}
                   animate={{ opacity: 1, height: "auto" }}
                   exit={{ opacity: 0, height: 0 }}
@@ -268,42 +267,42 @@ function ItemModalForm() {
               )}
             </AnimatePresence>
           </div>
-          <div className={styles.inputBox}>
-            <div className={styles.inputBox2}>
+          <div className={"modalFormInputBox"}>
+            <div className={"modalFormInputBox2"}>
               <textarea
-                className={`${styles.textInput} ${styles.textAreaInput} ${
+                className={`${"modalFormTextInput"} ${"modalFormTextAreaInput"} ${
                   itemToEdit
-                    ? !errors.description && styles.successOutline
-                    : !errors.description && touched.description && styles.successOutline
+                    ? !errors.description && "modalFormSuccessOutline"
+                    : !errors.description && touched.description && "modalFormSuccessOutline"
                 } ${
                   itemToEdit
-                    ? errors.description && styles.errorOutline
-                    : errors.description && touched.description && styles.errorOutline
+                    ? errors.description && "modalFormErrorOutline"
+                    : errors.description && touched.description && "modalFormErrorOutline"
                 }`}
                 id="description"
                 {...getFieldProps("description")}
               ></textarea>
               <label
-                className={`${styles.inputLabel} ${
+                className={`${"modalFormInputLabel"} ${
                   itemToEdit
-                    ? !errors.description && styles.successLabel
-                    : !errors.description && touched.description && styles.successLabel
+                    ? !errors.description && "modalFormSuccessLabel"
+                    : !errors.description && touched.description && "modalFormSuccessLabel"
                 } ${
                   itemToEdit
-                    ? errors.description && styles.errorLabel
-                    : errors.description && touched.description && styles.errorLabel
+                    ? errors.description && "modalFormErrorLabel"
+                    : errors.description && touched.description && "modalFormErrorLabel"
                 }`}
                 htmlFor="description"
               >
                 Description
               </label>
-              {/* <div className={styles.resizeHandle}></div> */}
+              {/* <div className={resizeHandle}></div> */}
             </div>
             <AnimatePresence>
               {errors.description && touched.description && (
                 <motion.span
-                  className={styles.errorMessage}
-                  key="errorMessage"
+                  className={"modalFormErrorMessage"}
+                  key="modalFormErrorMessage"
                   initial={{ opacity: 0, height: 0 }}
                   animate={{ opacity: 1, height: "auto" }}
                   exit={{ opacity: 0, height: 0 }}
@@ -315,11 +314,11 @@ function ItemModalForm() {
             </AnimatePresence>
           </div>
 
-          <div className={styles.submitAndCancelBtns}>
-            <button type="button" className={styles.cancelBtn} onClick={closeItemModal}>
+          <div className={"modalFormSubmitBtns"}>
+            <button type="button" className={"modalFormCancelBtn"} onClick={closeItemModal}>
               Cancel
             </button>
-            <button type="submit" className={styles.submitBtn}>
+            <button type="submit" className={"modalFormSubmitBtn"}>
               {itemToEdit ? "Edit" : "Create"}
             </button>
           </div>
