@@ -11,7 +11,7 @@ export default function MainNavigation() {
           className={"navigationLogoImage"}
           src={"/Logo smaller.png"}
           alt={"The app's logo"}
-          width={55}
+          width={60}
           height={50}
           priority
         ></Image>

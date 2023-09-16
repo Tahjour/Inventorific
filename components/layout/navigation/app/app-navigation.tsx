@@ -17,30 +17,30 @@ export default function AppNavigation() {
           className={"navigationLogoImage"}
           src={"/Logo smaller.png"}
           alt={"The app's logo"}
-          width={55}
+          width={60}
           height={50}
           priority
         ></Image>
       </Link>
 
-      {windowWidth > 480 && (
+      {
         <div className={"appNavigationBox"}>
           <Link
             href={"/dashboard"}
             className={`appNavLink ${router.pathname === "/dashboard" && "appNavLinkActive"}`}
           >
             <RiDashboard2Line size={25} />
-            Dashboard
+            {windowWidth > 480 && "Dashboard"}
           </Link>
           <Link
             href={"/inventory"}
             className={`appNavLink ${router.pathname === "/inventory" && "appNavLinkActive"}`}
           >
             <FiBox size={25} />
-            Inventory
+           {windowWidth > 480 && "Inventory"}
           </Link>
         </div>
-      )}
+      }
 
       <MainDropDownMenu />
     </header>

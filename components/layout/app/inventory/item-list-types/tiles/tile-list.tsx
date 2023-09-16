@@ -25,7 +25,17 @@ export default function TileList({ loadedItems }: { loadedItems: Item[] }) {
   }
 
   return (
-    <motion.section className="tileListSectionBox">
+    <motion.section
+      className="tileListSectionBox"
+      variants={{
+        hidden: { opacity: 0 },
+        visible: { opacity: 1 },
+      }}
+      initial="hidden"
+      animate="visible"
+      exit="hidden"
+      transition={{ duration: 0.2 }}
+    >
       <AnimatePresence>
         {loadedItems.map((item: Item) => {
           if (!item) {

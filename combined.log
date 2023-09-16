@@ -2426,3 +2426,43 @@
     '    at process.processTicksAndRejections (node:internal/process/task_queues:95:5)',
   timestamp: 'Sep-15-2023 20:25:01'
 }
+{
+  statusCode: 401,
+  level: 'error',
+  service: 'user-service',
+  message: 'User is not authorized. Login to save changes.',
+  stack: 'Error: User is not authorized. Login to save changes.\n' +
+    '    at loadUser (webpack-internal:///(api)/./src/pages/api/load-user.ts:30:19)\n' +
+    '    at process.processTicksAndRejections (node:internal/process/task_queues:95:5)',
+  timestamp: 'Sep-16-2023 02:33:16'
+}
+{
+  statusCode: 401,
+  level: 'error',
+  service: 'user-service',
+  message: 'User is not authorized. Login to save changes.',
+  stack: 'Error: User is not authorized. Login to save changes.\n' +
+    '    at loadUser (webpack-internal:///(api)/./src/pages/api/load-user.ts:30:19)\n' +
+    '    at process.processTicksAndRejections (node:internal/process/task_queues:95:5)',
+  timestamp: 'Sep-16-2023 02:33:16'
+}
+{
+  statusCode: 401,
+  level: 'error',
+  service: 'user-service',
+  message: 'User is not authorized. Login to save changes.',
+  stack: 'Error: User is not authorized. Login to save changes.\n' +
+    '    at loadUser (webpack-internal:///(api)/./src/pages/api/load-user.ts:30:19)\n' +
+    '    at process.processTicksAndRejections (node:internal/process/task_queues:95:5)',
+  timestamp: 'Sep-16-2023 02:35:38'
+}
+{
+  statusCode: 401,
+  level: 'error',
+  service: 'user-service',
+  message: 'User is not authorized. Login to save changes.',
+  stack: 'Error: User is not authorized. Login to save changes.\n' +
+    '    at loadUser (webpack-internal:///(api)/./src/pages/api/load-user.ts:30:19)\n' +
+    '    at process.processTicksAndRejections (node:internal/process/task_queues:95:5)',
+  timestamp: 'Sep-16-2023 02:35:38'
+}

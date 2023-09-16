@@ -55,12 +55,12 @@ body {
 
 ::-webkit-scrollbar {
   background-color: transparent;
-  width: 0.625rem;
+  width: 0.3125rem;
 }
 
 ::-webkit-scrollbar-thumb {
   background-color: var(--dark-neon-blue);
-  border: 0.1875rem solid var(--main-bg);
+  /* border: 0.1875rem solid var(--main-bg); */
   /* background-image: linear-gradient(var(--half-main-color-2), var(--dark-neon-blue)); */
   border-radius: 0.625rem;
 }
@@ -95,23 +95,23 @@ button {
   top: 0;
   left: 0;
   background-color: rgb(0, 0, 0, 0.3);
-  backdrop-filter: blur(10px);
+  backdrop-filter: blur(0.625rem);
   border-radius: inherit;
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  gap: 20px;
+  gap: 1.25rem;
   color: white;
   z-index: 2;
 }
 
 .mainLoaderCircle {
-  border: 10px solid var(--neon-blue);
+  border: 0.625rem solid var(--neon-blue);
   border-radius: 50%;
-  border-top: 10px solid var(--dark-bg);
-  width: 50px;
-  height: 50px;
+  border-top: 0.625rem solid var(--dark-bg);
+  width: 3.125rem;
+  height: 3.125rem;
 }
 
 /* Notification Toast ------------------------------------------------------------------------------------------------- */
@@ -128,21 +128,21 @@ button {
   position: relative;
   display: flex;
   align-items: center;
-  gap: 10px;
-  padding: 3px 20px;
+  gap: 0.625rem;
+  padding: 0.1875rem 1.25rem;
   background-color: var(--dark-neon-blue);
-  border-radius: 10px;
+  border-radius: 0.625rem;
   color: white;
-  font-size: 12px;
+  font-size: 0.75rem;
   transition: var(--fast-linear);
 }
 
 .notificationToastLoaderCircle {
-  border: 10px solid var(--neon-blue);
+  border: 0.625rem solid var(--neon-blue);
   border-radius: 50%;
-  border-top: 10px solid var(--dark-bg);
-  width: 30px;
-  height: 30px;
+  border-top: 0.625rem solid var(--dark-bg);
+  width: 1.875rem;
+  height: 1.875rem;
 }
 
 .notificationToastIconTypeBox {
@@ -178,6 +178,7 @@ button {
 .navigationLogoImage {
   border-radius: inherit;
   vertical-align: bottom;
+  border: var(--main-border-size) solid var(--dark-neon-blue);
 }
 
 .navigationLogoImage:hover,
@@ -704,8 +705,8 @@ button {
 }
 
 .modalFormItemForm {
-  width: 100%;
-  height: 100%;
+  width: 80%;
+  height: 90%;
   display: grid;
   grid-template-columns: 1fr 1fr;
   border-radius: 1.25rem;
@@ -782,7 +783,7 @@ button {
 }
 
 .modalFormUploadLabelOptionBox svg {
-  font-size: 19.2px;
+  font-size: 1.2rem;
 }
 
 .modalFormUploadLabelOptionBox p {
@@ -794,7 +795,7 @@ button {
   display: grid;
   align-content: start; /* changed from align-items: start */
   justify-items: center;
-  padding: 1.25rem;
+  padding: 1.875rem 1.25rem;
   border-radius: 1.25rem;
   color: var(--color-L100);
   overflow-y: scroll;
@@ -920,12 +921,12 @@ button {
   color: var(--color-L100);
   border: var(--main-border-size) solid var(--dark-neon-blue);
   border-radius: 0.625rem;
-  padding: 10px;
+  padding: 0.625rem;
   /* Use em instead of px for relative sizing */
-  font-size: 16px;
+  font-size: 1rem;
   /* Use rem for a responsive font size */
   width: auto;
-  padding: 16px 32px;
+  padding: 1rem 2rem;
   transition: var(--fast-linear);
 }
 
@@ -966,7 +967,7 @@ button {
     height: 100%;
     padding: 0.9375rem;
     border-radius: 0;
-    grid-template-columns: auto;
+    grid-template-columns: minmax(0, 1fr);
     grid-template-rows: 1fr 1fr;
     overflow-y: scroll;
     border: 0;
@@ -988,7 +989,6 @@ button {
   }
 
   .modalFormItemInfoBox {
-    gap: 1.25rem;
     padding: 1.875rem 0.625rem;
     overflow-y: visible;
   }
@@ -1080,12 +1080,25 @@ button {
 
   .dashboardChartBox {
     height: auto;
+    margin: 0.625rem 0;
+    padding: 0;
+  }
+}
+
+@media screen and (max-width: 40.625rem) {
+  .dashboardInfoCardBox {
+    flex-direction: column;
+    align-items: center;
+  }
+  .dashboardInfoCard {
+    width: 100%;
+    margin: 1.25rem 0;
   }
 }
 
 @media screen and (max-width: 31.25rem) {
   .dashboardLayoutBox {
-    padding: 0.625rem;
+    padding: .3125rem;
   }
 }
 
@@ -1099,10 +1112,10 @@ button {
   align-items: center;
   color: white;
   background-color: var(--dark-bg);
-  padding: 10px;
-  border-radius: 10px;
-  height: 50px;
-  border: 3px solid var(--dark-neon-blue);
+  padding: 0.625rem;
+  border-radius: 0.625rem;
+  height: 3.125rem;
+  border: 0.1875rem solid var(--dark-neon-blue);
   z-index: 2;
   cursor: pointer;
   transition: var(--fast-linear);
@@ -1121,12 +1134,12 @@ button {
 }
 
 .mainDropDownMenuContent {
-  margin-top: 5px;
-  margin-right: 5px;
-  border-radius: 10px;
+  margin-top: 0.3125rem;
+  margin-right: 0.3125rem;
+  border-radius: 0.625rem;
   cursor: pointer;
-  padding: 10px;
-  border: 3px solid var(--dark-neon-blue);
+  padding: 0.625rem;
+  border: 0.1875rem solid var(--dark-neon-blue);
   background-color: var(--dark-bg);
   z-index: 2;
 }
@@ -1144,18 +1157,18 @@ button {
 }
 
 .mainDropDownMenuItem {
-  font-size: 15px;
+  font-size: 0.9375rem;
   line-height: 1;
   color: white;
-  border-radius: 10px;
+  border-radius: 0.625rem;
   display: flex;
   align-items: center;
   /* justify-content: space-between; */
-  height: 50px;
-  padding: 10px;
-  margin: 5px;
+  height: 3.125rem;
+  padding: 0.625rem;
+  margin: 0.3125rem;
   position: relative;
-  /* padding-left: 25px; */
+  /* padding-left: 1.5625rem; */
   font-weight: normal;
   user-select: none;
   outline: none;
@@ -1168,7 +1181,7 @@ button {
 }
 
 .mainDropDownMenuIconWrapper {
-  margin-right: 10px;
+  margin-right: 0.625rem;
 }
 
 /* Inventory Layout --------------------------------------------------------------------------------------------- */
@@ -1194,23 +1207,23 @@ button {
   width: 100%;
   height: var(--main-bar-menu-height);
   z-index: 1;
-  padding: 10px 0;
+  padding: 0.625rem 0;
 }
 
 .mainBarMenuBox {
   display: flex;
   align-items: center;
   justify-content: center;
-  border-radius: 10px;
+  border-radius: 0.625rem;
   height: 100%;
-  width: 60%;
+  /* width: 60%; */
 }
 
 .mainBarMenuBtnBox {
   height: 100%;
   display: flex;
-  margin-left: 10px;
-  gap: 10px;
+  margin-left: 0.625rem;
+  gap: 0.625rem;
   justify-content: space-evenly;
 }
 
@@ -1219,7 +1232,7 @@ button {
   align-items: center;
   justify-content: center;
   background-color: var(--dark-bg);
-  border-radius: 10px;
+  border-radius: 0.625rem;
 }
 
 .mainBarMenuBtn,
@@ -1230,10 +1243,10 @@ button {
   display: flex;
   align-items: center;
   background-color: var(--dark-bg);
-  color: white;
+  color: var(--color-L100);
   border: var(--main-border-size) solid var(--dark-neon-blue);
-  border-radius: 10px;
-  padding: 10px;
+  border-radius: 0.625rem;
+  padding: 0.625rem;
   cursor: pointer;
   transition: var(--fast-linear);
 }
@@ -1244,10 +1257,10 @@ button {
 }
 
 .mainBarMenuListTypeBtn:first-child {
-  border-radius: 10px 0 0 10px;
+  border-radius: 0.625rem 0 0 0.625rem;
 }
 .mainBarMenuListTypeBtn:last-child {
-  border-radius: 0 10px 10px 0;
+  border-radius: 0 0.625rem 0.625rem 0;
 }
 
 .mainBarMenuListTypeBtn:hover,
@@ -1268,7 +1281,6 @@ button {
   justify-content: center;
   align-items: center;
   height: 100%;
-  /* flex: 0.5; */
 }
 
 .mainBarMenuSearchInput {
@@ -1277,21 +1289,21 @@ button {
   background-color: var(--dark-bg);
   border: var(--main-border-size) solid var(--dark-neon-blue);
   color: white;
-  border-radius: 10px;
-  padding: 0 10px 0 50px;
+  border-radius: 0.625rem;
+  padding: 0 0.625rem 0 3.125rem;
 }
 
 .mainBarMenuSearchInput:focus {
-  box-shadow: 0 0 10px var(--neon-blue-accent);
+  box-shadow: 0 0 0.625rem var(--neon-blue-accent);
 }
 
 .mainBarMenuSearchIcon {
   position: absolute;
-  left: 20px;
+  left: 1.25rem;
   color: white;
 }
 
-@media screen and (max-width: 900px) {
+@media screen and (max-width: 56.25rem) {
   .mainBarMenuSection {
     margin: 0;
   }
@@ -1301,6 +1313,26 @@ button {
   }
 }
 
+@media screen and (max-width: 28.125rem) {
+  :root {
+    --main-bar-menu-height: 6.875rem;
+  }
+  .mainBarMenuSectionBox {
+    padding: 0.625rem 0.8rem;
+  }
+  .mainBarMenuBox {
+    flex-direction: column;
+    gap: 0.625rem;
+    width: 100%;
+  }
+  .mainBarMenuSearchBarBox {
+    height: 2.5rem;
+    width: 100%;
+  }
+  .mainBarMenuBtnBox {
+    height: 2.5rem;
+  }
+}
 
 /* List Bar ---------------------------------------------------------------------------------------------- */
 .listBarSectionBox {
@@ -1600,6 +1632,12 @@ button {
 }
 
 @media screen and (max-width: 28.125rem) {
+  .slabListSectionBox {
+    padding: 0 0.125rem;
+  }
+  .slabListItemSlab {
+    border-radius: 0.3125rem;
+  }
   .slabListItemInfoBox {
     margin-left: 0.625rem;
   }

@@ -1,6 +1,5 @@
 // components\layout\app\app-bars\main-bar\list-bar\list-bar.tsx
 import { useUserInfoContext } from "@/context/user-context";
-import { useWindowContext } from "@/context/window-context";
 import { Item } from "@/lib/types/item";
 import { AnimatePresence, motion } from "framer-motion";
 import { useEffect, useState } from "react";
@@ -27,38 +26,14 @@ export default function ListBar() {
           !itemsAreLoading &&
           loadedItems.length > 0 &&
           getPreferredListType() === "tiles" && (
-            <motion.div
-              key={"tile-list"}
-              variants={{
-                hidden: { opacity: 0 },
-                visible: { opacity: 1 },
-              }}
-              initial="hidden"
-              animate="visible"
-              exit="hidden"
-              transition={{ duration: 0.5 }}
-            >
-              <TileList loadedItems={loadedItems} />
-            </motion.div>
+            <TileList key={"tile-list"} loadedItems={loadedItems} />
           )}
 
         {serverLoadWasTried &&
           !itemsAreLoading &&
           loadedItems.length > 0 &&
           getPreferredListType() === "slabs" && (
-            <motion.div
-              key={"slab-list"}
-              variants={{
-                hidden: { opacity: 0 },
-                visible: { opacity: 1 },
-              }}
-              initial="hidden"
-              animate="visible"
-              exit="hidden"
-              transition={{ duration: 0.5 }}
-            >
-              <SlabList loadedItems={loadedItems} />
-            </motion.div>
+            <SlabList key={"slab-list"} loadedItems={loadedItems} />
           )}
 
         {serverLoadWasTried && !itemsAreLoading && loadedItems.length < 1 && (

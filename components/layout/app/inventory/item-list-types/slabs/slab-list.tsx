@@ -5,7 +5,6 @@ import { useWindowContext } from "@/context/window-context";
 import { Item } from "@/lib/types/item";
 import { AnimatePresence, motion } from "framer-motion";
 import Image from "next/image";
-import Link from "next/link";
 import { useState } from "react";
 import { BiEdit } from "react-icons/bi";
 import { BsTrash } from "react-icons/bs";
@@ -37,7 +36,7 @@ export default function SlabList({ loadedItems }: { loadedItems: Item[] }) {
       initial="hidden"
       animate="visible"
       exit="hidden"
-      transition={{ duration: 0.5 }}
+      transition={{ duration: 0.2 }}
     >
       <AnimatePresence>
         {loadedItems.map((item: Item) => {
@@ -58,7 +57,22 @@ export default function SlabList({ loadedItems }: { loadedItems: Item[] }) {
               }}
               transition={{ duration: 0.2 }}
             >
-              <Link href={`inventory/${item.id}`} className="slabListItemSlab">
+              <div
+                className="slabListItemSlab"
+                tabIndex={0}
+                onClick={(e: React.MouseEvent) => {
+                  e.preventDefault();
+                  e.stopPropagation();
+                  editItemHandler(item);
+                }}
+                onKeyDown={(e: React.KeyboardEvent) => {
+                  if (e.key === "Enter") {
+                    e.preventDefault();
+                    e.stopPropagation();
+                    editItemHandler(item);
+                  }
+                }}
+              >
                 <div className="slabListItemImageBox">
                   {!imageLoaded && <MainLoader message="loading image..." />}
                   {/* Show the loader when the image is not loaded */}
@@ -94,25 +108,30 @@ export default function SlabList({ loadedItems }: { loadedItems: Item[] }) {
                   )}
 
                   <div className="slabListOperationIcons">
-                    <BiEdit
-                      className={`slabListOperationIcon slabListEditIcon`}
+                    <button
+                      className="tileListOperationButton"
                       onClick={(e: React.MouseEvent) => {
                         e.preventDefault();
                         e.stopPropagation();
                         editItemHandler(item);
                       }}
-                    />
-                    <BsTrash
-                      className={`slabListOperationIcon slabListDeleteIcon`}
+                    >
+                      <BiEdit className={`tileListOperationIcon`} />
+                    </button>
+
+                    <button
+                      className="tileListOperationButton"
                       onClick={async (e: React.MouseEvent) => {
                         e.preventDefault();
                         e.stopPropagation();
                         deleteItemHandler(item);
                       }}
-                    />
+                    >
+                      <BsTrash className={`tileListOperationIcon`} />
+                    </button>
                   </div>
                 </div>
-              </Link>
+              </div>
             </motion.div>
           );
         })}
