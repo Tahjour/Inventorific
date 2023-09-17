@@ -7,7 +7,7 @@ import { v2 as cloudinary } from "cloudinary";
 import { StatusCodes } from "http-status-codes";
 import { NextApiRequest, NextApiResponse } from "next";
 import { getServerSession } from "next-auth/next";
-import { getNextAuthOptions } from "./auth/[...nextauth]";
+import { getNextAuthOptions } from "../auth/[...nextauth]";
 
 // Cloudinary configuration
 cloudinary.config({

@@ -3,12 +3,14 @@ import { getFormattedDate } from "@/lib/helpers/date";
 import { ResponseError, sendResponseError } from "@/lib/helpers/errors";
 import { ErrorMessages, SuccessMessages } from "@/lib/helpers/messages";
 import { ResponseData } from "@/lib/types/api";
+import { UserInventoryStat } from "@/lib/types/stats";
+import { UserOperationsData } from "@/lib/types/user";
 import { v2 as cloudinary } from "cloudinary";
 import formidable from "formidable";
 import { StatusCodes } from "http-status-codes";
 import { NextApiRequest, NextApiResponse } from "next";
 import { getServerSession } from "next-auth/next";
-import { getNextAuthOptions } from "./auth/[...nextauth]";
+import { getNextAuthOptions } from "../auth/[...nextauth]";
 
 export const config = {
   api: {
@@ -90,16 +92,42 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
           );
         }
 
+        // Update the user operations
         const usersOperationsCollectionName = process.env.MONGODB_USERS_OPERATIONS_COLLECTION!;
         const usersOperationsCollection = mongoClient
           .db(databaseName)
           .collection(usersOperationsCollectionName);
 
-        const operationsUpdateResult = await usersOperationsCollection.updateOne(
-          { email: session.user.email, date: getFormattedDate() },
-          { $inc: { item_additions: 0, item_edits: 0, item_deletions: 1 } },
-          { upsert: true }
+        const currentDate = getFormattedDate();
+
+        // First, try to increment the counts for the existing date
+        let operationsUpdateResult = await usersOperationsCollection.updateOne(
+          { email: session.user.email, "operations.date": currentDate },
+          {
+            $inc: {
+              "operations.$.item_additions": 0,
+              "operations.$.item_edits": 0,
+              "operations.$.item_deletions": 1,
+            },
+          }
         );
+
+        // If the date doesn't exist yet, push a new operation to the array
+        if (operationsUpdateResult.matchedCount === 0) {
+          const newOperationData: UserOperationsData = {
+            date: currentDate,
+            item_additions: 0,
+            item_edits: 0,
+            item_deletions: 1,
+          };
+          operationsUpdateResult = await usersOperationsCollection.updateOne(
+            { email: session.user.email },
+            {
+              $push: { operations: newOperationData },
+            },
+            { upsert: true }
+          );
+        }
 
         if (operationsUpdateResult.upsertedCount < 1 && operationsUpdateResult.modifiedCount < 1) {
           throw new ResponseError(
@@ -107,6 +135,50 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
             ErrorMessages.UserOperationsUpdateFailed
           );
         }
+
+        // Update the inventory stats
+        const usersInventoryStatsCollectionName = process.env.MONGODB_USERS_INVENTORY_STATS!;
+        const usersInventoryStatsCollection = mongoClient
+          .db(databaseName)
+          .collection(usersInventoryStatsCollectionName);
+
+        const newTotalUserItemsChange: UserInventoryStat = {
+          date: fields.currentDate[0],
+          time: fields.currentTime[0],
+          value: parseFloat(fields.newTotalUserItems[0]),
+        };
+        const newTotalUserItemsPriceChange: UserInventoryStat = {
+          date: fields.currentDate[0],
+          time: fields.currentTime[0],
+          value: parseFloat(fields.newTotalUserItemsPrice[0]),
+        };
+        const newTotalUserItemAmountChange: UserInventoryStat = {
+          date: fields.currentDate[0],
+          time: fields.currentTime[0],
+          value: parseFloat(fields.newTotalUserItemsAmount[0]),
+        };
+        const inventoryStatsUpdateResult = await usersInventoryStatsCollection.updateOne(
+          { email: session.user.email },
+          {
+            $push: {
+              total_items_history: newTotalUserItemsChange,
+              total_items_price_history: newTotalUserItemsPriceChange,
+              total_items_amount_history: newTotalUserItemAmountChange,
+            },
+          },
+          { upsert: true }
+        );
+
+        if (
+          inventoryStatsUpdateResult.upsertedCount < 1 &&
+          inventoryStatsUpdateResult.modifiedCount < 1
+        ) {
+          throw new ResponseError(
+            StatusCodes.INTERNAL_SERVER_ERROR,
+            ErrorMessages.UserInventoryStatsUpdateFailed
+          );
+        }
+
         const data: ResponseData = {
           type: "success",
           message: SuccessMessages.ItemDeleted,

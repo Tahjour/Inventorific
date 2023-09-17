@@ -89,13 +89,11 @@ export default function SlabList({ loadedItems }: { loadedItems: Item[] }) {
 
                 <div className="slabListItemInfoBox">
                   <div className="slabListItemInfoBits">
-                    <p>{item.name.length > 25 ? `${item.name.slice(0, 25)}...` : item.name}</p>
-                    <p>
-                      <p>{`${parseFloat(item.amount).toLocaleString("en-US")} in stock`}</p>
-                    </p>
                     <div className="slabListItemPriceTagBox">
-                      {`$${parseFloat(item.price).toLocaleString("en-US")}`}
+                      {`$${item.price.toLocaleString("en-US", { minimumFractionDigits: 2 })}`}
                     </div>
+                    <p>{item.name.length > 25 ? `${item.name.slice(0, 25)}...` : item.name}</p>
+                    <p>{`${item.amount.toLocaleString("en-US")} in stock`}</p>
                   </div>
 
                   {windowWidth > 600 && (

@@ -15,10 +15,11 @@ export type UserInfo = {
   time_created: string;
   preferred_list_type?: ListType;
   user_operations?: DocumentOrUserOperationsData[];
+  user_inventory_stats?: UserInventoryStats;
 } | null;
 
-export type UserOperationType = "item_additions" | "item_edits" | "item_deletions";
-export const UserOperationsLabelsList: UserOperationType[] = [
+export type UserOperationNames = "item_additions" | "item_edits" | "item_deletions";
+export const UserOperationNamesList: UserOperationNames[] = [
   "item_additions",
   "item_edits",
   "item_deletions",

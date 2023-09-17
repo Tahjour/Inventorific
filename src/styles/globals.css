@@ -290,6 +290,11 @@ button {
 .homePageLaunchLink:focus::after {
   opacity: 1;
 }
+@media screen and (max-width: 23.75rem) {
+  .homePageIntroBox h1 {
+    font-size: 3rem;
+  }
+}
 
 /* Profile Page----------------------------------------------------------------------------------------- */
 .profileSectionBox {
@@ -1074,14 +1079,18 @@ button {
 
 @media screen and (max-width: 93.75rem) {
   .dashboardChartsBox {
-    grid-template-columns: repeat(1, minmax(0, 1fr));
-    grid-template-rows: repeat(2, auto);
+    grid-template-columns: minmax(0, 1fr);
+    grid-template-rows: repeat(2, 1fr);
   }
 
   .dashboardChartBox {
     height: auto;
     margin: 0.625rem 0;
     padding: 0;
+  }
+
+  .dashboardPieChartBox {
+    height: 25rem;
   }
 }
 
@@ -1098,7 +1107,7 @@ button {
 
 @media screen and (max-width: 31.25rem) {
   .dashboardLayoutBox {
-    padding: .3125rem;
+    padding: 0.3125rem;
   }
 }
 

@@ -3,6 +3,7 @@ import { getFormattedDate, getFormattedTime } from "@/lib/helpers/date";
 import { ErrorMessages, SuccessMessages } from "@/lib/helpers/messages";
 import { ResponseData } from "@/lib/types/api";
 import { Item, ItemsContextType } from "@/lib/types/item";
+import { UserInventoryStats } from "@/lib/types/stats";
 import { UserInfo, UserOperationsData } from "@/lib/types/user";
 import { useSession } from "next-auth/react";
 import { PropsWithChildren, createContext, useContext, useState } from "react";
@@ -70,6 +71,7 @@ export function ItemsContextProvider(props: PropsWithChildren) {
       setUserItems((prevItems) => {
         return [...prevItems, newItem];
       });
+
       setUserOperations((prevUserOperations) => {
         const currentDate = getFormattedDate();
         let updatedUserOperations = [...prevUserOperations];
@@ -96,39 +98,36 @@ export function ItemsContextProvider(props: PropsWithChildren) {
           };
           updatedUserOperations = [...updatedUserOperations, newUserOperations];
         }
-
         // Return the updated operations array
         return updatedUserOperations;
       });
 
-      setUserInventoryStats((prevUserInventoryStats) => {
-        const currentDate = getFormattedDate();
-        const currentTime = getFormattedTime();
-        const newUserItemsLength = getUserItems().length + 1;
-        const newTotalUserItemsPrice =
-          getTotalUserItemsPrice() +
-          parseFloat((parseFloat(newItem.price) * parseFloat(newItem.amount)).toFixed(2));
-        const newTotalUserItemsAmount = getTotalUserItemsAmount() + parseFloat(newItem.amount);
+      const currentDate = getFormattedDate();
+      const currentTime = getFormattedTime();
+      const newTotalUserItems = getUserItems().length + 1;
+      const newTotalUserItemsPrice = getTotalUserItemsPrice() + newItem.price * newItem.amount;
+      const newTotalUserItemsAmount = getTotalUserItemsAmount() + newItem.amount;
 
-        return {
-          totalItemsChangeOvertime: [
-            ...prevUserInventoryStats.totalItemsChangeOvertime,
+      setUserInventoryStats((prevUserInventoryStats) => {
+        const newUserInventoryStats: UserInventoryStats = {
+          total_items_history: [
+            ...(prevUserInventoryStats.total_items_history || []),
             {
               date: currentDate,
               time: currentTime,
-              value: newUserItemsLength,
+              value: newTotalUserItems,
             },
           ],
-          totalPriceChangeOvertime: [
-            ...prevUserInventoryStats.totalPriceChangeOvertime,
+          total_items_price_history: [
+            ...(prevUserInventoryStats.total_items_price_history || []),
             {
               date: currentDate,
               time: currentTime,
               value: newTotalUserItemsPrice,
             },
           ],
-          totalAmountChangeOvertime: [
-            ...prevUserInventoryStats.totalAmountChangeOvertime,
+          total_items_amount_history: [
+            ...(prevUserInventoryStats.total_items_amount_history || []),
             {
               date: currentDate,
               time: currentTime,
@@ -136,6 +135,7 @@ export function ItemsContextProvider(props: PropsWithChildren) {
             },
           ],
         };
+        return newUserInventoryStats;
       });
 
       if (!session) {
@@ -150,8 +150,8 @@ export function ItemsContextProvider(props: PropsWithChildren) {
 
       formData.append("newItemID", newItem.id);
       formData.append("newItemName", newItem.name);
-      formData.append("newItemPrice", newItem.price);
-      formData.append("newItemAmount", newItem.amount);
+      formData.append("newItemPrice", newItem.price.toString());
+      formData.append("newItemAmount", newItem.amount.toString());
       formData.append("newItemDescription", newItem.description);
       formData.append("newItemCreatedDate", newItem.date_created);
       formData.append("newItemCreatedTime", newItem.time_created);
@@ -165,7 +165,14 @@ export function ItemsContextProvider(props: PropsWithChildren) {
         formData.append("newItemImageFile", newItem.imageFile);
       }
 
-      const response = await fetch("/api/add-item", { method: "POST", body: formData });
+      //Form data for inventory stats
+      formData.append("currentDate", currentDate);
+      formData.append("currentTime", currentTime);
+      formData.append("newTotalUserItems", newTotalUserItems.toString());
+      formData.append("newTotalUserItemsPrice", newTotalUserItemsPrice.toString());
+      formData.append("newTotalUserItemsAmount", newTotalUserItemsAmount.toString());
+
+      const response = await fetch("/api/item/add-item", { method: "POST", body: formData });
 
       const data: ResponseData = await response.json();
       if (data.type === "error" || !data.uploadedItem) {
@@ -197,6 +204,7 @@ export function ItemsContextProvider(props: PropsWithChildren) {
       setUserItems((prevItems) => {
         return prevItems.map((item) => (item?.id === editedItem.id ? editedItem : item));
       });
+
       setUserOperations((prevUserOperations) => {
         const currentDate = getFormattedDate();
         let updatedUserOperations = [...prevUserOperations];
@@ -228,41 +236,35 @@ export function ItemsContextProvider(props: PropsWithChildren) {
         return updatedUserOperations;
       });
 
-      setUserInventoryStats((prevUserInventoryStats) => {
-        const currentDate = getFormattedDate();
-        const currentTime = getFormattedTime();
-        const itemAmountDifference = parseFloat(
-          (parseFloat(editedItem.amount) - parseFloat(itemToEdit.amount)).toFixed(2)
-        );
-        const itemPriceDifference = parseFloat(
-          (
-            parseFloat(editedItem.price) * parseFloat(editedItem.amount) -
-            parseFloat(itemToEdit.price) * parseFloat(itemToEdit.amount)
-          ).toFixed(2)
-        );
-        const newUserItemsLength = getUserItems().length; // This remains the same as we're editing, not adding or removing an item
-        const newTotalUserItemsPrice = getTotalUserItemsPrice() + itemPriceDifference;
-        const newTotalUserItemsAmount = getTotalUserItemsAmount() + itemAmountDifference;
+      const currentDate = getFormattedDate();
+      const currentTime = getFormattedTime();
+      const itemAmountDifference = editedItem.amount - itemToEdit.amount;
+      const itemPriceDifference =
+        editedItem.price * editedItem.amount - itemToEdit.price * itemToEdit.amount;
+      const newTotalUserItems = getUserItems().length; // This remains the same as we're editing, not adding or removing an item
+      const newTotalUserItemsPrice = getTotalUserItemsPrice() + itemPriceDifference;
+      const newTotalUserItemsAmount = getTotalUserItemsAmount() + itemAmountDifference;
 
-        return {
-          totalItemsChangeOvertime: [
-            ...prevUserInventoryStats.totalItemsChangeOvertime,
+      setUserInventoryStats((prevUserInventoryStats) => {
+        const newUserInventoryStats: UserInventoryStats = {
+          total_items_history: [
+            ...(prevUserInventoryStats.total_items_history || []),
             {
               date: currentDate,
               time: currentTime,
-              value: newUserItemsLength,
+              value: newTotalUserItems,
             },
           ],
-          totalPriceChangeOvertime: [
-            ...prevUserInventoryStats.totalPriceChangeOvertime,
+          total_items_price_history: [
+            ...(prevUserInventoryStats.total_items_price_history || []),
             {
               date: currentDate,
               time: currentTime,
               value: newTotalUserItemsPrice,
             },
           ],
-          totalAmountChangeOvertime: [
-            ...prevUserInventoryStats.totalAmountChangeOvertime,
+          total_items_amount_history: [
+            ...(prevUserInventoryStats.total_items_amount_history || []),
             {
               date: currentDate,
               time: currentTime,
@@ -270,6 +272,7 @@ export function ItemsContextProvider(props: PropsWithChildren) {
             },
           ],
         };
+        return newUserInventoryStats;
       });
 
       if (!session) {
@@ -284,8 +287,8 @@ export function ItemsContextProvider(props: PropsWithChildren) {
       //Add itemToEdit properties to form data
       formData.append("itemToEditID", itemToEdit.id);
       formData.append("itemToEditName", itemToEdit.name);
-      formData.append("itemToEditPrice", itemToEdit.price);
-      formData.append("itemToEditAmount", itemToEdit.amount);
+      formData.append("itemToEditPrice", itemToEdit.price.toString());
+      formData.append("itemToEditAmount", itemToEdit.amount.toString());
       formData.append("itemToEditDescription", itemToEdit.description);
       formData.append("itemToEditCreatedDate", itemToEdit.date_created);
       formData.append("itemToEditCreatedTime", itemToEdit.time_created);
@@ -299,8 +302,8 @@ export function ItemsContextProvider(props: PropsWithChildren) {
       // Add item after edit properties to form data
       formData.append("editedItemID", editedItem.id);
       formData.append("editedItemName", editedItem.name);
-      formData.append("editedItemPrice", editedItem.price);
-      formData.append("editedItemAmount", editedItem.amount);
+      formData.append("editedItemPrice", editedItem.price.toString());
+      formData.append("editedItemAmount", editedItem.amount.toString());
       formData.append("editedItemDescription", editedItem.description);
       formData.append("editedItemCreatedDate", editedItem.date_created);
       formData.append("editedItemCreatedTime", editedItem.time_created);
@@ -311,7 +314,14 @@ export function ItemsContextProvider(props: PropsWithChildren) {
         formData.append("editedItemImageFile", editedItem.imageFile);
       }
 
-      const response = await fetch("/api/edit-item", { method: "POST", body: formData });
+      //Form data for inventory stats
+      formData.append("currentDate", currentDate);
+      formData.append("currentTime", currentTime);
+      formData.append("newTotalUserItems", newTotalUserItems.toString());
+      formData.append("newTotalUserItemsPrice", newTotalUserItemsPrice.toString());
+      formData.append("newTotalUserItemsAmount", newTotalUserItemsAmount.toString());
+
+      const response = await fetch("/api/item/edit-item", { method: "POST", body: formData });
 
       const data: ResponseData = await response.json();
       if (data.type === "error" || !data.editedItem) {
@@ -376,35 +386,34 @@ export function ItemsContextProvider(props: PropsWithChildren) {
         return updatedUserOperations;
       });
 
-      const itemAmountDifference = parseFloat(itemToDelete.amount);
-      const itemPriceDifference = parseFloat(itemToDelete.price) * parseFloat(itemToDelete.amount);
+      const itemAmountDifference = itemToDelete.amount;
+      const itemPriceDifference = itemToDelete.price * itemToDelete.amount;
+      const currentDate = getFormattedDate();
+      const currentTime = getFormattedTime();
+      const newTotalUserItems = getUserItems().length - 1;
+      const newTotalUserItemsPrice = getTotalUserItemsPrice() - itemPriceDifference;
+      const newTotalUserItemsAmount = getTotalUserItemsAmount() - itemAmountDifference;
 
       setUserInventoryStats((prevUserInventoryStats) => {
-        const currentDate = getFormattedDate();
-        const currentTime = getFormattedTime();
-        const newUserItemsLength = getUserItems().length - 1;
-        const newTotalUserItemsPrice = getTotalUserItemsPrice() - itemPriceDifference;
-        const newTotalUserItemsAmount = getTotalUserItemsAmount() - itemAmountDifference;
-
-        return {
-          totalItemsChangeOvertime: [
-            ...prevUserInventoryStats.totalItemsChangeOvertime,
+        const newUserInventoryStats: UserInventoryStats = {
+          total_items_history: [
+            ...(prevUserInventoryStats.total_items_history || []),
             {
               date: currentDate,
               time: currentTime,
-              value: newUserItemsLength,
+              value: newTotalUserItems,
             },
           ],
-          totalPriceChangeOvertime: [
-            ...prevUserInventoryStats.totalPriceChangeOvertime,
+          total_items_price_history: [
+            ...(prevUserInventoryStats.total_items_price_history || []),
             {
               date: currentDate,
               time: currentTime,
               value: newTotalUserItemsPrice,
             },
           ],
-          totalAmountChangeOvertime: [
-            ...prevUserInventoryStats.totalAmountChangeOvertime,
+          total_items_amount_history: [
+            ...(prevUserInventoryStats.total_items_amount_history || []),
             {
               date: currentDate,
               time: currentTime,
@@ -412,7 +421,9 @@ export function ItemsContextProvider(props: PropsWithChildren) {
             },
           ],
         };
+        return newUserInventoryStats;
       });
+
       if (!session) {
         showNotification({
           type: "success",
@@ -424,7 +435,15 @@ export function ItemsContextProvider(props: PropsWithChildren) {
       formData.append("itemToDeleteID", itemToDelete.id);
       formData.append("itemToDeleteName", itemToDelete.name);
       formData.append("itemToDeleteImageURL", itemToDelete.imageURL);
-      const response = await fetch("/api/delete-item", { method: "POST", body: formData });
+
+      //Form data for inventory stats
+      formData.append("currentDate", currentDate);
+      formData.append("currentTime", currentTime);
+      formData.append("newTotalUserItems", newTotalUserItems.toString());
+      formData.append("newTotalUserItemsPrice", newTotalUserItemsPrice.toString());
+      formData.append("newTotalUserItemsAmount", newTotalUserItemsAmount.toString());
+
+      const response = await fetch("/api/item/delete-item", { method: "POST", body: formData });
       const data: ResponseData = await response.json();
       if (data.type === "error") {
         throw new Error(data.message);

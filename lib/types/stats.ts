@@ -5,7 +5,7 @@ export type UserInventoryStat = {
 };
 
 export type UserInventoryStats = {
-  totalItemsChangeOvertime: UserInventoryStat[];
-  totalPriceChangeOvertime: UserInventoryStat[];
-  totalAmountChangeOvertime: UserInventoryStat[];
+  total_items_history?: UserInventoryStat[];
+  total_items_price_history?: UserInventoryStat[];
+  total_items_amount_history?: UserInventoryStat[];
 };

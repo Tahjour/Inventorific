@@ -1,7 +1,7 @@
 import { useUserInfoContext } from "@/context/user-context";
 import { ChartData, ChartOptions } from "chart.js/auto";
-import { UserInventoryStat } from "../types/stats";
-import { UserOperationsLabelsList } from "../types/user";
+import { UserInventoryStat } from "../../../../../lib/types/stats";
+import { UserOperationNamesList } from "../../../../../lib/types/user";
 
 export const useInventoryStatsChartJSData = () => {
   const { getUserInventoryStats, getTotalForEachUserOperationList, getUserOperations } =
@@ -13,29 +13,38 @@ export const useInventoryStatsChartJSData = () => {
     amountDataTitle: "Last 50 Changes In Total Amount",
   };
 
-  const lineChartTotalPriceData = createLineChartData(inventoryStats.totalPriceChangeOvertime);
-  const lineChartTotalItemsData = createLineChartData(inventoryStats.totalItemsChangeOvertime);
-  const lineChartTotalAmountData = createLineChartData(inventoryStats.totalAmountChangeOvertime);
+  const lineChartTotalPriceData =
+    inventoryStats && createLineChartData(inventoryStats.total_items_price_history || [], "Price");
+  const lineChartTotalItemsData =
+    inventoryStats && createLineChartData(inventoryStats.total_items_history || [], "Items");
+  const lineChartTotalAmountData =
+    inventoryStats && createLineChartData(inventoryStats.total_items_amount_history || [], "Stock");
   const lineChartTotalPriceDataOptions = createLineChartOptions(lineChartTitles.priceDataTitle);
   const lineChartTotalItemsDataOptions = createLineChartOptions(lineChartTitles.itemsDataTitle);
   const lineChartTotalAmountDataOptions = createLineChartOptions(lineChartTitles.amountDataTitle);
 
-  function createLineChartData(userInventoryStat: UserInventoryStat[]): ChartData<"line"> {
+  function createLineChartData(
+    userInventoryStat: UserInventoryStat[],
+    labelName: string
+  ): ChartData<"line"> {
     return {
-      labels: userInventoryStat.map((stat) => `${stat.date}\n${stat.time}`),
+      labels: userInventoryStat
+        ? userInventoryStat.map((stat) => `${stat.date}\n${stat.time}`)
+        : [],
+
       datasets: [
         {
-          label: "Value",
-          data: userInventoryStat.map((stat) => stat.value),
+          label: labelName,
+          data: userInventoryStat.map((stat) => parseFloat(stat.value.toFixed(2))),
           backgroundColor: "hsl(180, 100%, 30%)",
           borderColor: "hsl(180, 100%, 50%)",
           pointHoverRadius: 10,
-          tension: 0.3,
+          tension: 0.2,
         },
       ],
     };
   }
-  
+
   function createLineChartOptions(lineChartTitle: string): ChartOptions<"line"> {
     return {
       scales: {
@@ -48,7 +57,7 @@ export const useInventoryStatsChartJSData = () => {
             callback: (value) => {
               return value;
             },
-          }
+          },
         },
         y: {
           grid: {
@@ -77,8 +86,8 @@ export const useInventoryStatsChartJSData = () => {
   }
 
   const pieChartUserOperationsData: ChartData<"pie"> = {
-    labels: UserOperationsLabelsList.map((userOperationLabel) =>
-      userOperationLabel.split("_").join(" ")
+    labels: UserOperationNamesList.map((userOperationName) =>
+      userOperationName.split("_").join(" ")
     ),
     datasets: [
       {

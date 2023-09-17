@@ -27,14 +27,14 @@ function ItemModalForm() {
   const formik = useFormik({
     initialValues: {
       name: itemToEdit?.name || "",
-      price: itemToEdit?.price || "",
-      amount: itemToEdit?.amount || "",
+      price: itemToEdit?.price.toFixed(2) || "",
+      amount: itemToEdit?.amount.toString() || "",
       description: itemToEdit?.description || "",
     },
     validate: itemValidate,
     onSubmit: itemSubmitHandler,
   });
-  const { values, errors, touched, handleSubmit, getFieldProps } = formik;
+  const { errors, touched, handleSubmit, getFieldProps } = formik;
 
   async function itemSubmitHandler(values: ItemValues) {
     const enteredImageURL = imageURL || defaultImageURL;
@@ -49,8 +49,8 @@ function ItemModalForm() {
       const editedItem = {
         id: itemToEdit.id,
         name: values.name,
-        price: values.price,
-        amount: values.amount,
+        price: parseFloat(values.price),
+        amount: parseFloat(values.amount),
         description: values.description,
         date_created: itemToEdit.date_created,
         time_created: itemToEdit.time_created,
@@ -64,8 +64,8 @@ function ItemModalForm() {
       const newItem = {
         id: uuidv4(),
         name: values.name,
-        price: values.price,
-        amount: values.amount,
+        price: parseFloat(values.price),
+        amount: parseFloat(values.amount),
         description: values.description,
         date_created: getFormattedDate(),
         time_created: getFormattedTime(),

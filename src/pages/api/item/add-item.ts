@@ -1,16 +1,17 @@
 //pages/api/auth/add-item.ts
 import { getConnectedClient } from "@/lib/database/mongodb";
-import { getFormattedDate } from "@/lib/helpers/date";
 import { ResponseError, sendResponseError } from "@/lib/helpers/errors";
 import { ErrorMessages, SuccessMessages } from "@/lib/helpers/messages";
 import { ResponseData } from "@/lib/types/api";
 import { MongodbItem } from "@/lib/types/item";
+import { UserInventoryStat } from "@/lib/types/stats";
+import { UserOperationsData } from "@/lib/types/user";
 import { v2 as cloudinary } from "cloudinary";
 import formidable from "formidable";
 import { StatusCodes } from "http-status-codes";
 import { NextApiRequest, NextApiResponse } from "next";
 import { getServerSession } from "next-auth/next";
-import { getNextAuthOptions } from "./auth/[...nextauth]";
+import { getNextAuthOptions } from "../auth/[...nextauth]";
 
 export const config = {
   api: {
@@ -24,11 +25,15 @@ cloudinary.config({
   api_secret: process.env.CLOUDINARY_API_SECRET,
   secure: true,
 });
+
 /**
- * Handles the logic for adding a new item to a user's collection.
+ * Handles a POST request to add a new item.
+ *
  * @param {NextApiRequest} req - The request object containing the form data.
- * @param {NextApiResponse} res - The response object used to send the response.
- * @returns {Promise<void>} - A promise that resolves when the function is done executing.
+ * @param {NextApiResponse} res - The response object to send the response.
+ * @returns {Promise<void>} - None. The function sends a response with a success message and the new item details.
+ *
+ * @throws {ResponseError} - If the request method is not "POST", if form parsing fails, if the session or user does not exist, if image upload fails, if database connection fails, if the user is not found, if item creation fails, or if user operations update fails.
  */
 export default async function addItemHandler(
   req: NextApiRequest,
@@ -82,8 +87,8 @@ export default async function addItemHandler(
         const newItem: MongodbItem = {
           id: fields.newItemID[0],
           name: fields.newItemName[0],
-          price: fields.newItemPrice[0],
-          amount: fields.newItemAmount[0],
+          price: parseFloat(fields.newItemPrice[0]),
+          amount: parseFloat(fields.newItemAmount[0]),
           description: fields.newItemDescription[0],
           imageURL: newItemImageURL,
           date_created: fields.newItemCreatedDate[0],
@@ -123,21 +128,89 @@ export default async function addItemHandler(
           );
         }
 
+        //Update the user's operations array
         const usersOperationsCollectionName = process.env.MONGODB_USERS_OPERATIONS_COLLECTION!;
         const usersOperationsCollection = mongoClient
           .db(databaseName)
           .collection(usersOperationsCollectionName);
 
-        const operationsUpdateResult = await usersOperationsCollection.updateOne(
-          { email: session.user.email, date: getFormattedDate() },
-          { $inc: { item_additions: 1, item_edits: 0, item_deletions: 0 } },
-          { upsert: true }
+        // First, try to increment the counts for the existing date
+        let operationsUpdateResult = await usersOperationsCollection.updateOne(
+          { email: session.user.email, "operations.date": fields.currentDate[0] },
+          {
+            $inc: {
+              "operations.$.item_additions": 1,
+              "operations.$.item_edits": 0,
+              "operations.$.item_deletions": 0,
+            },
+          }
         );
+
+        // If the date doesn't exist yet, push new operations with the current operation to the array
+        if (operationsUpdateResult.matchedCount === 0) {
+          const newOperations: UserOperationsData = {
+            date: fields.currentDate[0],
+            item_additions: 1,
+            item_edits: 0,
+            item_deletions: 0,
+          };
+          operationsUpdateResult = await usersOperationsCollection.updateOne(
+            { email: session.user.email },
+            {
+              $push: { operations: newOperations },
+            },
+            { upsert: true }
+          );
+        }
 
         if (operationsUpdateResult.upsertedCount < 1 && operationsUpdateResult.modifiedCount < 1) {
           throw new ResponseError(
             StatusCodes.INTERNAL_SERVER_ERROR,
             ErrorMessages.UserOperationsUpdateFailed
+          );
+        }
+
+        // Update the user's inventory stats
+        const usersInventoryStatsCollectionName = process.env.MONGODB_USERS_INVENTORY_STATS!;
+        const usersInventoryStatsCollection = mongoClient
+          .db(databaseName)
+          .collection(usersInventoryStatsCollectionName);
+
+        const newTotalUserItemsChange: UserInventoryStat = {
+          date: fields.currentDate[0],
+          time: fields.currentTime[0],
+          value: parseFloat(fields.newTotalUserItems[0]),
+        };
+        const newTotalUserItemsPriceChange: UserInventoryStat = {
+          date: fields.currentDate[0],
+          time: fields.currentTime[0],
+          value: parseFloat(fields.newTotalUserItemsPrice[0]),
+        };
+        const newTotalUserItemAmountChange: UserInventoryStat = {
+          date: fields.currentDate[0],
+          time: fields.currentTime[0],
+          value: parseFloat(fields.newTotalUserItemsAmount[0]),
+        };
+
+        const inventoryStatsUpdateResult = await usersInventoryStatsCollection.updateOne(
+          { email: session.user.email },
+          {
+            $push: {
+              total_items_history: newTotalUserItemsChange,
+              total_items_price_history: newTotalUserItemsPriceChange,
+              total_items_amount_history: newTotalUserItemAmountChange,
+            },
+          },
+          { upsert: true }
+        );
+
+        if (
+          inventoryStatsUpdateResult.upsertedCount < 1 &&
+          inventoryStatsUpdateResult.modifiedCount < 1
+        ) {
+          throw new ResponseError(
+            StatusCodes.INTERNAL_SERVER_ERROR,
+            ErrorMessages.UserInventoryStatsUpdateFailed
           );
         }
 

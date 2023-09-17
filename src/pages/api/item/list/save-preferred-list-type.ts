@@ -7,7 +7,7 @@ import { ListType } from "@/lib/types/list";
 import { StatusCodes } from "http-status-codes";
 import { NextApiRequest, NextApiResponse } from "next";
 import { getServerSession } from "next-auth/next";
-import { getNextAuthOptions } from "./auth/[...nextauth]";
+import { getNextAuthOptions } from "../../auth/[...nextauth]";
 
 export default async function saveListTypeHandler(req: NextApiRequest, res: NextApiResponse) {
   try {

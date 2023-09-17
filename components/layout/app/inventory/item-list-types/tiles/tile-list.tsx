@@ -86,14 +86,14 @@ export default function TileList({ loadedItems }: { loadedItems: Item[] }) {
                   />
                 </div>
                 <div className="tileListItemPriceTagBox">
-                  {`$${parseFloat(item.price).toLocaleString("en-US")}`}
+                  {`$${item.price.toLocaleString("en-US", { minimumFractionDigits: 2 })}`}
                 </div>
                 <div className="tileListItemInfoBox">
                   <div className="tileListItemInfoBits">
                     <p>{item.name.length > 25 ? `${item.name.slice(0, 25)}...` : item.name}</p>
                   </div>
                   <div className="tileListItemInfoBits">
-                    <p>{`${parseFloat(item.amount).toLocaleString("en-US")} in stock`}</p>
+                    <p>{`${item.amount.toLocaleString("en-US")} in stock`}</p>
                   </div>
 
                   <div className="tileListOperationIcons">

@@ -1,12 +1,12 @@
 import MainLoader from "@/components/ui/loading/main-loader";
 import { useUserInfoContext } from "@/context/user-context";
-import { useInventoryStatsChartJSData } from "@/lib/hooks/useInventoryStatsChartJSData";
-import { ArcElement, Chart as ChartJS, Legend, Tooltip } from "chart.js/auto";
 import { AnimatePresence } from "framer-motion";
 import { Line, Pie } from "react-chartjs-2";
 import { BsBoxes, BsCashCoin } from "react-icons/bs";
 import { MdOutlineInventory2 } from "react-icons/md";
 import AppNavigation from "../../navigation/app/app-navigation";
+import { ArcElement, Chart as ChartJS, Legend, Tooltip, } from "chart.js/auto";
+import { useInventoryStatsChartJSData } from "@/components/ui/charts/chartjs/hooks/useInventoryStatsChartJSData";
 
 ChartJS.register(ArcElement, Legend, Tooltip);
 
@@ -25,7 +25,7 @@ export default function DashboardSection() {
           <div className="dashboardInfoCard">
             <BsCashCoin size={30} />
             <h3>Total Value</h3>
-            <p>${getTotalUserItemsPrice().toLocaleString("en-US")}</p>
+            <p>${getTotalUserItemsPrice().toLocaleString("en-US", { minimumFractionDigits: 2 })}</p>
           </div>
           <div className="dashboardInfoCard">
             <MdOutlineInventory2 size={30} />

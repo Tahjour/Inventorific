@@ -9,7 +9,7 @@ import {
   DocumentOrUserOperationsData,
   UserContextType,
   UserInfo,
-  UserOperationsLabelsList,
+  UserOperationNamesList,
 } from "@/lib/types/user";
 import { signIn, signOut, useSession } from "next-auth/react";
 import { useRouter } from "next/router";
@@ -27,9 +27,9 @@ export function UserContextProvider({ children }: { children: React.ReactNode })
   const [userInfoToDelete, setUserInfoToDelete] = useState<UserInfo>(null);
   const [userOperations, setUserOperations] = useState<DocumentOrUserOperationsData[]>([]);
   const [userInventoryStats, setUserInventoryStats] = useState<UserInventoryStats>({
-    totalItemsChangeOvertime: [],
-    totalPriceChangeOvertime: [],
-    totalAmountChangeOvertime: [],
+    total_items_history: [],
+    total_items_price_history: [],
+    total_items_amount_history: [],
   });
 
   const [serverItemsWereLoaded, setServerItemsWereLoaded] = useState(false);
@@ -42,7 +42,7 @@ export function UserContextProvider({ children }: { children: React.ReactNode })
     // Figure out how to add a loading component
     async function loadUserInfo() {
       if (!serverLoadWasTried) {
-        const response = await fetch("/api/load-user");
+        const response = await fetch("/api/user/load-user");
         const data: ResponseData = await response.json();
         if (data.type === "success" && data.userInfo) {
           setUserInfo(data.userInfo);
@@ -52,6 +52,9 @@ export function UserContextProvider({ children }: { children: React.ReactNode })
           }
           if (data.userInfo.user_operations) {
             setUserOperations(data.userInfo.user_operations);
+          }
+          if (data.userInfo.user_inventory_stats) {
+            setUserInventoryStats(data.userInfo.user_inventory_stats);
           }
           setServerItemsWereLoaded(true);
         }
@@ -94,9 +97,7 @@ export function UserContextProvider({ children }: { children: React.ReactNode })
   function getTotalUserItemsPrice() {
     return userItems.reduce((total, item) => {
       if (!item) return total;
-      let collectivePrice = parseFloat(
-        (parseFloat(item.price) * parseFloat(item.amount)).toFixed(2)
-      );
+      let collectivePrice = item.price * item.amount;
       return total + collectivePrice;
     }, 0);
   }
@@ -104,15 +105,15 @@ export function UserContextProvider({ children }: { children: React.ReactNode })
   function getTotalUserItemsAmount() {
     return userItems.reduce((total, item) => {
       if (!item) return total;
-      let amount = parseFloat(item.amount);
+      let amount = item.amount;
       return total + amount;
     }, 0);
   }
 
   function getTotalForEachUserOperationList() {
-    return UserOperationsLabelsList.map((userOperationLabel) => {
+    return UserOperationNamesList.map((userOperationName) => {
       return userOperations.reduce((sum, userOperation) => {
-        return sum + (userOperation[userOperationLabel] || 0);
+        return sum + (userOperation[userOperationName] || 0);
       }, 0);
     });
   }
@@ -122,8 +123,8 @@ export function UserContextProvider({ children }: { children: React.ReactNode })
       return userItems;
     }
 
-    return userItems.filter((item) =>
-      item?.name.toLowerCase().includes(debouncedSearchTerm.toLowerCase())
+    return userItems.filter(
+      (item) => item?.name.toLowerCase().includes(debouncedSearchTerm.toLowerCase())
     );
   }
 
@@ -148,7 +149,7 @@ export function UserContextProvider({ children }: { children: React.ReactNode })
         return;
       }
 
-      const response = await fetch("/api/save-preferred-list-type", {
+      const response = await fetch("/api/item/list/save-preferred-list-type", {
         method: "POST",
         body: JSON.stringify({ preferredListType: listType }),
         headers: {
@@ -230,7 +231,7 @@ export function UserContextProvider({ children }: { children: React.ReactNode })
       });
     }
   }
-  //similar function to register user instead
+
   async function registerUser(values: RegisterValues) {
     try {
       const requestBody = {
@@ -298,7 +299,7 @@ export function UserContextProvider({ children }: { children: React.ReactNode })
         type: "saving",
         message: PendingMessages.DeletingUser,
       });
-      const response = await fetch("/api/delete-user", {
+      const response = await fetch("/api/user/delete-user", {
         method: "DELETE",
       });
       const data: ResponseData = await response.json();

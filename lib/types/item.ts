@@ -19,8 +19,8 @@ export type ItemsContextType = {
 export type Item = {
   id: string;
   name: string;
-  price: string;
-  amount: string;
+  price: number;
+  amount: number;
   description: string;
   date_created: string;
   time_created: string;
@@ -33,8 +33,8 @@ export type Item = {
 export type MongodbItem = {
   id: string;
   name: string;
-  price: string;
-  amount: string;
+  price: number;
+  amount: number;
   description: string;
   date_created: string;
   time_created: string;
