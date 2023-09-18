@@ -24,7 +24,11 @@ export const ErrorMessages = {
   PreferredListTypeSaveFailed: "Failed to save preferred list type. Please contact the developer.",
   UserOperationsUpdateFailed: "Failed to update user operations. Please contact the developer.",
   UserOperationsLoadFailed: "Failed to load user operations. Please contact the developer.",
-  UserInventoryStatsUpdateFailed: "Failed to update user inventory stats. Please contact the developer.",
+  UserInventoryStatsUpdateFailed:
+    "Failed to update user inventory stats. Please contact the developer.",
+  UserOperationsDeleteFailed: "Failed to delete user operations. Please contact the developer.",
+  UserInventoryStatsDeleteFailed:
+    "Failed to delete user inventory stats. Please contact the developer.",
 
   InvalidImageFile: "Invalid image file",
   ImageUploadFailed: "Failed to upload image on server. Please contact the developer.",

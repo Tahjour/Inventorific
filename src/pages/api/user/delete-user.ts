@@ -77,14 +77,42 @@ export default async function deleteUserHandler(
     }
 
     // Get the users collection from the database
-    const database = process.env.MONGODB_DATABASE;
-    const collection = process.env.MONGODB_USERS_COLLECTION!;
-    const users = mongoClient.db(database).collection(collection);
+    const databaseName = process.env.MONGODB_DATABASE;
+    const usersCollectionName = process.env.MONGODB_USERS_COLLECTION!;
+    const usersCollection = mongoClient.db(databaseName).collection(usersCollectionName);
 
     // Delete the user from the database
-    const deleteResult = await users.deleteOne({ email: user.email });
-    if (!deleteResult || deleteResult.deletedCount === 0) {
+    const userDeleteResult = await usersCollection.deleteOne({ email: user.email });
+    if (userDeleteResult.deletedCount === 0) {
       throw new ResponseError(StatusCodes.INTERNAL_SERVER_ERROR, ErrorMessages.UserDeleteFailed);
+    }
+
+    const usersOperationsCollectionName = process.env.MONGODB_USERS_OPERATIONS_COLLECTION!;
+    const usersOperationsCollection = mongoClient
+      .db(databaseName)
+      .collection(usersOperationsCollectionName);
+    const userOperationsDeleteResult = await usersOperationsCollection.deleteOne({
+      email: user.email,
+    });
+    if (userOperationsDeleteResult.deletedCount === 0) {
+      throw new ResponseError(
+        StatusCodes.INTERNAL_SERVER_ERROR,
+        ErrorMessages.UserOperationsDeleteFailed
+      );
+    }
+
+    const usersInventoryStatsCollectionName = process.env.MONGODB_USERS_INVENTORY_STATS_COLLECTION!;
+    const usersInventoryStatsCollection = mongoClient
+      .db(databaseName)
+      .collection(usersInventoryStatsCollectionName);
+    const userInventoryStatsDeleteResult = await usersInventoryStatsCollection.deleteOne({
+      email: user.email,
+    });
+    if (userInventoryStatsDeleteResult.deletedCount === 0) {
+      throw new ResponseError(
+        StatusCodes.INTERNAL_SERVER_ERROR,
+        ErrorMessages.UserInventoryStatsDeleteFailed
+      );
     }
 
     // Return a success message with the deleted user information
