@@ -16,7 +16,7 @@ export function itemValidate(values: ItemValues) {
   } else if (!/^[1-9]\d*(\.\d{2})?$/.test(values.price)) {
     errors.price =
       "Invalid price: must be a number starting from 1 to 9 with up to 2 decimal places";
-  } else if (values.price.length > 12) {
+  } else if (parseFloat(values.price) > 1000000000000) {
     errors.price = "Seems unlikely. Please contact the developer.";
   }
 
@@ -24,7 +24,7 @@ export function itemValidate(values: ItemValues) {
     errors.amount = "Amount is required";
   } else if (!/^[1-9]\d*$/.test(values.amount)) {
     errors.amount = "Invalid Amount: must be a number starting from 1 to 9";
-  } else if (values.amount.length > 12) {
+  } else if (parseFloat(values.amount) > 1000000000000) {
     errors.amount = "Seems unlikely. Please contact the developer.";
   }
 

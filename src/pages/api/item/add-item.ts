@@ -68,8 +68,8 @@ export default async function addItemHandler(
           const newItemImageFile = files.newItemImageFile[0].filepath;
           const mainFolder = `${process.env.CLOUDINARY_MAIN_FOLDER!}`;
           const userFolder = `${session.user.name} (${session.user.email})`;
-          const userItemImage = `${fields.newItemName} (${fields.newItemID})`;
-          const newPublicID = `${mainFolder}/${userFolder}/${userItemImage}`;
+          const userItemImageFolder = `${fields.newItemName} (${fields.newItemID})`;
+          const newPublicID = `${mainFolder}/${userFolder}/${userItemImageFolder}`;
 
           const uploadResponse = await cloudinary.uploader.upload(newItemImageFile, {
             public_id: newPublicID,
