@@ -1090,7 +1090,7 @@ button {
   }
 }
 
-@media screen and (max-width: 40.625rem) {
+@media screen and (max-width: 42.5rem) {
   .dashboardInfoCardBox {
     flex-direction: column;
     align-items: center;
