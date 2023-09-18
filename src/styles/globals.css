@@ -102,7 +102,7 @@ button {
   justify-content: center;
   align-items: center;
   gap: 1.25rem;
-  color: white;
+  color: var(--color-L100);
   z-index: 2;
 }
 
@@ -132,7 +132,7 @@ button {
   padding: 0.1875rem 1.25rem;
   background-color: var(--dark-neon-blue);
   border-radius: 0.625rem;
-  color: white;
+  color: var(--color-L100);
   font-size: 0.75rem;
   transition: var(--fast-linear);
 }
@@ -237,7 +237,7 @@ button {
   text-decoration: none;
   font-size: 1.2rem;
   background-color: transparent;
-  color: white;
+  color: var(--color-L100);
   /* border: 0.125em solid var(--dark-neon-blue); */
   outline: 0;
   border-radius: 0.4em;
@@ -1115,7 +1115,7 @@ button {
   justify-content: center;
   display: flex;
   align-items: center;
-  color: white;
+  color: var(--color-L100);
   background-color: var(--dark-bg);
   padding: 0.625rem;
   border-radius: 0.625rem;
@@ -1151,7 +1151,7 @@ button {
 
 .mainDropDownMenuLink {
   text-decoration: none;
-  color: white;
+  color: var(--color-L100);
   font-weight: bold;
   transition:
     color,
@@ -1164,7 +1164,7 @@ button {
 .mainDropDownMenuItem {
   font-size: 0.9375rem;
   line-height: 1;
-  color: white;
+  color: var(--color-L100);
   border-radius: 0.625rem;
   display: flex;
   align-items: center;
@@ -1293,7 +1293,7 @@ button {
   height: 100%;
   background-color: var(--dark-bg);
   border: var(--main-border-size) solid var(--dark-neon-blue);
-  color: white;
+  color: var(--color-L100);
   border-radius: 0.625rem;
   padding: 0 0.625rem 0 3.125rem;
 }
@@ -1305,7 +1305,7 @@ button {
 .mainBarMenuSearchIcon {
   position: absolute;
   left: 1.25rem;
-  color: white;
+  color: var(--color-L100);
 }
 
 @media screen and (max-width: 56.25rem) {
