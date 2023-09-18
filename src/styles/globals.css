@@ -1045,7 +1045,7 @@ button {
 }
 
 .dashboardInfoCard {
-  width: 15.625rem;
+  min-width: 15.625rem;
   display: flex;
   flex-direction: column;
   justify-content: center;
