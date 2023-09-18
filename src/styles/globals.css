@@ -1079,8 +1079,8 @@ button {
 
 @media screen and (max-width: 93.75rem) {
   .dashboardChartsBox {
-    grid-template-columns: minmax(0, 1fr);
-    grid-template-rows: repeat(2, 1fr);
+    grid-template-columns: minmax(0, auto);
+    grid-template-rows: repeat(2, auto);
   }
 
   .dashboardChartBox {
