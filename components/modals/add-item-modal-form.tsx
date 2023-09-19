@@ -34,7 +34,7 @@ function ItemModalForm() {
     validate: itemValidate,
     onSubmit: itemSubmitHandler,
   });
-  const { errors, touched, handleSubmit, getFieldProps } = formik;
+  const { values, errors, touched, handleSubmit, getFieldProps } = formik;
 
   async function itemSubmitHandler(values: ItemValues) {
     const enteredImageURL = imageURL || defaultImageURL;
@@ -131,8 +131,8 @@ function ItemModalForm() {
         <div className={"modalFormItemInfoBox"}>
           <div className={"modalFormInputBox"}>
             <div className={"modalFormInputBox2"}>
-              <input
-                className={`${"modalFormTextInput"} ${
+              <textarea
+                className={`${"modalFormTextInput modalFormTextAreaInput"} ${
                   itemToEdit
                     ? !errors.name && "modalFormSuccessOutline"
                     : !errors.name && touched.name && "modalFormSuccessOutline"
@@ -141,10 +141,18 @@ function ItemModalForm() {
                     ? errors.name && "modalFormErrorOutline"
                     : errors.name && touched.name && "modalFormErrorOutline"
                 }`}
-                type="text"
                 id="name"
                 {...getFieldProps("name")}
-              />
+                onClick={(e) => {
+                  const target = e.target as HTMLTextAreaElement;
+                  target.style.height = `${target.scrollHeight}px`;
+                }}
+                onInput={(e) => {
+                  const target = e.target as HTMLTextAreaElement;
+                  target.style.height = "auto";
+                  target.style.height = `${target.scrollHeight}px`;
+                }}
+              ></textarea>
               <label
                 className={`${"modalFormInputLabel"} ${
                   itemToEdit
@@ -270,7 +278,7 @@ function ItemModalForm() {
           <div className={"modalFormInputBox"}>
             <div className={"modalFormInputBox2"}>
               <textarea
-                className={`${"modalFormTextInput"} ${"modalFormTextAreaInput"} ${
+                className={`modalFormTextInput modalFormTextAreaInput ${
                   itemToEdit
                     ? !errors.description && "modalFormSuccessOutline"
                     : !errors.description && touched.description && "modalFormSuccessOutline"
@@ -281,6 +289,15 @@ function ItemModalForm() {
                 }`}
                 id="description"
                 {...getFieldProps("description")}
+                onClick={(e) => {
+                  const target = e.target as HTMLTextAreaElement;
+                  target.style.height = `${target.scrollHeight}px`;
+                }}
+                onInput={(e) => {
+                  const target = e.target as HTMLTextAreaElement;
+                  target.style.height = "auto";
+                  target.style.height = `${target.scrollHeight}px`;
+                }}
               ></textarea>
               <label
                 className={`${"modalFormInputLabel"} ${

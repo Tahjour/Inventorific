@@ -76,7 +76,7 @@ export default async function loadUser(req: NextApiRequest, res: NextApiResponse
       logger.info("No user operations data found");
     }
 
-    const usersInventoryStatsCollectionName = process.env.MONGODB_USERS_INVENTORY_STATS!;
+    const usersInventoryStatsCollectionName = process.env.MONGODB_USERS_INVENTORY_STATS_COLLECTION!;
     const usersInventoryStatsCollection = mongoClient
       .db(databaseName)
       .collection(usersInventoryStatsCollectionName);

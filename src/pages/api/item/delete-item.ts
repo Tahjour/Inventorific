@@ -1,5 +1,4 @@
 import { getConnectedClient } from "@/lib/database/mongodb";
-import { getFormattedDate } from "@/lib/helpers/date";
 import { ResponseError, sendResponseError } from "@/lib/helpers/errors";
 import { ErrorMessages, SuccessMessages } from "@/lib/helpers/messages";
 import { ResponseData } from "@/lib/types/api";
@@ -11,6 +10,7 @@ import { StatusCodes } from "http-status-codes";
 import { NextApiRequest, NextApiResponse } from "next";
 import { getServerSession } from "next-auth/next";
 import { getNextAuthOptions } from "../auth/[...nextauth]";
+import { logger } from "@/lib/helpers/logger";
 
 export const config = {
   api: {
@@ -47,14 +47,22 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 
         if (fields.itemToDeleteImageURL[0] !== process.env.CLOUDINARY_DEFAULT_IMAGE_URL) {
           // Define the existing image public ID
-          const mainFolder = `${process.env.CLOUDINARY_MAIN_FOLDER}`;
-          const userFolder = `${session.user.name} (${session.user.email})`;
-          const userItemImage = `${fields.itemToDeleteName} (${fields.itemToDeleteID})`;
+          const mainFolder = `${process.env.CLOUDINARY_MAIN_FOLDER!}`;
+          const userFolder = `${session.user.email}`;
+
+          const itemToDeleteName =
+            fields.itemToDeleteName[0].length > 30
+              ? `${fields.itemToDeleteName[0].slice(0, 30)}...`
+              : fields.itemToDeleteName[0];
+          const itemToDeleteID = fields.itemToDeleteID[0];
+
+          const userItemImage = `${itemToDeleteName} (${itemToDeleteID})`;
           const existingImagePublicId = `${mainFolder}/${userFolder}/${userItemImage}`;
 
           // Delete the existing image from Cloudinary
           const destroyResponse = await cloudinary.uploader.destroy(existingImagePublicId);
-          if (!destroyResponse || destroyResponse.result !== "ok") {
+          logger.info(destroyResponse);
+          if (destroyResponse.result !== "ok") {
             throw new ResponseError(
               StatusCodes.INTERNAL_SERVER_ERROR,
               ErrorMessages.ImageDeleteFailed
@@ -85,7 +93,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
           { email: session.user.email },
           { $pull: { items: { id: fields.itemToDeleteID[0] } } }
         );
-        if (!deleteResponse || deleteResponse.modifiedCount === 0) {
+        if (deleteResponse.modifiedCount < 1) {
           throw new ResponseError(
             StatusCodes.INTERNAL_SERVER_ERROR,
             ErrorMessages.ItemDeleteFailed
@@ -98,11 +106,9 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
           .db(databaseName)
           .collection(usersOperationsCollectionName);
 
-        const currentDate = getFormattedDate();
-
         // First, try to increment the counts for the existing date
         let operationsUpdateResult = await usersOperationsCollection.updateOne(
-          { email: session.user.email, "operations.date": currentDate },
+          { email: session.user.email, "operations.date": fields.currentDate[0] },
           {
             $inc: {
               "operations.$.item_additions": 0,
@@ -113,18 +119,16 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
         );
 
         // If the date doesn't exist yet, push a new operation to the array
-        if (operationsUpdateResult.matchedCount === 0) {
+        if (operationsUpdateResult.matchedCount < 1) {
           const newOperationData: UserOperationsData = {
-            date: currentDate,
+            date: fields.currentDate[0],
             item_additions: 0,
             item_edits: 0,
             item_deletions: 1,
           };
           operationsUpdateResult = await usersOperationsCollection.updateOne(
             { email: session.user.email },
-            {
-              $push: { operations: newOperationData },
-            },
+            { $push: { operations: newOperationData } },
             { upsert: true }
           );
         }
@@ -137,7 +141,8 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
         }
 
         // Update the inventory stats
-        const usersInventoryStatsCollectionName = process.env.MONGODB_USERS_INVENTORY_STATS!;
+        const usersInventoryStatsCollectionName =
+          process.env.MONGODB_USERS_INVENTORY_STATS_COLLECTION!;
         const usersInventoryStatsCollection = mongoClient
           .db(databaseName)
           .collection(usersInventoryStatsCollectionName);

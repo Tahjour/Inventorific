@@ -6,14 +6,13 @@ import { AnimatePresence } from "framer-motion";
 import { Fragment } from "react";
 
 export default function ProfilePage() {
-  const { getUserInfo } = useUserInfoContext();
-  const userInfo = getUserInfo();
+  const { serverLoadWasTried } = useUserInfoContext();
   return (
     <Fragment>
       <AnimatePresence mode="wait">
-        {!userInfo && <MainLoader message="Loading profile..." />}
+        {!serverLoadWasTried && <MainLoader message="Loading profile..." />}
       </AnimatePresence>
-      {userInfo && <ProfilePageLayout userInfo={userInfo} />}
+      {serverLoadWasTried && <ProfilePageLayout />}
     </Fragment>
   );
 }

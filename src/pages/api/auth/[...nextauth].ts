@@ -95,7 +95,7 @@ export function getNextAuthOptions(req?: NextApiRequest): NextAuthOptions {
               items: [],
             };
             const insertResult = await users.insertOne(newUserDocument);
-            if (!insertResult || !insertResult.insertedId) {
+            if (!insertResult.insertedId) {
               throw new ResponseError(
                 StatusCodes.INTERNAL_SERVER_ERROR,
                 ErrorMessages.UserCreationFailed

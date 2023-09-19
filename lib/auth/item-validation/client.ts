@@ -5,11 +5,12 @@ export function itemValidate(values: ItemValues) {
   const errors: FormikErrors<ItemValues> = {};
   if (!values.name || !values.name.trim()) {
     errors.name = "Name is required";
-  } else if (/[^\w\s]/.test(values.name)) {
+  } else if (/[^a-zA-Z0-9_\s-"'().]/g.test(values.name)) {
     errors.name = "Invalid name";
   } else if (values.name.length > 200) {
     errors.name = "Name is too long";
   }
+
 
   if (!values.price || !values.price.trim()) {
     errors.price = "Price is required";

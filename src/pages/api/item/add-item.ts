@@ -67,14 +67,21 @@ export default async function addItemHandler(
         if (files.newItemImageFile) {
           const newItemImageFile = files.newItemImageFile[0].filepath;
           const mainFolder = `${process.env.CLOUDINARY_MAIN_FOLDER!}`;
-          const userFolder = `${session.user.name} (${session.user.email})`;
-          const userItemImageFolder = `${fields.newItemName} (${fields.newItemID})`;
-          const newPublicID = `${mainFolder}/${userFolder}/${userItemImageFolder}`;
+          const userFolder = `${session.user.email}`;
+
+          const newItemName =
+            fields.newItemName[0].length > 30
+              ? `${fields.newItemName[0].slice(0, 30)}...`
+              : fields.newItemName[0];
+          const newItemID = fields.newItemID[0];
+
+          const userItemImage = `${newItemName} (${newItemID})`;
+          const newPublicID = `${mainFolder}/${userFolder}/${userItemImage}`;
 
           const uploadResponse = await cloudinary.uploader.upload(newItemImageFile, {
             public_id: newPublicID,
           });
-          if (!uploadResponse || !uploadResponse.secure_url) {
+          if (!uploadResponse.secure_url) {
             throw new ResponseError(
               StatusCodes.INTERNAL_SERVER_ERROR,
               ErrorMessages.ImageUploadFailed
@@ -156,9 +163,7 @@ export default async function addItemHandler(
           };
           operationsUpdateResult = await usersOperationsCollection.updateOne(
             { email: session.user.email },
-            {
-              $push: { operations: newOperations },
-            },
+            { $push: { operations: newOperations } },
             { upsert: true }
           );
         }
@@ -171,7 +176,8 @@ export default async function addItemHandler(
         }
 
         // Update the user's inventory stats
-        const usersInventoryStatsCollectionName = process.env.MONGODB_USERS_INVENTORY_STATS!;
+        const usersInventoryStatsCollectionName =
+          process.env.MONGODB_USERS_INVENTORY_STATS_COLLECTION!;
         const usersInventoryStatsCollection = mongoClient
           .db(databaseName)
           .collection(usersInventoryStatsCollectionName);

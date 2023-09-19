@@ -11,7 +11,6 @@ export const logger = createLogger({
       format: "MMM-DD-YYYY HH:mm:ss",
     }),
     prettyPrint()
-    // customFormat
   ),
   defaultMeta: { service: "user-service" },
   transports: [
@@ -21,13 +20,13 @@ export const logger = createLogger({
     //
     // new transports.File({ filename: "error.log", level: "error" }),
     // new transports.File({ filename: "combined.log" }),
-    new transports.MongoDB({
-      db: process.env.MONGODB_URI!,
-      collection: "logs",
-      options: {
-        useUnifiedTopology: true,
-      },
-    }),
+    // new transports.MongoDB({
+    //   db: process.env.MONGODB_URI!,
+    //   collection: "logs",
+    //   options: {
+    //     useUnifiedTopology: true,
+    //   },
+    // }),
     new transports.Console(),
   ],
 });

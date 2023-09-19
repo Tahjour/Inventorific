@@ -1,6 +1,7 @@
 // pages/api/auth/delete-user.js
 import { getConnectedClient } from "@/lib/database/mongodb";
 import { ResponseError, sendResponseError } from "@/lib/helpers/errors";
+import { logger } from "@/lib/helpers/logger";
 import { ErrorMessages, SuccessMessages } from "@/lib/helpers/messages";
 import { ResponseData } from "@/lib/types/api";
 import { v2 as cloudinary } from "cloudinary";
@@ -43,24 +44,22 @@ export default async function deleteUserHandler(
       throw new ResponseError(StatusCodes.UNAUTHORIZED, ErrorMessages.UserNotAuthorized);
     }
 
-    // Get the user information from the session
-    const { user } = session;
-
     // Construct the public ID of the user's folder in Cloudinary
-    const userFolderPublicId = `${process.env.CLOUDINARY_MAIN_FOLDER}/${user.name} (${user.email})`;
+    const userFolderPublicId = `${process.env.CLOUDINARY_MAIN_FOLDER}/${session.user.email}`;
 
     // Delete all resources with the specified public ID from Cloudinary
-    const deleteResourcesResponse = await cloudinary.api.delete_resources_by_prefix(
-      userFolderPublicId,
-      { invalidate: true }
-    );
-    if (!deleteResourcesResponse || deleteResourcesResponse.deleted) {
+    const deleteResourcesResponse =
+      await cloudinary.api.delete_resources_by_prefix(userFolderPublicId);
+    logger.info(`deleteResourcesResponse: ${deleteResourcesResponse}`);
+
+    if (!deleteResourcesResponse) {
       throw new ResponseError(StatusCodes.INTERNAL_SERVER_ERROR, ErrorMessages.ImagesDeleteFailed);
     }
 
     // Delete the user's folder from Cloudinary
     const deleteFolderResponse = await cloudinary.api.delete_folder(userFolderPublicId);
-    if (!deleteFolderResponse || deleteFolderResponse.deleted) {
+    logger.info(`deleteFolderResponse: ${deleteFolderResponse}`);
+    if (!deleteFolderResponse) {
       throw new ResponseError(
         StatusCodes.INTERNAL_SERVER_ERROR,
         ErrorMessages.ImageFolderDeleteFailed
@@ -82,8 +81,8 @@ export default async function deleteUserHandler(
     const usersCollection = mongoClient.db(databaseName).collection(usersCollectionName);
 
     // Delete the user from the database
-    const userDeleteResult = await usersCollection.deleteOne({ email: user.email });
-    if (userDeleteResult.deletedCount === 0) {
+    const userDeleteResult = await usersCollection.deleteOne({ email: session.user.email });
+    if (userDeleteResult.deletedCount < 1) {
       throw new ResponseError(StatusCodes.INTERNAL_SERVER_ERROR, ErrorMessages.UserDeleteFailed);
     }
 
@@ -92,9 +91,9 @@ export default async function deleteUserHandler(
       .db(databaseName)
       .collection(usersOperationsCollectionName);
     const userOperationsDeleteResult = await usersOperationsCollection.deleteOne({
-      email: user.email,
+      email: session.user.email,
     });
-    if (userOperationsDeleteResult.deletedCount === 0) {
+    if (userOperationsDeleteResult.deletedCount < 1) {
       throw new ResponseError(
         StatusCodes.INTERNAL_SERVER_ERROR,
         ErrorMessages.UserOperationsDeleteFailed
@@ -106,9 +105,9 @@ export default async function deleteUserHandler(
       .db(databaseName)
       .collection(usersInventoryStatsCollectionName);
     const userInventoryStatsDeleteResult = await usersInventoryStatsCollection.deleteOne({
-      email: user.email,
+      email: session.user.email,
     });
-    if (userInventoryStatsDeleteResult.deletedCount === 0) {
+    if (userInventoryStatsDeleteResult.deletedCount < 1) {
       throw new ResponseError(
         StatusCodes.INTERNAL_SERVER_ERROR,
         ErrorMessages.UserInventoryStatsDeleteFailed

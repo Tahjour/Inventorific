@@ -30,7 +30,7 @@ export default async function signUpHandler(req: NextApiRequest, res: NextApiRes
     const existingUser = await users.findOne({ email: email });
 
     if (existingUser) {
-      throw new ResponseError(StatusCodes.NOT_FOUND, ErrorMessages.UserNotFound);
+      throw new ResponseError(StatusCodes.NOT_FOUND, ErrorMessages.UserAlreadyExists);
     }
 
     const hashedPassword = await hashPassword(password);
@@ -42,7 +42,7 @@ export default async function signUpHandler(req: NextApiRequest, res: NextApiRes
     }
 
     const userDoc = {
-      type: "credentials",
+      login_type: "credentials",
       date_created: getFormattedDate(),
       time_created: getFormattedTime(),
       name: name,

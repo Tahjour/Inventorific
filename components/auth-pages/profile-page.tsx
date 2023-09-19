@@ -1,11 +1,14 @@
 // components\auth-pages\profile-page.js
-import { UserInfo } from "@/lib/types/user";
+import { useUserInfoContext } from "@/context/user-context";
 import { Fragment } from "react";
 import { useItemsContext } from "../../context/items-context";
 import MainDropDownMenu from "../layout/app/inventory/drop-down-menu/main-dropdown-menu";
 
-export default function ProfilePageLayout({ userInfo }: { userInfo: UserInfo }) {
+export default function ProfilePageLayout() {
   const { showDeleteModal } = useItemsContext();
+  const { getUserInfo, getUserItems } = useUserInfoContext();
+  const userInfo = getUserInfo();
+  const userItems = getUserItems();
 
   async function deleteUserHandler() {
     showDeleteModal(null, userInfo);
@@ -23,9 +26,9 @@ export default function ProfilePageLayout({ userInfo }: { userInfo: UserInfo }) 
             {userInfo?.login_type === "oauth" ? "Signed in with Google" : "Signed in with password"}
           </h3>
           <h3>
-            {userInfo?.items.length === 1
-              ? `${userInfo?.items.length} item`
-              : `${userInfo?.items.length} items`}
+            {userItems?.length === 1
+              ? `${userItems?.length} item`
+              : `${userItems?.length} items`}
           </h3>
         </div>
         <div className="profileFormBox">

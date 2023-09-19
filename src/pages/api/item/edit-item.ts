@@ -1,5 +1,4 @@
 import { getConnectedClient } from "@/lib/database/mongodb";
-import { getFormattedDate } from "@/lib/helpers/date";
 import { ResponseError, sendResponseError } from "@/lib/helpers/errors";
 import { ErrorMessages, SuccessMessages } from "@/lib/helpers/messages";
 import { ResponseData } from "@/lib/types/api";
@@ -53,30 +52,26 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
         if (!session || !session.user) {
           throw new ResponseError(StatusCodes.UNAUTHORIZED, ErrorMessages.UserNotAuthorized);
         }
-
-        const {
-          itemToEditID,
-          itemToEditName,
-          itemToEditCreatedDate,
-          itemToEditCreatedTime,
-          itemToEditImageURL,
-          editedItemID,
-          editedItemName,
-          editedItemPrice,
-          editedItemAmount,
-          editedItemDescription,
-          editedItemModifiedDate,
-          editedItemModifiedTime,
-          editedItemImageURL,
-        } = fields;
-
         const mainFolder = `${process.env.CLOUDINARY_MAIN_FOLDER}`;
-        const userFolder = `${session.user.name} (${session.user.email})`;
-        const itemToEditImageFolder = `${itemToEditName} (${itemToEditID})`;
-        const editedItemImageFolder = `${editedItemName} (${editedItemID})`;
-        const itemToEditImagePublicId = `${mainFolder}/${userFolder}/${itemToEditImageFolder}`;
-        const editedItemImagePublicId = `${mainFolder}/${userFolder}/${editedItemImageFolder}`;
-        let updatedImageURL = editedItemImageURL[0];
+        const userFolder = `${session.user.email}`;
+
+        const itemToEditName =
+          fields.itemToEditName[0].length > 30
+            ? `${fields.itemToEditName[0].slice(0, 30)}...`
+            : fields.itemToEditName[0];
+        const itemToEditID = fields.itemToEditID[0];
+
+        const editedItemName =
+          fields.editedItemName[0].length > 30
+            ? `${fields.editedItemName[0].slice(0, 30)}...`
+            : fields.editedItemName[0];
+        const editedItemID = fields.editedItemID[0];
+
+        const itemToEditImage = `${itemToEditName} (${itemToEditID})`;
+        const editedItemImage = `${editedItemName} (${editedItemID})`;
+        const itemToEditImagePublicId = `${mainFolder}/${userFolder}/${itemToEditImage}`;
+        const editedItemImagePublicId = `${mainFolder}/${userFolder}/${editedItemImage}`;
+        let updatedImageURL = fields.editedItemImageURL[0];
 
         //if edited image file is not provided
         if (!files.editedItemImageFile) {
@@ -84,7 +79,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
           // Since the cloudinary image folder uses the name of the item,
           // a simple rename is made to the existing image folder in Cloudinary instead of deleting and then reuploading
           if (
-            editedItemImageURL[0] !== process.env.CLOUDINARY_DEFAULT_IMAGE_URL &&
+            fields.editedItemImageURL[0] !== process.env.CLOUDINARY_DEFAULT_IMAGE_URL &&
             itemToEditImagePublicId.toLowerCase() !== editedItemImagePublicId.toLowerCase()
           ) {
             const renameResponse = await cloudinary.uploader.rename(
@@ -103,7 +98,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
         //if edited image file is provided
         if (files.editedItemImageFile) {
           const editedItemImageFile = files.editedItemImageFile[0].filepath;
-          if (itemToEditImageURL[0] !== process.env.CLOUDINARY_DEFAULT_IMAGE_URL) {
+          if (fields.itemToEditImageURL[0] !== process.env.CLOUDINARY_DEFAULT_IMAGE_URL) {
             const destroyResponse = await cloudinary.uploader.destroy(itemToEditImagePublicId);
             if (!destroyResponse || destroyResponse.result !== "ok") {
               throw new ResponseError(
@@ -126,16 +121,16 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 
         // Create the edited item object
         const editedItem: MongodbItem = {
-          id: editedItemID[0],
-          name: editedItemName[0],
-          price: parseFloat(editedItemPrice[0]),
-          amount: parseFloat(editedItemAmount[0]),
-          description: editedItemDescription[0],
+          id: fields.editedItemID[0],
+          name: fields.editedItemName[0],
+          price: parseFloat(fields.editedItemPrice[0]),
+          amount: parseFloat(fields.editedItemAmount[0]),
+          description: fields.editedItemDescription[0],
           imageURL: updatedImageURL,
-          date_created: itemToEditCreatedDate[0],
-          time_created: itemToEditCreatedTime[0],
-          date_modified: editedItemModifiedDate[0],
-          time_modified: editedItemModifiedTime[0],
+          date_created: fields.itemToEditCreatedDate[0],
+          time_created: fields.itemToEditCreatedTime[0],
+          date_modified: fields.editedItemModifiedDate[0],
+          time_modified: fields.editedItemModifiedTime[0],
         };
 
         // Connect to the MongoDB database
@@ -152,9 +147,9 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 
         // Find the existing user in the database
         const existingUser = await users.findOne({ email: session.user.email });
-        if (!existingUser)
+        if (!existingUser) {
           throw new ResponseError(StatusCodes.NOT_FOUND, ErrorMessages.UserNotFound);
-
+        }
         // Update the item for the existing user
         const updateResult = await users.updateOne(
           { email: session.user.email, "items.id": fields.editedItemID[0] },
@@ -170,11 +165,9 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
           .db(databaseName)
           .collection(usersOperationsCollectionName);
 
-        const currentDate = getFormattedDate();
-
         // First, try to increment the counts for the existing date
         let operationsUpdateResult = await usersOperationsCollection.updateOne(
-          { email: session.user.email, "operations.date": currentDate },
+          { email: session.user.email, "operations.date": fields.currentDate[0] },
           {
             $inc: {
               "operations.$.item_additions": 0,
@@ -187,16 +180,14 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
         // If the date doesn't exist yet, push a new operation to the array
         if (operationsUpdateResult.matchedCount === 0) {
           const newOperationData: UserOperationsData = {
-            date: currentDate,
+            date: fields.currentDate[0],
             item_additions: 0,
             item_edits: 1,
             item_deletions: 0,
           };
           operationsUpdateResult = await usersOperationsCollection.updateOne(
             { email: session.user.email },
-            {
-              $push: { operations: newOperationData },
-            },
+            { $push: { operations: newOperationData } },
             { upsert: true }
           );
         }
@@ -209,7 +200,8 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
         }
 
         // update user inventory stats
-        const usersInventoryStatsCollectionName = process.env.MONGODB_USERS_INVENTORY_STATS!;
+        const usersInventoryStatsCollectionName =
+          process.env.MONGODB_USERS_INVENTORY_STATS_COLLECTION!;
         const usersInventoryStatsCollection = mongoClient
           .db(databaseName)
           .collection(usersInventoryStatsCollectionName);

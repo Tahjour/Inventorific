@@ -710,7 +710,7 @@ button {
 }
 
 .modalFormItemForm {
-  width: 80%;
+  width: 90%;
   height: 90%;
   display: grid;
   grid-template-columns: 1fr 1fr;
@@ -853,19 +853,19 @@ button {
   border: 0;
   outline: var(--main-border-size) solid var(--color-L75);
   color: var(--color-L100);
-  text-align: center;
   letter-spacing: 0.0625rem;
-  transition:
-    color var(--medium-linear),
-    outline var(--medium-linear);
+  transition: color var(--medium-linear), outline var(--medium-linear);
 }
 
 .modalFormTextAreaInput {
-  height: 18.75rem;
+  resize: none;
   width: 100%;
+  height: auto;
+  max-width: 100%;
   line-height: 1.25rem;
   text-align: left;
   letter-spacing: 0.0625rem;
+  /* overflow: hidden; */
 }
 
 .modalFormSuccessOutline {
@@ -887,7 +887,7 @@ button {
   position: absolute;
   top: 50%;
   transform: translateY(-50%);
-  border-radius: 0.625rem;
+  font-size: 0.8rem;
   pointer-events: none;
   color: var(--color-L100);
   background-color: var(--main-bg);
@@ -898,8 +898,7 @@ button {
 .modalFormSuccessLabel,
 .modalFormErrorLabel {
   top: -0.0625rem;
-  padding: 0.3125rem;
-  font-size: 0.8rem;
+  padding: .625rem;
 }
 
 .modalFormSuccessLabel {
@@ -1088,6 +1087,10 @@ button {
     margin: 0.625rem 0;
     padding: 0;
   }
+
+  .dashboardPieChartBox {
+    height: 25rem;
+  }
 }
 
 @media screen and (max-width: 42.5rem) {
@@ -1104,6 +1107,12 @@ button {
 @media screen and (max-width: 31.25rem) {
   .dashboardLayoutBox {
     padding: 0.3125rem;
+  }
+}
+
+@media screen and (max-width: 28.125rem) {
+  .dashboardPieChartBox {
+    height: auto;
   }
 }
 

@@ -66,17 +66,6 @@ export default function MainDropDownMenu() {
                   </Link>
                 )}
 
-                {!session && (
-                  <Link href={"/login"} className={"mainDropDownMenuLink"}>
-                    <DropdownMenu.Item className={"mainDropDownMenuItem"}>
-                      <span className={"mainDropDownMenuIconWrapper"}>
-                        <RiLoginBoxLine size={20} />
-                      </span>
-                      Login
-                    </DropdownMenu.Item>
-                  </Link>
-                )}
-
                 {route !== "dashboard" && (
                   <Link href={"/dashboard"} className={"mainDropDownMenuLink"}>
                     <DropdownMenu.Item className={"mainDropDownMenuItem"}>
@@ -106,6 +95,17 @@ export default function MainDropDownMenu() {
                         <AiOutlineUserSwitch size={20} />
                       </span>
                       Switch User
+                    </DropdownMenu.Item>
+                  </Link>
+                )}
+
+                {!session && (
+                  <Link href={"/login"} className={"mainDropDownMenuLink"}>
+                    <DropdownMenu.Item className={"mainDropDownMenuItem"}>
+                      <span className={"mainDropDownMenuIconWrapper"}>
+                        <RiLoginBoxLine size={20} />
+                      </span>
+                      Login
                     </DropdownMenu.Item>
                   </Link>
                 )}

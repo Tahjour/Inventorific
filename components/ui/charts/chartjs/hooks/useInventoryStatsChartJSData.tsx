@@ -8,9 +8,9 @@ export const useInventoryStatsChartJSData = () => {
     useUserInfoContext();
   const inventoryStats = getUserInventoryStats();
   const lineChartTitles = {
-    itemsDataTitle: "Last 50 Changes In Total Items",
-    priceDataTitle: "Last 50 Changes In Total Value",
-    amountDataTitle: "Last 50 Changes In Total Amount",
+    itemsDataTitle: "History of Total Items",
+    priceDataTitle: "History of Total Value",
+    amountDataTitle: "History of Total Stock",
   };
 
   const lineChartTotalPriceData =
@@ -75,6 +75,8 @@ export const useInventoryStatsChartJSData = () => {
         legend: {
           labels: {
             color: "hsl(0, 0%, 100%)",
+            usePointStyle: true,
+            pointStyle: "triangle",
           },
         },
       },
@@ -87,13 +89,16 @@ export const useInventoryStatsChartJSData = () => {
 
   const pieChartUserOperationsData: ChartData<"pie"> = {
     labels: UserOperationNamesList.map((userOperationName) =>
-      userOperationName.split("_").join(" ")
+      userOperationName
+        .split("_")
+        .map((word) => word.charAt(0).toUpperCase() + word.slice(1).toLowerCase())
+        .join(" ")
     ),
     datasets: [
       {
-        label: "amount",
+        label: "Amount",
         data: getTotalForEachUserOperationList(),
-        backgroundColor: ["hsl(180, 100%, 30%)", "hsl(200, 100%, 30%)", "hsl(220, 100%, 30%)"],
+        backgroundColor: ["hsl(180, 100%, 40%)", "hsl(200, 100%, 50%)", "hsl(220, 100%, 50%)"],
         hoverOffset: 15,
         borderColor: ["hsl(120, 100%, 0%)", "hsl(60, 100%, 0%)", "hsl(0, 100%, 0%)"],
       },
@@ -127,7 +132,7 @@ export const useInventoryStatsChartJSData = () => {
                 if (typeof sum === "number" && typeof operationAmount === "number") {
                   return sum + operationAmount;
                 }
-                return 0;
+                return sum;
               }, 0);
               const value = context.parsed;
               const percentage =

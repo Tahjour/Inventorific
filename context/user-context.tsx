@@ -97,16 +97,14 @@ export function UserContextProvider({ children }: { children: React.ReactNode })
   function getTotalUserItemsPrice() {
     return userItems.reduce((total, item) => {
       if (!item) return total;
-      let collectivePrice = item.price * item.amount;
-      return total + collectivePrice;
+      return total + item.price * item.amount;
     }, 0);
   }
 
   function getTotalUserItemsAmount() {
     return userItems.reduce((total, item) => {
       if (!item) return total;
-      let amount = item.amount;
-      return total + amount;
+      return total + item.amount;
     }, 0);
   }
 

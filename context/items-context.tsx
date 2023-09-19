@@ -201,12 +201,15 @@ export function ItemsContextProvider(props: PropsWithChildren) {
       if (!itemToEdit || !editedItem) {
         throw new Error(ErrorMessages.NoItemToEdit);
       }
+      //Save edited item to local state array
       setUserItems((prevItems) => {
         return prevItems.map((item) => (item?.id === editedItem.id ? editedItem : item));
       });
 
+      // Update local user operations
+      const currentDate = getFormattedDate();
+      const currentTime = getFormattedTime();
       setUserOperations((prevUserOperations) => {
-        const currentDate = getFormattedDate();
         let updatedUserOperations = [...prevUserOperations];
         const operationIndex = updatedUserOperations.findIndex(
           (userOperation) => userOperation.date === currentDate
@@ -236,11 +239,10 @@ export function ItemsContextProvider(props: PropsWithChildren) {
         return updatedUserOperations;
       });
 
-      const currentDate = getFormattedDate();
-      const currentTime = getFormattedTime();
-      const itemAmountDifference = editedItem.amount - itemToEdit.amount;
+      // Update local user inventory stats
       const itemPriceDifference =
         editedItem.price * editedItem.amount - itemToEdit.price * itemToEdit.amount;
+      const itemAmountDifference = editedItem.amount - itemToEdit.amount;
       const newTotalUserItems = getUserItems().length; // This remains the same as we're editing, not adding or removing an item
       const newTotalUserItemsPrice = getTotalUserItemsPrice() + itemPriceDifference;
       const newTotalUserItemsAmount = getTotalUserItemsAmount() + itemAmountDifference;
@@ -283,8 +285,8 @@ export function ItemsContextProvider(props: PropsWithChildren) {
         return;
       }
 
+      // Send data to backend to edit item info there as well if user is logged in
       const formData = new FormData();
-      //Add itemToEdit properties to form data
       formData.append("itemToEditID", itemToEdit.id);
       formData.append("itemToEditName", itemToEdit.name);
       formData.append("itemToEditPrice", itemToEdit.price.toString());
@@ -328,6 +330,7 @@ export function ItemsContextProvider(props: PropsWithChildren) {
         throw new Error(data.message);
       }
 
+      // Update local item's image URL to the one from cloudinary
       editedItem.imageURL = data.editedItem.imageURL;
       setUserItems((prevItems) => {
         return prevItems.map((item) => (item?.id === editedItem.id ? editedItem : item));
@@ -355,8 +358,10 @@ export function ItemsContextProvider(props: PropsWithChildren) {
       setUserItems((prevItems) => {
         return prevItems.filter((item) => item?.id !== itemToDelete.id);
       });
+
+      const currentDate = getFormattedDate();
+      const currentTime = getFormattedTime();
       setUserOperations((prevUserOperations) => {
-        const currentDate = getFormattedDate();
         let updatedUserOperations = [...prevUserOperations];
         const operationIndex = updatedUserOperations.findIndex(
           (userOperation) => userOperation.date === currentDate
@@ -364,13 +369,11 @@ export function ItemsContextProvider(props: PropsWithChildren) {
 
         if (operationIndex !== -1) {
           // If found, increment the property
-          if (updatedUserOperations[operationIndex]) {
-            const updatedUserOperation = {
-              ...updatedUserOperations[operationIndex],
-              item_deletions: updatedUserOperations[operationIndex].item_deletions + 1,
-            };
-            updatedUserOperations[operationIndex] = updatedUserOperation;
-          }
+          const updatedUserOperation = {
+            ...updatedUserOperations[operationIndex],
+            item_deletions: updatedUserOperations[operationIndex].item_deletions + 1,
+          };
+          updatedUserOperations[operationIndex] = updatedUserOperation;
         } else {
           // If not found, create a new object and add to the array
           const newUserOperations: UserOperationsData = {
@@ -386,13 +389,10 @@ export function ItemsContextProvider(props: PropsWithChildren) {
         return updatedUserOperations;
       });
 
-      const itemAmountDifference = itemToDelete.amount;
-      const itemPriceDifference = itemToDelete.price * itemToDelete.amount;
-      const currentDate = getFormattedDate();
-      const currentTime = getFormattedTime();
       const newTotalUserItems = getUserItems().length - 1;
-      const newTotalUserItemsPrice = getTotalUserItemsPrice() - itemPriceDifference;
-      const newTotalUserItemsAmount = getTotalUserItemsAmount() - itemAmountDifference;
+      const newTotalUserItemsPrice =
+        getTotalUserItemsPrice() - itemToDelete.price * itemToDelete.amount;
+      const newTotalUserItemsAmount = getTotalUserItemsAmount() - itemToDelete.amount;
 
       setUserInventoryStats((prevUserInventoryStats) => {
         const newUserInventoryStats: UserInventoryStats = {
