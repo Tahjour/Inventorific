@@ -279,7 +279,9 @@ export function UserContextProvider({ children }: { children: React.ReactNode })
         type: "loading",
         message: PendingMessages.LoggingOut,
       });
-      await signOut();
+      await signOut({
+        callbackUrl: "/",
+      });
     } catch (error) {
       showNotification({
         type: "error",
